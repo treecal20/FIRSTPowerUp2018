@@ -30,6 +30,8 @@ public class MoveCommand extends SingleSubsystemCmd<DriveBaseSubsystem> {
         this.subsystem.doMove(0, 0);
     }
 
+    // JOYSTICK --------------------------------------------
+
     private static double getLeft() {
         return constrain(Oi.L_JOYSTICK.getRawAxis(1));
     }
