@@ -1,6 +1,8 @@
 package org.usfirst.frc.team4131.robot.subsystems;
 
 import com.ctre.CANTalon;
+import com.ctre.phoenix.motorcontrol.ControlMode;
+
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.usfirst.frc.team4131.robot.RobotMap;
 import org.usfirst.frc.team4131.robot.commands.MoveCommand;
@@ -24,9 +26,9 @@ public class DriveBaseSubsystem extends Subsystem {
     }
 
     public void doMove(double l, double r) {
-        this.l1.set(l);
-        this.l2.set(l);
-        this.r1.set(-r);
-        this.r2.set(-r);
+        this.l1.set(ControlMode.Velocity, l);
+        this.l2.set(ControlMode.Velocity, l);
+        this.r1.set(ControlMode.Velocity, -r);
+        this.r2.set(ControlMode.Velocity, -r);
     }
 }
