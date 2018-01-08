@@ -7,6 +7,10 @@ import org.usfirst.frc.team4131.robot.RobotMap;
 import org.usfirst.frc.team4131.robot.commands.MoveCommand;
 
 public class DriveBaseSubsystem extends Subsystem {
+    // Control mode used to determine the drive speed
+    private static final ControlMode CTL = ControlMode.PercentOutput;
+
+    // Physical drive mappings
     private final TalonSRX l1;
     private final TalonSRX l2;
     private final TalonSRX r1;
@@ -23,10 +27,6 @@ public class DriveBaseSubsystem extends Subsystem {
     protected void initDefaultCommand() {
         this.setDefaultCommand(new MoveCommand(this));
     }
-
-    // TODO: Figure out the correct control mode on an
-    // actual robot
-    private static final ControlMode CTL = ControlMode.PercentOutput;
 
     public void doMove(double l, double r) {
         this.l1.set(CTL, l);
