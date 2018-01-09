@@ -32,7 +32,7 @@ public class Robot extends IterativeRobot {
         DriveBaseSubsystem driveBase = new DriveBaseSubsystem();
 
         // TODO: Register auton Commands to chooser
-        this.chooser.addDefault("Default", new AutoDefaultCommand(driveBase));
+        // this.chooser.addDefault("Default", new AutoDefaultCommand(driveBase));
         SmartDashboard.putData("Auto mode", this.chooser);
     }
 
