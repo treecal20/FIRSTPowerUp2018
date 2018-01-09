@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.usfirst.frc.team4131.robot.commands.AutoDefaultCommand;
 import org.usfirst.frc.team4131.robot.subsystems.DriveBaseSubsystem;
 
 /**
@@ -28,9 +29,10 @@ public class Robot extends IterativeRobot {
         Oi.init();
 
         // Init subsystems
-        new DriveBaseSubsystem();
+        DriveBaseSubsystem driveBase = new DriveBaseSubsystem();
 
         // TODO: Register auton Commands to chooser
+        this.chooser.addDefault("Default", new AutoDefaultCommand(driveBase));
         SmartDashboard.putData("Auto mode", this.chooser);
     }
 
@@ -49,7 +51,6 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void autonomousInit() {
-        // SmartDashboard, use #getString(String,String) for LabView
         this.autoCommand = this.chooser.getSelected();
 
         if (this.autoCommand != null) {

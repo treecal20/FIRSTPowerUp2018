@@ -22,4 +22,6 @@ public class RobotMap {
     // Right gears
     public static final int R1 = 4;
     public static final int R2 = 5;
+
+    public static final int PDP = 62;
 }
