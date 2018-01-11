@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import org.usfirst.frc.team4131.robot.commands.AutoDefaultCommand;
 import org.usfirst.frc.team4131.robot.subsystems.DriveBaseSubsystem;
 
 /**
