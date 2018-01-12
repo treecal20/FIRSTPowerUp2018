@@ -8,12 +8,12 @@
 package org.usfirst.frc.team4131.robot;
 
 import edu.wpi.first.wpilibj.CameraServer;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import org.usfirst.frc.team4131.robot.commands.AutoDefaultCommand;
 import org.usfirst.frc.team4131.robot.subsystems.DriveBaseSubsystem;
 
 /**
@@ -26,7 +26,8 @@ public class Robot extends IterativeRobot {
     @Override
     public void robotInit() {
         CameraServer.getInstance().startAutomaticCapture();
-    	// Run init block for OI
+      
+        // Run init block for OI
         // TODO: If no init needed, remove this
         Oi.init();
 
@@ -53,6 +54,8 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void autonomousInit() {
+        String str = DriverStation.getInstance().getGameSpecificMessage();
+
         this.autoCommand = this.chooser.getSelected();
 
         if (this.autoCommand != null) {
