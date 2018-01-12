@@ -7,6 +7,7 @@
 
 package org.usfirst.frc.team4131.robot;
 
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
@@ -24,6 +25,8 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void robotInit() {
+        CameraServer.getInstance().startAutomaticCapture();
+      
         // Run init block for OI
         // TODO: If no init needed, remove this
         Oi.init();
