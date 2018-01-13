@@ -1,9 +1,9 @@
 package org.usfirst.frc.team4131.robot.commands;
 
-import org.usfirst.frc.team4131.robot.subsystems.DriveBaseSubsystem;
+import org.usfirst.frc.team4131.robot.subsystem.DriveBaseSubsystem;
 
 public class AutoDefaultCommand extends SingleSubsystemCmd<DriveBaseSubsystem> {
-    private long start = -1;
+    private long start;
 
     public AutoDefaultCommand(DriveBaseSubsystem subsystem) {
         super(subsystem);
@@ -16,12 +16,20 @@ public class AutoDefaultCommand extends SingleSubsystemCmd<DriveBaseSubsystem> {
 
     @Override
     protected void execute() {
-        this.subsystem.doMove(1, 1);
+        this.subsystem.doMove(.3, .3);
     }
 
     @Override
     protected boolean isFinished() {
-        return System.currentTimeMillis() - this.start >= 5000L;
+        boolean b = this.subsystem.getLeftDist() >= 10000 ||
+                this.subsystem.getRightDist() >= 1000;
+        if (b) {
+            this.subsystem.debug();
+            this.subsystem.doMove(0, 0);
+            // this.subsystem.reset();
+        }
+
+        return false;
     }
 
     @Override

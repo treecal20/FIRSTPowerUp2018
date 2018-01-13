@@ -1,7 +1,7 @@
 package org.usfirst.frc.team4131.robot.commands;
 
 import org.usfirst.frc.team4131.robot.Oi;
-import org.usfirst.frc.team4131.robot.subsystems.DriveBaseSubsystem;
+import org.usfirst.frc.team4131.robot.subsystem.DriveBaseSubsystem;
 
 public class MoveCommand extends SingleSubsystemCmd<DriveBaseSubsystem> {
     public MoveCommand(DriveBaseSubsystem subsystem) {
@@ -11,6 +11,7 @@ public class MoveCommand extends SingleSubsystemCmd<DriveBaseSubsystem> {
     @Override
     protected void execute() {
         this.subsystem.doMove(getLeft(), getRight());
+        // this.subsystem.debug();
     }
 
     @Override
