@@ -26,7 +26,7 @@ public class AutoDefaultCommand extends SingleSubsystemCmd<DriveBaseSubsystem> {
         if (b) {
             this.subsystem.debug();
             this.subsystem.doMove(0, 0);
-            this.subsystem.reset();
+            // this.subsystem.reset();
         }
 
         return false;

@@ -36,7 +36,7 @@ public class DriveBaseSubsystem extends Subsystem {
         if (code.value != 0) {
             DriverStation.reportError("Error occurred configuring quad encoders", false);
         }
-
+        
         ErrorCode code0 = ErrorCode.worstOne(this.l1.setSelectedSensorPosition(0, PID_IDX, SENSOR_TIMEOUT),
                 this.l2.setSelectedSensorPosition(0, PID_IDX, SENSOR_TIMEOUT),
                 this.r1.setSelectedSensorPosition(0, PID_IDX, SENSOR_TIMEOUT),
@@ -44,6 +44,11 @@ public class DriveBaseSubsystem extends Subsystem {
         if (code0.value != 0) {
             DriverStation.reportError("Error occurred resetting quad encoders", false);
         }
+        
+        this.configPid(this.l1);
+        this.configPid(this.l2);
+        this.configPid(this.r1);
+        this.configPid(this.r2);
     }
 
     @Override
@@ -51,6 +56,16 @@ public class DriveBaseSubsystem extends Subsystem {
         this.setDefaultCommand(new MoveCommand(this));
     }
 
+    private void configPid(TalonSRX talon) {
+    	ErrorCode code = ErrorCode.worstOne(talon.config_kP(0, PID_IDX, SENSOR_TIMEOUT),
+    			talon.config_kI(0, PID_IDX, SENSOR_TIMEOUT),
+    			talon.config_kD(0, PID_IDX, SENSOR_TIMEOUT),
+    			talon.config_kF(0, PID_IDX, SENSOR_TIMEOUT));
+    	if (code.value != 0) {
+    		DriverStation.reportError("Error occurred configuring PIDF", false);
+    	}
+    }
+    
     public void reset() {
         ErrorCode code0 = ErrorCode.worstOne(this.l1.setSelectedSensorPosition(0, PID_IDX, SENSOR_TIMEOUT),
                 this.l2.setSelectedSensorPosition(0, PID_IDX, SENSOR_TIMEOUT),

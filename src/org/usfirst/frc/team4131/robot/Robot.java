@@ -8,6 +8,7 @@
 package org.usfirst.frc.team4131.robot;
 
 import edu.wpi.cscore.UsbCamera;
+import edu.wpi.cscore.VideoMode;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -15,7 +16,6 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import org.usfirst.frc.team4131.robot.commands.AutoDefaultCommand;
 import org.usfirst.frc.team4131.robot.subsystem.DriveBaseSubsystem;
 
 /**
@@ -34,8 +34,11 @@ public class Robot extends IterativeRobot {
         // Init subsystems
         DriveBaseSubsystem driveBase = new DriveBaseSubsystem();
 
+        UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
+        camera.setVideoMode(new VideoMode(VideoMode.PixelFormat.kMJPEG, 900, 900, 1));
+
         // TODO: Register auton Commands to chooser
-        this.chooser.addDefault("Default", new AutoDefaultCommand(driveBase));
+        // this.chooser.addDefault("Default", new AutoDefaultCommand(driveBase));
         SmartDashboard.putData("Auto mode", this.chooser);
     }
 
@@ -54,9 +57,6 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void autonomousInit() {
-        UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
-        System.out.println("CAMERA CONN: " + (camera.isConnected() && camera.isValid()));
-
         String str = DriverStation.getInstance().getGameSpecificMessage();
 
         this.autoCommand = this.chooser.getSelected();
