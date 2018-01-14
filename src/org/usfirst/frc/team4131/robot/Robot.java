@@ -35,7 +35,7 @@ public class Robot extends IterativeRobot {
         DriveBaseSubsystem driveBase = new DriveBaseSubsystem();
 
         UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
-        camera.setVideoMode(new VideoMode(VideoMode.PixelFormat.kMJPEG, 700, 700, 10));
+        camera.setVideoMode(new VideoMode(VideoMode.PixelFormat.kMJPEG, 500, 500, 10));
 
         // TODO: Register auton Commands to chooser
         // this.chooser.addDefault("Default", new AutoDefaultCommand(driveBase));
