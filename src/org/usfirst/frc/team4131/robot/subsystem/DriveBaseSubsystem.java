@@ -7,15 +7,14 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.usfirst.frc.team4131.robot.RobotMap;
-import org.usfirst.frc.team4131.robot.commands.MoveCommand;
+import org.usfirst.frc.team4131.robot.command.MoveCommand;
 
 public class DriveBaseSubsystem extends Subsystem {
-    // Control mode used to determine the drive speed
-    private static final ControlMode CTL = ControlMode.PercentOutput;
-
     // Sensor constants
     private static final int PID_IDX = 0;
     private static final int SENSOR_TIMEOUT = 0;
+
+    private static final int ERROR_DELTA = 0;
 
     // Physical drive mappings
     private final TalonSRX l1;
@@ -36,7 +35,7 @@ public class DriveBaseSubsystem extends Subsystem {
         if (code.value != 0) {
             DriverStation.reportError("Error occurred configuring quad encoders", false);
         }
-        
+
         ErrorCode code0 = ErrorCode.worstOne(this.l1.setSelectedSensorPosition(0, PID_IDX, SENSOR_TIMEOUT),
                 this.l2.setSelectedSensorPosition(0, PID_IDX, SENSOR_TIMEOUT),
                 this.r1.setSelectedSensorPosition(0, PID_IDX, SENSOR_TIMEOUT),
@@ -44,7 +43,7 @@ public class DriveBaseSubsystem extends Subsystem {
         if (code0.value != 0) {
             DriverStation.reportError("Error occurred resetting quad encoders", false);
         }
-        
+
         this.configPid(this.l1);
         this.configPid(this.l2);
         this.configPid(this.r1);
@@ -57,15 +56,38 @@ public class DriveBaseSubsystem extends Subsystem {
     }
 
     private void configPid(TalonSRX talon) {
-    	ErrorCode code = ErrorCode.worstOne(talon.config_kP(0, PID_IDX, SENSOR_TIMEOUT),
-    			talon.config_kI(0, PID_IDX, SENSOR_TIMEOUT),
-    			talon.config_kD(0, PID_IDX, SENSOR_TIMEOUT),
-    			talon.config_kF(0, PID_IDX, SENSOR_TIMEOUT));
-    	if (code.value != 0) {
-    		DriverStation.reportError("Error occurred configuring PIDF", false);
-    	}
+        ErrorCode code = ErrorCode.worstOne(talon.config_kP(PID_IDX, 0.5, SENSOR_TIMEOUT),
+                talon.config_kI(PID_IDX, 0, SENSOR_TIMEOUT),
+                talon.config_kD(PID_IDX, 0, SENSOR_TIMEOUT),
+                talon.config_kF(PID_IDX, 0, SENSOR_TIMEOUT));
+        ErrorCode code0 = talon.configAllowableClosedloopError(PID_IDX, ERROR_DELTA, SENSOR_TIMEOUT);
+        if (code.value != 0 || code0.value != 0) {
+            DriverStation.reportError("Error occurred configuring PIDF", false);
+        }
     }
-    
+
+    public void debug() {
+        int l1ss = this.l1.getSelectedSensorPosition(PID_IDX);
+        int l1cs = this.r1.getSelectedSensorPosition(PID_IDX);
+
+        System.out.printf("L: %s === R: %s%n", l1ss, l1cs);
+    }
+
+    public void doThrottle(double l, double r) {
+        this.l1.set(ControlMode.PercentOutput, l);
+        this.l2.set(ControlMode.PercentOutput, l);
+        this.r1.set(ControlMode.PercentOutput, -r);
+        this.r2.set(ControlMode.PercentOutput, -r);
+    }
+
+    public void gotoPosition(int pos) {
+        this.l1.set(ControlMode.Position, pos);
+        this.l2.set(ControlMode.Position, pos);
+        // TODO: Re-enable
+        // this.r1.set(ControlMode.Position, pos);
+        // this.r2.set(ControlMode.Position, pos);
+    }
+
     public void reset() {
         ErrorCode code0 = ErrorCode.worstOne(this.l1.setSelectedSensorPosition(0, PID_IDX, SENSOR_TIMEOUT),
                 this.l2.setSelectedSensorPosition(0, PID_IDX, SENSOR_TIMEOUT),
@@ -76,12 +98,7 @@ public class DriveBaseSubsystem extends Subsystem {
         }
     }
 
-    public void doMove(double l, double r) {
-        this.l1.set(CTL, l);
-        this.l2.set(CTL, l);
-        this.r1.set(CTL, -r);
-        this.r2.set(CTL, -r);
-    }
+    // DO NOT use SensorCollection here
 
     public int getLeftDist() {
         return this.l1.getSelectedSensorPosition(PID_IDX);
@@ -89,12 +106,5 @@ public class DriveBaseSubsystem extends Subsystem {
 
     public int getRightDist() {
         return this.r1.getSelectedSensorPosition(PID_IDX);
-    }
-
-    public void debug() {
-        int l1ss = this.l1.getSelectedSensorPosition(PID_IDX);
-        int l1cs = this.r1.getSelectedSensorPosition(PID_IDX);
-
-        System.out.printf("L: %s === R: %s%n", l1ss, l1cs);
     }
 }

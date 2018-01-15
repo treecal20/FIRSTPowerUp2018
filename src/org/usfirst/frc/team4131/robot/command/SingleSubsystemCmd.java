@@ -1,4 +1,4 @@
-package org.usfirst.frc.team4131.robot.commands;
+package org.usfirst.frc.team4131.robot.command;
 
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Subsystem;

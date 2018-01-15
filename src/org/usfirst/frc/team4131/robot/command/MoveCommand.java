@@ -1,4 +1,4 @@
-package org.usfirst.frc.team4131.robot.commands;
+package org.usfirst.frc.team4131.robot.command;
 
 import org.usfirst.frc.team4131.robot.Oi;
 import org.usfirst.frc.team4131.robot.subsystem.DriveBaseSubsystem;
@@ -10,8 +10,7 @@ public class MoveCommand extends SingleSubsystemCmd<DriveBaseSubsystem> {
 
     @Override
     protected void execute() {
-        this.subsystem.doMove(getLeft(), getRight());
-        // this.subsystem.debug();
+        this.subsystem.doThrottle(getLeft(), getRight());
     }
 
     @Override
@@ -23,12 +22,12 @@ public class MoveCommand extends SingleSubsystemCmd<DriveBaseSubsystem> {
 
     @Override
     protected void end() {
-        this.subsystem.doMove(0, 0);
+        this.subsystem.doThrottle(0, 0);
     }
 
     @Override
     protected void interrupted() {
-        this.subsystem.doMove(0, 0);
+        this.subsystem.doThrottle(0, 0);
     }
 
     // JOYSTICK --------------------------------------------
