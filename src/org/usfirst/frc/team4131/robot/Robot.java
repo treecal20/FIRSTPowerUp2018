@@ -12,18 +12,25 @@ import edu.wpi.cscore.VideoMode;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.usfirst.frc.team4131.robot.auto.Action;
+import org.usfirst.frc.team4131.robot.auto.Procedure;
+import org.usfirst.frc.team4131.robot.auto.Side;
+import org.usfirst.frc.team4131.robot.auto.procedure.SampleProcedure;
 import org.usfirst.frc.team4131.robot.subsystem.DriveBaseSubsystem;
+import org.usfirst.frc.team4131.robot.subsystem.SubsystemProvider;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Robot lifecycle handler.
  */
 public class Robot extends IterativeRobot {
-    private Command autoCommand;
-    private final SendableChooser<Command> chooser = new SendableChooser<>();
+    private SubsystemProvider provider;
+    private SendableChooser<Procedure> chooser = new SendableChooser<>();
 
     @Override
     public void robotInit() {
@@ -32,13 +39,13 @@ public class Robot extends IterativeRobot {
         Oi.init();
 
         // Init subsystems
-        DriveBaseSubsystem driveBase = new DriveBaseSubsystem();
+        this.provider = new SubsystemProvider(new DriveBaseSubsystem());
 
         UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
         camera.setVideoMode(new VideoMode(VideoMode.PixelFormat.kMJPEG, 600, 600, 10));
 
         // TODO: Register auton Commands to chooser
-        // this.chooser.addDefault("Default", new AutoDefaultCommand(driveBase));
+        this.chooser.addDefault("Test Auto", new SampleProcedure());
         SmartDashboard.putData("Auto mode", this.chooser);
     }
 
@@ -58,36 +65,35 @@ public class Robot extends IterativeRobot {
     @Override
     public void autonomousInit() {
         String str = DriverStation.getInstance().getGameSpecificMessage();
-
-        this.autoCommand = this.chooser.getSelected();
-
-        if (this.autoCommand != null) {
-            this.autoCommand.start();
+        Side[] sides = new Side[str.length()];
+        for (int i = 0, s = str.length(); i < s; i++) {
+            sides[i] = Side.decode(str.charAt(i));
         }
-    }
 
-    @Override
-    public void autonomousPeriodic() {
-        Scheduler.getInstance().run();
+        Procedure procedure = this.chooser.getSelected();
+        this.chooser = null; // Free memory
+
+        procedure.init(sides);
+
+        List<Action> actions = new ArrayList<>(procedure.estimateLen());
+        procedure.populate(this.provider, actions);
+        // this.provider = null; // Free unneeded references
+
+        for (int i = 0, s = actions.size(); i < s; i++) {
+            Action action = actions.get(i);
+            action.doAction();
+        }
     }
 
     // HUMAN-OPERATED --------------------------------------
 
     @Override
     public void teleopInit() {
-        if (this.autoCommand != null) {
-            this.autoCommand.cancel();
-        }
+        this.provider.getDriveBase().debug();
     }
 
     @Override
     public void teleopPeriodic() {
         Scheduler.getInstance().run();
-    }
-
-    // TEST-MODE -------------------------------------------
-
-    @Override
-    public void testPeriodic() {
     }
 }
