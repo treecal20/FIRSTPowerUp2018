@@ -18,6 +18,6 @@ public class SampleProcedure extends Procedure {
 
     @Override
     public void populate(SubsystemProvider provider, List<Action> procedure) {
-        procedure.add(new DistanceMoveAction(provider.getDriveBase(), 1000));
+        procedure.add(new DistanceMoveAction(provider.getDriveBase(), 20000));
     }
 }

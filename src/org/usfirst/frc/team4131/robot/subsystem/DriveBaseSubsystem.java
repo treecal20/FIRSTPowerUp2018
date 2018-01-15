@@ -6,6 +6,7 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team4131.robot.RobotMap;
 import org.usfirst.frc.team4131.robot.command.MoveCommand;
 
@@ -56,11 +57,13 @@ public class DriveBaseSubsystem extends Subsystem {
     }
 
     private void configPid(TalonSRX talon) {
-        ErrorCode code = ErrorCode.worstOne(talon.config_kP(PID_IDX, 0.5, SENSOR_TIMEOUT),
+        ErrorCode code = ErrorCode.worstOne(talon.config_kP(PID_IDX, 4, SENSOR_TIMEOUT),
                 talon.config_kI(PID_IDX, 0, SENSOR_TIMEOUT),
                 talon.config_kD(PID_IDX, 0, SENSOR_TIMEOUT),
                 talon.config_kF(PID_IDX, 0, SENSOR_TIMEOUT));
         ErrorCode code0 = talon.configAllowableClosedloopError(PID_IDX, ERROR_DELTA, SENSOR_TIMEOUT);
+        // talon.configVoltageCompSaturation(5, SENSOR_TIMEOUT);
+        // talon.enableVoltageCompensation(true);
         if (code.value != 0 || code0.value != 0) {
             DriverStation.reportError("Error occurred configuring PIDF", false);
         }
@@ -70,7 +73,7 @@ public class DriveBaseSubsystem extends Subsystem {
         int l1ss = this.l1.getSelectedSensorPosition(PID_IDX);
         int l1cs = this.r1.getSelectedSensorPosition(PID_IDX);
 
-        System.out.printf("L: %s === R: %s%n", l1ss, l1cs);
+        SmartDashboard.putString("Debug", String.format("L: %s === R: %s%n", l1ss, l1cs));
     }
 
     public void doThrottle(double l, double r) {

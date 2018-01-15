@@ -77,7 +77,7 @@ public class Robot extends IterativeRobot {
 
         List<Action> actions = new ArrayList<>(procedure.estimateLen());
         procedure.populate(this.provider, actions);
-        // this.provider = null; // Free unneeded references
+        this.provider = null; // Free unneeded references
 
         for (int i = 0, s = actions.size(); i < s; i++) {
             Action action = actions.get(i);

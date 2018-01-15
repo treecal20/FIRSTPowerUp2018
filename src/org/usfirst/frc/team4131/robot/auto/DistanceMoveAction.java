@@ -1,5 +1,6 @@
 package org.usfirst.frc.team4131.robot.auto;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team4131.robot.subsystem.DriveBaseSubsystem;
 
 /**
@@ -28,10 +29,16 @@ public class DistanceMoveAction extends Action {
     public void doAction() {
         this.driveBase.reset();
         this.driveBase.gotoPosition(this.distance);
-        while (this.driveBase.getLeftDist() < this.distance - 500 &&
-                this.driveBase.getRightDist() < this.distance - 500) {
-            this.driveBase.debug();
+        long start = System.currentTimeMillis();
+        long i = 0;
+        while (true) {
+            if (i % 10000 == 0) {
+                long now = System.currentTimeMillis();
+                SmartDashboard.putString("Debug", String.valueOf(now - start));
+                this.driveBase.debug();
+            }
+
+            i++;
         }
-        this.driveBase.doThrottle(0, 0);
     }
 }
