@@ -1,5 +1,8 @@
 package org.usfirst.frc.team4131.robot.auto;
 
+/**
+ * A unit of data sent by FMS
+ */
 public enum Side {
     LEFT, RIGHT;
 

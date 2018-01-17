@@ -18,11 +18,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team4131.robot.auto.Action;
 import org.usfirst.frc.team4131.robot.auto.Procedure;
 import org.usfirst.frc.team4131.robot.auto.Side;
-import org.usfirst.frc.team4131.robot.auto.procedure.SampleProcedure;
+import org.usfirst.frc.team4131.robot.auto.procedure.Move12;
+import org.usfirst.frc.team4131.robot.auto.procedure.Move12ThenTurn90;
+import org.usfirst.frc.team4131.robot.auto.procedure.Turn90;
 import org.usfirst.frc.team4131.robot.subsystem.DriveBaseSubsystem;
 import org.usfirst.frc.team4131.robot.subsystem.SubsystemProvider;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -45,7 +48,9 @@ public class Robot extends IterativeRobot {
         camera.setVideoMode(new VideoMode(VideoMode.PixelFormat.kMJPEG, 600, 600, 10));
 
         // TODO: Register auton Commands to chooser
-        this.chooser.addDefault("Test Auto", new SampleProcedure());
+        this.chooser.addDefault("Move 12 then Turn 90", new Move12ThenTurn90());
+        this.chooser.addObject("Turn 90 Degrees", new Turn90());
+        this.chooser.addObject("Move 12 Inches", new Move12());
         SmartDashboard.putData("Auto mode", this.chooser);
     }
 
@@ -71,13 +76,8 @@ public class Robot extends IterativeRobot {
         }
 
         Procedure procedure = this.chooser.getSelected();
-        this.chooser = null; // Free memory
-
-        procedure.init(sides);
-
         List<Action> actions = new ArrayList<>(procedure.estimateLen());
-        procedure.populate(this.provider, actions);
-        this.provider = null; // Free unneeded references
+        procedure.populate(this.provider, Arrays.asList(sides), actions);
 
         for (int i = 0, s = actions.size(); i < s; i++) {
             Action action = actions.get(i);
@@ -89,7 +89,18 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void teleopInit() {
-        this.provider.getDriveBase().debug();
+        DriveBaseSubsystem driveBase = this.provider.getDriveBase();
+        while (driveBase.getLeftDist() < 10000) {
+            driveBase.doThrottle(.1, .1);
+        }
+        driveBase.doThrottle(0, 0);
+        try {
+            Thread.sleep(2000);
+            System.out.println("CALIBRATE DONE");
+            driveBase.debug();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
