@@ -1,6 +1,8 @@
 package org.usfirst.frc.team4131.robot.auto;
 
-// TODO Migrate to Runnable (?)
-public abstract class Action {
-    public abstract void doAction();
+/**
+ * An action that that will be run as a part of a procedure
+ */
+public interface Action {
+    void doAction();
 }
