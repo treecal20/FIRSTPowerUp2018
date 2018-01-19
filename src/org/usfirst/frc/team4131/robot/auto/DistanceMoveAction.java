@@ -6,10 +6,10 @@ import org.usfirst.frc.team4131.robot.subsystem.DriveBaseSubsystem;
  * An action that will cause the robot to be moved a
  * certain given distance, in inches.
  */
-public class DistanceMoveAction extends Action {
+public class DistanceMoveAction implements Action {
     /** The drive base used to move the robot */
     private final DriveBaseSubsystem driveBase;
-    /** The distance that should be moved, in inches */
+    /** The distance that should be moved, in ticks */
     private final int distance;
 
     /**
@@ -19,19 +19,33 @@ public class DistanceMoveAction extends Action {
      * @param driveBase the robot drive base
      * @param distance the distance, in inches
      */
-    public DistanceMoveAction(DriveBaseSubsystem driveBase, int distance) {
+    public DistanceMoveAction(DriveBaseSubsystem driveBase, double distance) {
         this.driveBase = driveBase;
-        this.distance = distance;
+        this.distance = inToTicks(distance);
+    }
+
+    /**
+     * Converts the given distance in inches to encoder
+     * ticks that may be passed to the talons.
+     *
+     * @param inches the distance to convert
+     * @return the whole number of ticks
+     */
+    public static int inToTicks(double inches) {
+        return (int) Math.round(inches / 0.01308125);
     }
 
     @Override
     public void doAction() {
         this.driveBase.reset();
         this.driveBase.gotoPosition(this.distance);
-        while (this.driveBase.getLeftDist() < this.distance - 500 &&
-                this.driveBase.getRightDist() < this.distance - 500) {
-            this.driveBase.debug();
+        while (!this.hasSucceeded()) {
         }
-        this.driveBase.doThrottle(0, 0);
+    }
+
+    private boolean hasSucceeded() {
+        int diff = Math.max(Math.abs(this.distance - this.driveBase.getLeftDist()),
+                Math.abs(this.distance - this.driveBase.getRightDist()));
+        return diff < 25;
     }
 }
