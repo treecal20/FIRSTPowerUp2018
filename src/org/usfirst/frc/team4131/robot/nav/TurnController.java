@@ -7,21 +7,34 @@ import edu.wpi.first.wpilibj.SPI;
 
 import java.util.function.DoubleConsumer;
 
+/**
+ * A turn controller used to ensure accurate rotation using
+ * the navX onboard controller.
+ *
+ * <p>See the usage of this class in {@link org.usfirst.frc.team4131.robot.auto.action.TurnAction}</p>.
+ *
+ * @see #getInstance()
+ */
 public class TurnController implements PIDOutput {
+    /** The singleton instance of the turn controller */
+    private static final TurnController INSTANCE = new TurnController();
+
+    // Internal navX and PID control device
     private final AHRS dev;
     private final PIDController controller;
 
+    // Exposed methods used for supplying turn actions
     private DoubleConsumer cached;
     private boolean isTurning;
     private double throttleDelta;
 
-    public TurnController() {
+    private TurnController() {
         this.dev = new AHRS(SPI.Port.kMXP);
 
         PIDController controller = new PIDController(.010, 0, 0, 0, this.dev, this);
         controller.setInputRange(-180, 180);
         controller.setOutputRange(-1, 1);
-        // TODO: Value range
+        // TODO: Value range (accepts 360?)
         // TODO: Configure tolerance
         controller.setAbsoluteTolerance(.2);
         controller.setContinuous(true);
@@ -29,10 +42,23 @@ public class TurnController implements PIDOutput {
         this.controller = controller;
     }
 
-    public double getYaw() {
-        return this.dev.getYaw();
+    /**
+     * Obtains the singleton instance of the navX turn
+     * controller.
+     *
+     * @return the turn controller wrapper
+     */
+    public static TurnController getInstance() {
+        return INSTANCE;
     }
 
+    /**
+     * Begins the PID procedure. Must be placed before a
+     * polling loop in order to cause the controller to
+     * supply the correct throttle deltas.
+     *
+     * @param delta the angle which to turn towards
+     */
     public void begin(double delta) {
         if (!this.isTurning) {
             this.dev.zeroYaw();
@@ -45,6 +71,13 @@ public class TurnController implements PIDOutput {
         }
     }
 
+    /**
+     * Polls data and passes it to the given consumer. Must
+     * be called within a victory loop in order to poll
+     * data and supply the motors with throttle deltas.
+     *
+     * @param dataConsumer the throttle data consumer
+     */
     public void pollData(DoubleConsumer dataConsumer) {
         if (this.cached != null) {
             if (this.cached != dataConsumer) {
@@ -57,14 +90,32 @@ public class TurnController implements PIDOutput {
         dataConsumer.accept(this.throttleDelta);
     }
 
-    public boolean hasFinished() {
-        if (this.controller.onTarget()) {
+    /**
+     * Determines whether the target has been reached.
+     *
+     * <p>This method does not detect whether or not the
+     * PID operation has completed or not, so be cautious
+     * to continue polling until this method returns
+     * consistently.</p>
+     *
+     * @return {@code true} if the turn control comes within
+     * bound of the target angle, {@code false} if it is
+     * still outside
+     */
+    public boolean targetReached() {
+        return this.controller.onTarget();
+    }
+
+    /**
+     * Completes PID control, should be called at the end
+     * of a polling loop in order to release the controller
+     * for other turning processes.
+     */
+    public void finish() {
+        if (this.isTurning) {
             this.isTurning = false;
             this.controller.disable();
-            return true;
         }
-
-        return false;
     }
 
     @Override

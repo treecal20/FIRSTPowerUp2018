@@ -1,5 +1,6 @@
-package org.usfirst.frc.team4131.robot.auto;
+package org.usfirst.frc.team4131.robot.auto.action;
 
+import org.usfirst.frc.team4131.robot.auto.Action;
 import org.usfirst.frc.team4131.robot.subsystem.DriveBaseSubsystem;
 
 /**
@@ -7,6 +8,10 @@ import org.usfirst.frc.team4131.robot.subsystem.DriveBaseSubsystem;
  * certain given distance, in inches.
  */
 public class DistanceMoveAction implements Action {
+    /** The number of polls in loop to reasonably declare
+     * PID victory */
+    private static final int V_GRANULARITY = 10;
+
     /** The drive base used to move the robot */
     private final DriveBaseSubsystem driveBase;
     /** The distance that should be moved, in ticks */
@@ -21,7 +26,7 @@ public class DistanceMoveAction implements Action {
      */
     public DistanceMoveAction(DriveBaseSubsystem driveBase, double distance) {
         this.driveBase = driveBase;
-        this.distance = inToTicks(distance);
+        this.distance = 10000; // inToTicks(distance);
     }
 
     /**
@@ -39,13 +44,32 @@ public class DistanceMoveAction implements Action {
     public void doAction() {
         this.driveBase.reset();
         this.driveBase.gotoPosition(this.distance);
-        while (!this.hasSucceeded()) {
-        }
-    }
 
-    private boolean hasSucceeded() {
-        int diff = Math.max(Math.abs(this.distance - this.driveBase.getLeftDist()),
-                Math.abs(this.distance - this.driveBase.getRightDist()));
-        return diff < 25;
+        int tLeft = this.driveBase.getLeftDist();
+        int tRight = this.driveBase.getRightDist();
+        int roundsSinceLastChange = 0;
+        while (true) {
+            int nLeft = this.driveBase.getLeftDist();
+            int nRight = this.driveBase.getRightDist();
+            boolean hasChanged = false;
+
+            if (tLeft != nLeft) {
+                tLeft = nLeft;
+                roundsSinceLastChange = 0;
+                hasChanged = true;
+            }
+
+            if (tRight != nRight) {
+                tRight = nRight;
+                roundsSinceLastChange = 0;
+            } else if (!hasChanged) {
+                roundsSinceLastChange++;
+            }
+
+            // Victory
+            if (roundsSinceLastChange >= V_GRANULARITY) {
+                break;
+            }
+        }
     }
 }

@@ -33,36 +33,21 @@ import java.util.List;
  */
 public class Robot extends IterativeRobot {
     private SubsystemProvider provider;
-    private SendableChooser<Procedure> chooser = new SendableChooser<>();
+    private final SendableChooser<Procedure> chooser = new SendableChooser<>();
 
     @Override
     public void robotInit() {
-        // Run init block for OI
-        // TODO: If no init needed, remove this
-        Oi.init();
-
         // Init subsystems
         this.provider = new SubsystemProvider(new DriveBaseSubsystem());
 
+        // Init camera
         UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
         camera.setVideoMode(new VideoMode(VideoMode.PixelFormat.kMJPEG, 600, 600, 10));
 
-        // TODO: Register auton Commands to chooser
         this.chooser.addDefault("Move 12 then Turn 90", new Move12ThenTurn90());
         this.chooser.addObject("Turn 90 Degrees", new Turn90());
         this.chooser.addObject("Move 12 Inches", new Move12());
         SmartDashboard.putData("Auto mode", this.chooser);
-    }
-
-    // DISABLED MODE ---------------------------------------
-
-    @Override
-    public void disabledInit() {
-    }
-
-    @Override
-    public void disabledPeriodic() {
-        Scheduler.getInstance().run();
     }
 
     // AUTONOMOUS ------------------------------------------
@@ -85,22 +70,14 @@ public class Robot extends IterativeRobot {
         }
     }
 
+    @Override
+    public void autonomousPeriodic() {
+    }
+
     // HUMAN-OPERATED --------------------------------------
 
     @Override
     public void teleopInit() {
-        DriveBaseSubsystem driveBase = this.provider.getDriveBase();
-        while (driveBase.getLeftDist() < 10000) {
-            driveBase.doThrottle(.1, .1);
-        }
-        driveBase.doThrottle(0, 0);
-        try {
-            Thread.sleep(2000);
-            System.out.println("CALIBRATE DONE");
-            driveBase.debug();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override

@@ -1,7 +1,7 @@
 package org.usfirst.frc.team4131.robot.auto.procedure;
 
 import org.usfirst.frc.team4131.robot.auto.Action;
-import org.usfirst.frc.team4131.robot.auto.DistanceMoveAction;
+import org.usfirst.frc.team4131.robot.auto.action.DistanceMoveAction;
 import org.usfirst.frc.team4131.robot.auto.Procedure;
 import org.usfirst.frc.team4131.robot.auto.Side;
 import org.usfirst.frc.team4131.robot.subsystem.SubsystemProvider;

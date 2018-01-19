@@ -1,5 +1,6 @@
-package org.usfirst.frc.team4131.robot.auto;
+package org.usfirst.frc.team4131.robot.auto.action;
 
+import org.usfirst.frc.team4131.robot.auto.Action;
 import org.usfirst.frc.team4131.robot.nav.TurnController;
 import org.usfirst.frc.team4131.robot.subsystem.DriveBaseSubsystem;
 
@@ -10,8 +11,12 @@ import java.util.function.DoubleConsumer;
  * arguments have been reached.
  */
 public class TurnAction implements Action {
+    /**
+     * The amount of rounds in which the target turn angle
+     * must be within bounds before the turn can exit.
+     */
+    private static final int V_GRANULARITY = 10;
 
-    private static final TurnController controller = new TurnController();
     /** The drive base */
     private final DriveBaseSubsystem driveBase;
     /** The value to turn */
@@ -32,10 +37,22 @@ public class TurnAction implements Action {
     @Override
     public void doAction() {
         DoubleConsumer consumer = value -> this.driveBase.doThrottle(value, -value);
+
+        TurnController controller = TurnController.getInstance();
         controller.begin(this.delta);
-        while (!controller.hasFinished()) {
+        int roundsSinceChange = 0;
+        while (true) {
+            if (controller.targetReached()) {
+                roundsSinceChange++;
+            }
+
+            if (roundsSinceChange >= V_GRANULARITY) {
+                break;
+            }
+
             controller.pollData(consumer);
         }
+        controller.finish();
         this.driveBase.doThrottle(0, 0);
     }
 }
