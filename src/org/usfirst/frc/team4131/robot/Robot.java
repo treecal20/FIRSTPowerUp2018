@@ -83,13 +83,11 @@ public class Robot extends IterativeRobot {
     public void teleopInit() {
         this.step(1);
         this.step(-1);
-        this.step(-1);
-        this.step(1);
     }
 
     public void step(int sigint) {
         DriveBaseSubsystem base = this.provider.getDriveBase();
-        int rounds = 10000000;
+        int rounds = 1000000;
         double cur = 0;
         for (int i = 0; i < rounds * 10; i++) {
             base.doThrottle(cur, cur);
