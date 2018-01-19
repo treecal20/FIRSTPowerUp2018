@@ -21,6 +21,8 @@ import org.usfirst.frc.team4131.robot.auto.Side;
 import org.usfirst.frc.team4131.robot.auto.procedure.Move12;
 import org.usfirst.frc.team4131.robot.auto.procedure.Move12ThenTurn90;
 import org.usfirst.frc.team4131.robot.auto.procedure.Turn90;
+import org.usfirst.frc.team4131.robot.subsystem.ClawSubsystem;
+import org.usfirst.frc.team4131.robot.subsystem.ClimberSubsystem;
 import org.usfirst.frc.team4131.robot.subsystem.DriveBaseSubsystem;
 import org.usfirst.frc.team4131.robot.subsystem.SubsystemProvider;
 
@@ -38,7 +40,8 @@ public class Robot extends IterativeRobot {
     @Override
     public void robotInit() {
         // Init subsystems
-        this.provider = new SubsystemProvider(new DriveBaseSubsystem());
+        this.provider = new SubsystemProvider(new DriveBaseSubsystem(),
+                new ClawSubsystem(), new ClimberSubsystem());
 
         // Init camera
         UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
@@ -78,6 +81,24 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void teleopInit() {
+        this.step(1);
+        this.step(-1);
+        this.step(-1);
+        this.step(1);
+    }
+
+    public void step(int sigint) {
+        DriveBaseSubsystem base = this.provider.getDriveBase();
+        int rounds = 10000000;
+        double cur = 0;
+        for (int i = 0; i < rounds * 10; i++) {
+            base.doThrottle(cur, cur);
+            base.pavv(cur, i);
+
+            if (i % rounds == 0) {
+                cur += Math.copySign(.1, sigint);
+            }
+        }
     }
 
     @Override

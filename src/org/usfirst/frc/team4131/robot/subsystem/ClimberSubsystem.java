@@ -3,6 +3,9 @@ package org.usfirst.frc.team4131.robot.subsystem;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.usfirst.frc.team4131.robot.command.ClimbCommand;
 
+/**
+ * Links control of the climbing mechanism.
+ */
 public class ClimberSubsystem extends Subsystem {
     public ClimberSubsystem() {
     }

@@ -58,11 +58,10 @@ public class DriveBaseSubsystem extends Subsystem {
         if (code.value != 0) {
             DriverStation.reportError("Error occurred configuring quad encoders", false);
         }
-
     }
 
     private void setupPid(TalonSRX talon) {
-        ErrorCode code = ErrorCode.worstOne(talon.config_kP(PID_IDX, 0.5, SENSOR_TIMEOUT),
+        ErrorCode code = ErrorCode.worstOne(talon.config_kP(PID_IDX, 0.6, SENSOR_TIMEOUT),
                 talon.config_kI(PID_IDX, 0, SENSOR_TIMEOUT),
                 talon.config_kD(PID_IDX, 0, SENSOR_TIMEOUT),
                 talon.config_kF(PID_IDX, 0, SENSOR_TIMEOUT));
@@ -98,6 +97,16 @@ public class DriveBaseSubsystem extends Subsystem {
     public void gotoPosition(int pos) {
         this.l1.set(ControlMode.Position, pos);
         this.r1.set(ControlMode.Position, pos);
+    }
+
+    // TODO: Remove usages
+    public void pavv(double speed, int round) {
+        if (round % 100000 == 0) {
+            System.out.println("INPUT=" + speed
+                    + " ENCODER VEL=" + this.l1.getSelectedSensorVelocity(PID_IDX)
+                    + " AMPS=" + this.l1.getOutputCurrent()
+                    + " VOLTS=" + this.l1.getBusVoltage());
+        }
     }
 
     // Sensor polling methods ------------------------------

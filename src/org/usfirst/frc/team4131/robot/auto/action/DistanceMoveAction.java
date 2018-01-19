@@ -8,9 +8,16 @@ import org.usfirst.frc.team4131.robot.subsystem.DriveBaseSubsystem;
  * certain given distance, in inches.
  */
 public class DistanceMoveAction implements Action {
-    /** The number of polls in loop to reasonably declare
-     * PID victory */
-    private static final int V_GRANULARITY = 10;
+    /**
+     * The number of polls in loop to reasonably declare
+     * PID victory
+     */
+    private static final int V_GRANULARITY = 200;
+    /**
+     * The amount of acceptable error for the target tick
+     * distance
+     */
+    private static final int ERR_BOUND = 30;
 
     /** The drive base used to move the robot */
     private final DriveBaseSubsystem driveBase;
@@ -26,6 +33,8 @@ public class DistanceMoveAction implements Action {
      */
     public DistanceMoveAction(DriveBaseSubsystem driveBase, double distance) {
         this.driveBase = driveBase;
+
+        // TODO: Change back
         this.distance = 10000; // inToTicks(distance);
     }
 
@@ -48,18 +57,26 @@ public class DistanceMoveAction implements Action {
         int tLeft = this.driveBase.getLeftDist();
         int tRight = this.driveBase.getRightDist();
         int roundsSinceLastChange = 0;
+        int i = 0;
         while (true) {
+            if (i++ == 100) {
+                System.out.println("L=" + tLeft + " R=" + tRight);
+                i = 0;
+            }
+
             int nLeft = this.driveBase.getLeftDist();
             int nRight = this.driveBase.getRightDist();
             boolean hasChanged = false;
 
-            if (tLeft != nLeft) {
+            int lDiff = Math.abs(nLeft - tLeft);
+            if (lDiff > ERR_BOUND) {
                 tLeft = nLeft;
                 roundsSinceLastChange = 0;
                 hasChanged = true;
             }
 
-            if (tRight != nRight) {
+            int rDiff = Math.abs(nRight - tRight);
+            if (rDiff > ERR_BOUND) {
                 tRight = nRight;
                 roundsSinceLastChange = 0;
             } else if (!hasChanged) {
