@@ -7,6 +7,9 @@ import org.usfirst.frc.team4131.robot.command.ClimbCommand;
  * Links control of the climbing mechanism.
  */
 public class ClimberSubsystem extends Subsystem {
+    /**
+     * Initializes and caches the climbing mechanism motors.
+     */
     public ClimberSubsystem() {
     }
 
@@ -15,6 +18,10 @@ public class ClimberSubsystem extends Subsystem {
         this.setDefaultCommand(new ClimbCommand(this));
     }
 
+    /**
+     * Performs the climbing action and hoists the robot
+     * up the pull-up bar.
+     */
     public void doClimb() {
     }
 }

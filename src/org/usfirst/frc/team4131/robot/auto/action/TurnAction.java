@@ -1,5 +1,6 @@
 package org.usfirst.frc.team4131.robot.auto.action;
 
+import org.usfirst.frc.team4131.robot.Robot;
 import org.usfirst.frc.team4131.robot.auto.Action;
 import org.usfirst.frc.team4131.robot.nav.TurnController;
 import org.usfirst.frc.team4131.robot.subsystem.DriveBaseSubsystem;
@@ -36,12 +37,13 @@ public class TurnAction implements Action {
 
     @Override
     public void doAction() {
-        DoubleConsumer consumer = value -> this.driveBase.doThrottle(value, -value);
+        DoubleConsumer consumer = value -> this.driveBase.doThrottle(-value, value);
 
         TurnController controller = TurnController.getInstance();
         controller.begin(this.delta);
         int roundsSinceChange = 0;
         while (true) {
+            Robot.debug(controller::getYaw);
             if (controller.targetReached()) {
                 roundsSinceChange++;
             }

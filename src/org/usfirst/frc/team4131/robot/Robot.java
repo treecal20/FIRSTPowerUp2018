@@ -18,9 +18,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team4131.robot.auto.Action;
 import org.usfirst.frc.team4131.robot.auto.Procedure;
 import org.usfirst.frc.team4131.robot.auto.Side;
-import org.usfirst.frc.team4131.robot.auto.procedure.Move12;
-import org.usfirst.frc.team4131.robot.auto.procedure.Move12ThenTurn90;
-import org.usfirst.frc.team4131.robot.auto.procedure.Turn90;
+import org.usfirst.frc.team4131.robot.auto.procedure.*;
 import org.usfirst.frc.team4131.robot.subsystem.ClawSubsystem;
 import org.usfirst.frc.team4131.robot.subsystem.ClimberSubsystem;
 import org.usfirst.frc.team4131.robot.subsystem.DriveBaseSubsystem;
@@ -29,6 +27,7 @@ import org.usfirst.frc.team4131.robot.subsystem.SubsystemProvider;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Supplier;
 
 /**
  * Robot lifecycle handler.
@@ -50,6 +49,8 @@ public class Robot extends IterativeRobot {
         this.chooser.addDefault("Move 12 then Turn 90", new Move12ThenTurn90());
         this.chooser.addObject("Turn 90 Degrees", new Turn90());
         this.chooser.addObject("Move 12 Inches", new Move12());
+        this.chooser.addObject("Turn 180 degrees", new Turn180());
+        this.chooser.addObject("Ramp Test Procedure", new Ramp());
         SmartDashboard.putData("Auto mode", this.chooser);
     }
 
@@ -81,26 +82,20 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void teleopInit() {
-        this.step(1);
-        this.step(-1);
-    }
-
-    public void step(int sigint) {
-        DriveBaseSubsystem base = this.provider.getDriveBase();
-        int rounds = 1000000;
-        double cur = 0;
-        for (int i = 0; i < rounds * 10; i++) {
-            base.doThrottle(cur, cur);
-            base.pavv(cur, i);
-
-            if (i % rounds == 0) {
-                cur += Math.copySign(.1, sigint);
-            }
-        }
     }
 
     @Override
     public void teleopPeriodic() {
         Scheduler.getInstance().run();
+    }
+
+    // ----------------------------------------------------
+
+    private static int round;
+    public static void debug(Supplier<String> string) {
+        if (round++ == 900) {
+            System.out.println("DEBUG: " + string.get());
+            round = 0;
+        }
     }
 }

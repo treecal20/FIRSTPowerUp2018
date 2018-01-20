@@ -16,12 +16,12 @@ public final class RobotMap {
     public static final int R_JOY_PORT = 0;
 
     // Left gears
-    public static final int L1 = 1;
-    public static final int L2 = 2;
+    public static final int L1 = 3;
+    public static final int L2 = 4;
 
     // Right gears
-    public static final int R1 = 3;
-    public static final int R2 = 4;
+    public static final int R1 = 1;
+    public static final int R2 = 2;
 
     private RobotMap() { // Prevent instantiation
     }

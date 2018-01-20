@@ -31,15 +31,17 @@ public class TurnController implements PIDOutput {
     private TurnController() {
         this.dev = new AHRS(SPI.Port.kMXP);
 
-        PIDController controller = new PIDController(.010, 0, 0, 0, this.dev, this);
+        PIDController controller = new PIDController(.008, 0, 0, 0, this.dev, this);
         controller.setInputRange(-180, 180);
         controller.setOutputRange(-1, 1);
-        // TODO: Value range (accepts 360?)
-        // TODO: Configure tolerance
         controller.setAbsoluteTolerance(.2);
         controller.setContinuous(true);
         controller.disable();
         this.controller = controller;
+    }
+
+    public String getYaw() {
+        return String.valueOf(this.dev.getYaw());
     }
 
     /**
@@ -57,7 +59,8 @@ public class TurnController implements PIDOutput {
      * polling loop in order to cause the controller to
      * supply the correct throttle deltas.
      *
-     * @param delta the angle which to turn towards
+     * @param delta the angle which to turn towards between
+     * {@code -180 <= delta <= 180}
      */
     public void begin(double delta) {
         if (!this.isTurning) {

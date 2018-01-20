@@ -21,26 +21,24 @@ public class DriveBaseSubsystem extends Subsystem {
     private static final int ERROR_DELTA = 0;
 
     // Physical drive mappings
-    private final TalonSRX l1;
-    private final TalonSRX l2;
-    private final TalonSRX r1;
-    private final TalonSRX r2;
+    private final TalonSRX left;
+    private final TalonSRX right;
 
+    /**
+     * Creates and caches the motors used for the drive base
+     */
     public DriveBaseSubsystem() {
-        this.l1 = new TalonSRX(RobotMap.L1);
-        this.l2 = new TalonSRX(RobotMap.L2);
-        this.r1 = new TalonSRX(RobotMap.R1);
-        this.r2 = new TalonSRX(RobotMap.R2);
+        this.left = new TalonSRX(RobotMap.L1);
+        this.right = new TalonSRX(RobotMap.R1);
 
-        this.l2.follow(this.l1);
-        this.r2.follow(this.r1);
+        new TalonSRX(RobotMap.L2).follow(this.left);
+        new TalonSRX(RobotMap.R2).follow(this.right);
 
         this.setupEncoder();
         this.reset();
-        this.setupPid(this.l1);
-        this.setupPid(this.l2);
-        this.setupPid(this.r1);
-        this.setupPid(this.r2);
+
+        this.setupPid(this.left);
+        this.setupPid(this.right);
     }
 
     @Override
@@ -50,18 +48,41 @@ public class DriveBaseSubsystem extends Subsystem {
 
     // Talon setup methods ---------------------------------
 
+    /**
+     * Configures the selected sensor to the quadrature
+     * encoder on the left and right motors.
+     */
     private void setupEncoder() {
-        ErrorCode code = ErrorCode.worstOne(this.l1.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0),
-                this.l2.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, PID_IDX, SENSOR_TIMEOUT),
-                this.r1.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, PID_IDX, SENSOR_TIMEOUT),
-                this.r2.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, PID_IDX, SENSOR_TIMEOUT));
+        ErrorCode code = ErrorCode.worstOne(
+                this.left.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0),
+                this.right.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, PID_IDX, SENSOR_TIMEOUT));
         if (code.value != 0) {
             DriverStation.reportError("Error occurred configuring quad encoders", false);
         }
     }
 
+    /**
+     * Resets the position indicated by the quadencoders to
+     * {@code 0}.
+     */
+    public void reset() {
+        ErrorCode code0 = ErrorCode.worstOne(
+                this.left.setSelectedSensorPosition(0, PID_IDX, SENSOR_TIMEOUT),
+                this.right.setSelectedSensorPosition(0, PID_IDX, SENSOR_TIMEOUT));
+        if (code0.value != 0) {
+            DriverStation.reportError("Error occurred resetting quad encoders", false);
+        }
+    }
+
+    /**
+     * Configures the PID constanats on the given talon
+     * device.
+     *
+     * @param talon the talon on which the PID constants
+     * will be configured
+     */
     private void setupPid(TalonSRX talon) {
-        ErrorCode code = ErrorCode.worstOne(talon.config_kP(PID_IDX, 0.6, SENSOR_TIMEOUT),
+        ErrorCode code = ErrorCode.worstOne(talon.config_kP(PID_IDX, 0.5, SENSOR_TIMEOUT),
                 talon.config_kI(PID_IDX, 0, SENSOR_TIMEOUT),
                 talon.config_kD(PID_IDX, 0, SENSOR_TIMEOUT),
                 talon.config_kF(PID_IDX, 0, SENSOR_TIMEOUT));
@@ -75,48 +96,66 @@ public class DriveBaseSubsystem extends Subsystem {
         }
     }
 
-    public void reset() {
-        ErrorCode code0 = ErrorCode.worstOne(this.l1.setSelectedSensorPosition(0, PID_IDX, SENSOR_TIMEOUT),
-                this.l2.setSelectedSensorPosition(0, PID_IDX, SENSOR_TIMEOUT),
-                this.r1.setSelectedSensorPosition(0, PID_IDX, SENSOR_TIMEOUT),
-                this.r2.setSelectedSensorPosition(0, PID_IDX, SENSOR_TIMEOUT));
-        if (code0.value != 0) {
-            DriverStation.reportError("Error occurred resetting quad encoders", false);
+    /**
+     * Print Amperage Voltage Velocity
+     *
+     * @param speed the speed currently being input
+     * @param round the loop round
+     */
+    public void pavv(double speed, int round) {
+        if (round % 100000 == 0) {
+            System.out.println("INPUT=" + speed
+                    + " ENCODER VEL=" + this.left.getSelectedSensorVelocity(PID_IDX)
+                    + " AMPS=" + this.left.getOutputCurrent()
+                    + " VOLTS=" + this.left.getBusVoltage());
         }
     }
 
     // Talon control ---------------------------------------
 
+    /**
+     * Changes the speed of the motors to the given
+     * constant output mode (-1 to 1).
+     *
+     * @param l the left motor speed
+     * @param r the right motor speed
+     */
     public void doThrottle(double l, double r) {
-        this.l1.set(ControlMode.PercentOutput, l);
-        this.l2.set(ControlMode.PercentOutput, l);
-        this.r1.set(ControlMode.PercentOutput, -r);
-        this.r2.set(ControlMode.PercentOutput, -r);
+        this.left.set(ControlMode.PercentOutput, -l);
+        this.right.set(ControlMode.PercentOutput, r);
     }
 
+    /**
+     * Performs a PID-controlled movement using the
+     * encoder target tick.
+     *
+     * @param pos the target tick to move
+     */
     public void gotoPosition(int pos) {
-        this.l1.set(ControlMode.Position, pos);
-        this.r1.set(ControlMode.Position, pos);
-    }
-
-    // TODO: Remove usages
-    public void pavv(double speed, int round) {
-        if (round % 100000 == 0) {
-            System.out.println("INPUT=" + speed
-                    + " ENCODER VEL=" + this.l1.getSelectedSensorVelocity(PID_IDX)
-                    + " AMPS=" + this.l1.getOutputCurrent()
-                    + " VOLTS=" + this.l1.getBusVoltage());
-        }
+        this.left.set(ControlMode.Position, pos);
+        this.right.set(ControlMode.Position, -pos);
     }
 
     // Sensor polling methods ------------------------------
     // DO NOT use SensorCollection here
 
+    /**
+     * Obtains the tick count for the left encoder.
+     *
+     * @return the ticks since the last reset travelled by
+     * the left encoder
+     */
     public int getLeftDist() {
-        return this.l1.getSelectedSensorPosition(PID_IDX);
+        return this.left.getSelectedSensorPosition(PID_IDX);
     }
 
+    /**
+     * Obtains the tick count for the right encoder.
+     *
+     * @return the ticks since the last reset travelled by
+     * the right encoder
+     */
     public int getRightDist() {
-        return this.r1.getSelectedSensorPosition(PID_IDX);
+        return -this.right.getSelectedSensorPosition(PID_IDX);
     }
 }

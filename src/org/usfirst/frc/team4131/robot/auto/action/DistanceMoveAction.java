@@ -33,9 +33,7 @@ public class DistanceMoveAction implements Action {
      */
     public DistanceMoveAction(DriveBaseSubsystem driveBase, double distance) {
         this.driveBase = driveBase;
-
-        // TODO: Change back
-        this.distance = 10000; // inToTicks(distance);
+        this.distance = inToTicks(distance);
     }
 
     /**
@@ -57,13 +55,7 @@ public class DistanceMoveAction implements Action {
         int tLeft = this.driveBase.getLeftDist();
         int tRight = this.driveBase.getRightDist();
         int roundsSinceLastChange = 0;
-        int i = 0;
         while (true) {
-            if (i++ == 100) {
-                System.out.println("L=" + tLeft + " R=" + tRight);
-                i = 0;
-            }
-
             int nLeft = this.driveBase.getLeftDist();
             int nRight = this.driveBase.getRightDist();
             boolean hasChanged = false;
