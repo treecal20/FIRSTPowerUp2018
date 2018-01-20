@@ -13,6 +13,11 @@ import java.util.List;
  */
 public class Ramp implements Procedure {
     @Override
+    public int estimateLen() {
+        return 4;
+    }
+
+    @Override
     public void populate(SubsystemProvider provider, List<Side> data, List<Action> procedure) {
         procedure.add(new RampAction(provider.getDriveBase(), 1));
         procedure.add(new RampAction(provider.getDriveBase(), -1));
