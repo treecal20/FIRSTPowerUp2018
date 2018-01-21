@@ -3,6 +3,9 @@ package org.usfirst.frc.team4131.robot.command;
 import org.usfirst.frc.team4131.robot.Oi;
 import org.usfirst.frc.team4131.robot.subsystem.DriveBaseSubsystem;
 
+/**
+ * A command that allows joystick control of the drive base
+ */
 public class MoveCommand extends SingleSubsystemCmd<DriveBaseSubsystem> {
     public MoveCommand(DriveBaseSubsystem subsystem) {
         super(subsystem);
@@ -19,11 +22,6 @@ public class MoveCommand extends SingleSubsystemCmd<DriveBaseSubsystem> {
     }
 
     // CLEAN UP --------------------------------------------
-
-    @Override
-    protected void end() {
-        this.subsystem.doThrottle(0, 0);
-    }
 
     @Override
     protected void interrupted() {

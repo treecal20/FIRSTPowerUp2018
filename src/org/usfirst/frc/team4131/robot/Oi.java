@@ -20,7 +20,4 @@ public final class Oi {
 
     private Oi() { // Prevent instantiation
     }
-
-    public static void init() {
-    }
 }

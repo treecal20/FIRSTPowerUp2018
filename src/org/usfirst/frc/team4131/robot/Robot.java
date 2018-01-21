@@ -18,51 +18,40 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team4131.robot.auto.Action;
 import org.usfirst.frc.team4131.robot.auto.Procedure;
 import org.usfirst.frc.team4131.robot.auto.Side;
-import org.usfirst.frc.team4131.robot.auto.procedure.Move12;
-import org.usfirst.frc.team4131.robot.auto.procedure.Move12ThenTurn90;
-import org.usfirst.frc.team4131.robot.auto.procedure.Turn90;
+import org.usfirst.frc.team4131.robot.auto.procedure.*;
+import org.usfirst.frc.team4131.robot.subsystem.ClawSubsystem;
+import org.usfirst.frc.team4131.robot.subsystem.ClimberSubsystem;
 import org.usfirst.frc.team4131.robot.subsystem.DriveBaseSubsystem;
 import org.usfirst.frc.team4131.robot.subsystem.SubsystemProvider;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Supplier;
 
 /**
  * Robot lifecycle handler.
  */
 public class Robot extends IterativeRobot {
     private SubsystemProvider provider;
-    private SendableChooser<Procedure> chooser = new SendableChooser<>();
+    private final SendableChooser<Procedure> chooser = new SendableChooser<>();
 
     @Override
     public void robotInit() {
-        // Run init block for OI
-        // TODO: If no init needed, remove this
-        Oi.init();
-
         // Init subsystems
-        this.provider = new SubsystemProvider(new DriveBaseSubsystem());
+        this.provider = new SubsystemProvider(new DriveBaseSubsystem(),
+                new ClawSubsystem(), new ClimberSubsystem());
 
+        // Init camera
         UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
         camera.setVideoMode(new VideoMode(VideoMode.PixelFormat.kMJPEG, 600, 600, 10));
 
-        // TODO: Register auton Commands to chooser
         this.chooser.addDefault("Move 12 then Turn 90", new Move12ThenTurn90());
         this.chooser.addObject("Turn 90 Degrees", new Turn90());
         this.chooser.addObject("Move 12 Inches", new Move12());
+        this.chooser.addObject("Turn 180 degrees", new Turn180());
+        this.chooser.addObject("Ramp Test Procedure", new Ramp());
         SmartDashboard.putData("Auto mode", this.chooser);
-    }
-
-    // DISABLED MODE ---------------------------------------
-
-    @Override
-    public void disabledInit() {
-    }
-
-    @Override
-    public void disabledPeriodic() {
-        Scheduler.getInstance().run();
     }
 
     // AUTONOMOUS ------------------------------------------
@@ -85,26 +74,28 @@ public class Robot extends IterativeRobot {
         }
     }
 
+    @Override
+    public void autonomousPeriodic() {
+    }
+
     // HUMAN-OPERATED --------------------------------------
 
     @Override
     public void teleopInit() {
-        DriveBaseSubsystem driveBase = this.provider.getDriveBase();
-        while (driveBase.getLeftDist() < 10000) {
-            driveBase.doThrottle(.1, .1);
-        }
-        driveBase.doThrottle(0, 0);
-        try {
-            Thread.sleep(2000);
-            System.out.println("CALIBRATE DONE");
-            driveBase.debug();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
     public void teleopPeriodic() {
         Scheduler.getInstance().run();
+    }
+
+    // ----------------------------------------------------
+
+    private static int round;
+    public static void debug(Supplier<String> string) {
+        if (round++ == 900) {
+            System.out.println("DEBUG: " + string.get());
+            round = 0;
+        }
     }
 }
