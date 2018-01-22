@@ -8,6 +8,7 @@
 package org.usfirst.frc.team4131.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.buttons.JoystickButton;
 
 /**
  * Mappings of physical control devices (i.e. joysticks,
@@ -17,6 +18,10 @@ import edu.wpi.first.wpilibj.Joystick;
 public final class Oi {
     public static final Joystick L_JOYSTICK = new Joystick(RobotMap.L_JOY_PORT);
     public static final Joystick R_JOYSTICK = new Joystick(RobotMap.R_JOY_PORT);
+    public static final Joystick AUX_JOYSTICK = new Joystick(RobotMap.AUX_JOY_PORT);
+    
+    public static final JoystickButton CLIMB = new JoystickButton(AUX_JOYSTICK, 1);
+    public static final JoystickButton LOWER = new JoystickButton(AUX_JOYSTICK, 2);
 
     private Oi() { // Prevent instantiation
     }
