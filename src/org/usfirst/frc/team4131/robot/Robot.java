@@ -35,6 +35,7 @@ import java.util.function.Supplier;
 public class Robot extends IterativeRobot {
     private SubsystemProvider provider;
     private final SendableChooser<Procedure> chooser = new SendableChooser<>();
+    public static boolean isInverted;
 
     @Override
     public void robotInit() {
@@ -52,6 +53,7 @@ public class Robot extends IterativeRobot {
         this.chooser.addObject("Turn 180 degrees", new Turn180());
         this.chooser.addObject("Ramp Test Procedure", new Ramp());
         SmartDashboard.putData("Auto mode", this.chooser);
+        
     }
 
     // AUTONOMOUS ------------------------------------------
@@ -86,7 +88,12 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void teleopPeriodic() {
-        Scheduler.getInstance().run();
+    	Scheduler.getInstance().run();
+    	if (Oi.INVERT_L_1.get() && Oi.INVERT_L_2.get() && Oi.INVERT_R_1.get() && Oi.INVERT_R_2.get()) {
+    		isInverted = true;
+    	} else {
+    		isInverted = false;
+    	}
     }
 
     // ----------------------------------------------------
