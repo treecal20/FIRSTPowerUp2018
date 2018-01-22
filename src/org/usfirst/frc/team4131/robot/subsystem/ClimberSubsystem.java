@@ -35,11 +35,11 @@ public class ClimberSubsystem extends Subsystem {
      */
     public void doClimb(boolean upDown) {
     	if (upDown) {
-    		this.one.set(ControlMode.PercentOutput, 1);
-    		this.two.set(ControlMode.PercentOutput, 1);
+    		this.one.set(ControlMode.PercentOutput, 0.5);
+    		this.two.set(ControlMode.PercentOutput, 0.5);
     	} else {
-    		this.one.set(ControlMode.PercentOutput, -1);
-        	this.two.set(ControlMode.PercentOutput, -1);
+    		this.one.set(ControlMode.PercentOutput, -0.5);
+        	this.two.set(ControlMode.PercentOutput, -0.5);
     	}
     }
     
