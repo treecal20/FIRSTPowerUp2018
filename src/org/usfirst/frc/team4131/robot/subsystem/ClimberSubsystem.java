@@ -2,6 +2,7 @@ package org.usfirst.frc.team4131.robot.subsystem;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 
+import org.usfirst.frc.team4131.robot.Robot;
 import org.usfirst.frc.team4131.robot.RobotMap;
 import org.usfirst.frc.team4131.robot.command.ClimbCommand;
 
@@ -35,11 +36,19 @@ public class ClimberSubsystem extends Subsystem {
      */
     public void doClimb(boolean upDown) {
     	if (upDown) {
-    		this.one.set(ControlMode.PercentOutput, 0.5);
-    		this.two.set(ControlMode.PercentOutput, 0.5);
+    		if (Robot.isTop) {
+    			this.one.set(ControlMode.PercentOutput, 0.5);
+    			this.two.set(ControlMode.PercentOutput, 0.5);
+    		} else {
+    			doStop();
+    		}
     	} else {
-    		this.one.set(ControlMode.PercentOutput, -0.5);
-        	this.two.set(ControlMode.PercentOutput, -0.5);
+    		if (Robot.isBottom) {
+    			this.one.set(ControlMode.PercentOutput, -0.5);
+    			this.two.set(ControlMode.PercentOutput, -0.5);
+    		} else {
+    			doStop();
+    		}
     	}
     }
     
