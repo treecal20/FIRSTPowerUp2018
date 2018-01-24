@@ -1,6 +1,7 @@
 package org.usfirst.frc.team4131.robot.command;
 
 import org.usfirst.frc.team4131.robot.Oi;
+import org.usfirst.frc.team4131.robot.Robot;
 import org.usfirst.frc.team4131.robot.subsystem.ClimberSubsystem;
 
 /**
