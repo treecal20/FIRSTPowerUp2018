@@ -94,9 +94,11 @@ public class Robot extends IterativeRobot {
     public void teleopPeriodic() {
     	Scheduler.getInstance().run();
     	
+    	//climber stuff
     	isBottom = bottomSwitch.get();
     	isTop = topSwitch.get();
     	
+    	//inverting controls
     	if (Oi.INVERT_L_1.get() && Oi.INVERT_L_2.get() && Oi.INVERT_R_1.get() && Oi.INVERT_R_2.get()) {
     		isInverted = true;
     	} else {

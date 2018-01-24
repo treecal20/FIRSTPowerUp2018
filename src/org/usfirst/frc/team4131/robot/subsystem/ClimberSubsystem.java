@@ -36,19 +36,11 @@ public class ClimberSubsystem extends Subsystem {
      */
     public void doClimb(boolean upDown) {
     	if (upDown) {
-    		if (Robot.isTop) {
-    			this.one.set(ControlMode.PercentOutput, 0.5);
-    			this.two.set(ControlMode.PercentOutput, 0.5);
-    		} else {
-    			doStop();
-    		}
+    		this.one.set(ControlMode.PercentOutput, 0.5);
+    		this.two.set(ControlMode.PercentOutput, 0.5);
     	} else {
-    		if (Robot.isBottom) {
-    			this.one.set(ControlMode.PercentOutput, -0.5);
-    			this.two.set(ControlMode.PercentOutput, -0.5);
-    		} else {
-    			doStop();
-    		}
+    		this.one.set(ControlMode.PercentOutput, -0.5);
+    		this.two.set(ControlMode.PercentOutput, -0.5);
     	}
     }
     
