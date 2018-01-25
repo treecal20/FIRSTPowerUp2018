@@ -14,6 +14,7 @@ package org.usfirst.frc.team4131.robot;
 public final class RobotMap {
     public static final int L_JOY_PORT = 1;
     public static final int R_JOY_PORT = 0;
+    public static final int AUX_JOY_PORT = 2;
 
     // Left gears
     public static final int L1 = 3;
@@ -22,6 +23,10 @@ public final class RobotMap {
     // Right gears
     public static final int R1 = 1;
     public static final int R2 = 2;
+
+    // Climber motors
+    public static final int C1 = 5;
+    public static final int C2 = 6;
 
     private RobotMap() { // Prevent instantiation
     }

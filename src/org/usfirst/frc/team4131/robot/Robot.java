@@ -10,6 +10,7 @@ package org.usfirst.frc.team4131.robot;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.cscore.VideoMode;
 import edu.wpi.first.wpilibj.CameraServer;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -35,12 +36,16 @@ import java.util.function.Supplier;
 public class Robot extends IterativeRobot {
     private SubsystemProvider provider;
     private final SendableChooser<Procedure> chooser = new SendableChooser<>();
+    public static boolean isInverted, isTop, isBottom;
+    
+    DigitalInput bottomSwitch = new DigitalInput(0);
+    DigitalInput topSwitch = new DigitalInput(1);
 
     @Override
     public void robotInit() {
         // Init subsystems
         this.provider = new SubsystemProvider(new DriveBaseSubsystem(),
-                new ClawSubsystem(), new ClimberSubsystem());
+        new ClawSubsystem(), new ClimberSubsystem());
 
         // Init camera
         UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
@@ -86,7 +91,28 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void teleopPeriodic() {
-        Scheduler.getInstance().run();
+    	Scheduler.getInstance().run();
+    	
+    	//climber stuff
+    	isBottom = bottomSwitch.get();
+    	isTop = topSwitch.get();
+    	
+    	//inverting controls
+    	if (Oi.INVERT_L_1.get() && Oi.INVERT_L_2.get() && Oi.INVERT_R_1.get() && Oi.INVERT_R_2.get()) {
+    		isInverted = true;
+    	} else {
+    		isInverted = false;
+    	}
+    }
+
+    // ----------------------------------------------------
+
+    private static int round;
+    public static void debug(Supplier<String> string) {
+        if (round++ == 900) {
+            System.out.println("DEBUG: " + string.get());
+            round = 0;
+        }
     }
 
     // ----------------------------------------------------
