@@ -57,7 +57,6 @@ public class Robot extends IterativeRobot {
         this.chooser.addObject("Turn 180 degrees", new Turn180());
         this.chooser.addObject("Ramp Test Procedure", new Ramp());
         SmartDashboard.putData("Auto mode", this.chooser);
-        
     }
 
     // AUTONOMOUS ------------------------------------------
@@ -104,6 +103,16 @@ public class Robot extends IterativeRobot {
     	} else {
     		isInverted = false;
     	}
+    }
+
+    // ----------------------------------------------------
+
+    private static int round;
+    public static void debug(Supplier<String> string) {
+        if (round++ == 900) {
+            System.out.println("DEBUG: " + string.get());
+            round = 0;
+        }
     }
 
     // ----------------------------------------------------
