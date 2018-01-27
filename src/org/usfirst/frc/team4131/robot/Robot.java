@@ -10,6 +10,7 @@ package org.usfirst.frc.team4131.robot;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.cscore.VideoMode;
 import edu.wpi.first.wpilibj.CameraServer;
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -40,6 +41,9 @@ public class Robot extends IterativeRobot {
     
     DigitalInput bottomSwitch = new DigitalInput(0);
     DigitalInput topSwitch = new DigitalInput(1);
+    
+    //compressor stuff
+    public static final Compressor compressor = new Compressor(61);
 
     @Override
     public void robotInit() {
@@ -57,6 +61,9 @@ public class Robot extends IterativeRobot {
         this.chooser.addObject("Turn 180 degrees", new Turn180());
         this.chooser.addObject("Ramp Test Procedure", new Ramp());
         SmartDashboard.putData("Auto mode", this.chooser);
+
+        compressor.setClosedLoopControl(true);
+        compressor.clearAllPCMStickyFaults();
     }
 
     // AUTONOMOUS ------------------------------------------
@@ -103,16 +110,6 @@ public class Robot extends IterativeRobot {
     	} else {
     		isInverted = false;
     	}
-    }
-
-    // ----------------------------------------------------
-
-    private static int round;
-    public static void debug(Supplier<String> string) {
-        if (round++ == 900) {
-            System.out.println("DEBUG: " + string.get());
-            round = 0;
-        }
     }
 
     // ----------------------------------------------------
