@@ -61,7 +61,7 @@ public class Robot extends IterativeRobot {
         this.chooser.addObject("Turn 180 degrees", new Turn180());
         this.chooser.addObject("Ramp Test Procedure", new Ramp());
         SmartDashboard.putData("Auto mode", this.chooser);
-        
+
         compressor.setClosedLoopControl(true);
         compressor.clearAllPCMStickyFaults();
     }

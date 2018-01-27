@@ -25,14 +25,12 @@ public final class Oi {
     public static final JoystickButton INVERT_L_1 = new JoystickButton(L_JOYSTICK, 6);
     public static final JoystickButton INVERT_L_2 = new JoystickButton(L_JOYSTICK, 4);
 
-    // Stick two buttons
     public static final JoystickButton INVERT_R_1 = new JoystickButton(R_JOYSTICK, 5);
     public static final JoystickButton INVERT_R_2 = new JoystickButton(R_JOYSTICK, 3);
     
     // Aux stick buttons
     public static final JoystickButton CLIMB = new JoystickButton(AUX_JOYSTICK, 1);
     public static final JoystickButton LOWER = new JoystickButton(AUX_JOYSTICK, 2);
-
     private Oi() { // Prevent instantiation
     }
 }

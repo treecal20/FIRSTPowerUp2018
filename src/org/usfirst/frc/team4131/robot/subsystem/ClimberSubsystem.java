@@ -9,6 +9,8 @@ import org.usfirst.frc.team4131.robot.command.ClimbCommand;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
+import org.usfirst.frc.team4131.robot.command.ClimbCommand;
+
 /**
  * Links control of the climbing mechanism.
  */
