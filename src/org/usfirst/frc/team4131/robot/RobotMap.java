@@ -15,6 +15,10 @@ public final class RobotMap {
     public static final int L_JOY_PORT = 1;
     public static final int R_JOY_PORT = 0;
     public static final int AUX_JOY_PORT = 2;
+    
+    // Other devices
+    public static final int PCM_ID = 61;
+    public static final int PDP_ID = 62;
 
     // Left gears
     public static final int L1 = 1;
