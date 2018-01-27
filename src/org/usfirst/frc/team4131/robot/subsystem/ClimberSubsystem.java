@@ -46,7 +46,6 @@ public class ClimberSubsystem extends Subsystem {
     	}
     }
     
-    
     public void doStop() {
     	this.one.set(ControlMode.PercentOutput, 0);
     	this.two.set(ControlMode.PercentOutput, 0);
