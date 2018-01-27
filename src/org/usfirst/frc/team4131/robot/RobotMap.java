@@ -23,7 +23,7 @@ public final class RobotMap {
     // Right gears
     public static final int R1 = 3;
     public static final int R2 = 4;
-    
+  
     // Climber motors
     public static final int C1 = 5;
     public static final int C2 = 6;
