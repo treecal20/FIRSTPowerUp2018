@@ -37,8 +37,8 @@ import java.util.function.Supplier;
 public class Robot extends IterativeRobot {
     private SubsystemProvider provider;
     private final SendableChooser<Procedure> chooser = new SendableChooser<>();
-    public static boolean isInverted, isTop, isBottom;
     
+    public static boolean isInverted, isTop, isBottom;
     DigitalInput bottomSwitch = new DigitalInput(0);
     DigitalInput topSwitch = new DigitalInput(1);
     
@@ -116,7 +116,7 @@ public class Robot extends IterativeRobot {
 
     private static int round;
     public static void debug(Supplier<String> string) {
-        if (round++ == 900) {
+        if (round++ == 2000) {
             System.out.println("DEBUG: " + string.get());
             round = 0;
         }
