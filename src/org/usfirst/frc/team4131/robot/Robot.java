@@ -116,7 +116,7 @@ public class Robot extends IterativeRobot {
 
     private static int round;
     public static void debug(Supplier<String> string) {
-        if (round++ == 900) {
+        if (round++ == 2000) {
             System.out.println("DEBUG: " + string.get());
             round = 0;
         }

@@ -37,7 +37,10 @@ public class TurnAction implements Action {
 
     @Override
     public void doAction() {
-        DoubleConsumer consumer = value -> this.driveBase.doThrottle(-value, value);
+        DoubleConsumer consumer = value -> {
+        	value = value < 0.1 ? 0.1 : value;
+        	this.driveBase.doThrottle(-value, value);
+        };
 
         TurnController controller = TurnController.getInstance();
         controller.begin(this.delta);
