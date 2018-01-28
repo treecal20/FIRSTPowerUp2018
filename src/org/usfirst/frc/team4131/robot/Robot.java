@@ -37,8 +37,8 @@ import java.util.function.Supplier;
 public class Robot extends IterativeRobot {
     private SubsystemProvider provider;
     private final SendableChooser<Procedure> chooser = new SendableChooser<>();
-    public static boolean isInverted, isTop, isBottom;
     
+    public static boolean isInverted, isTop, isBottom;
     DigitalInput bottomSwitch = new DigitalInput(0);
     DigitalInput topSwitch = new DigitalInput(1);
     
