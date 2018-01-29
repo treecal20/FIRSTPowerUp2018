@@ -34,15 +34,18 @@ import java.util.function.Supplier;
 /**
  * Robot lifecycle handler.
  */
+
 public class Robot extends IterativeRobot {
-    private SubsystemProvider provider;
+    
+	private SubsystemProvider provider;
     private final SendableChooser<Procedure> chooser = new SendableChooser<>();
     
+    // Limit switches
     public static boolean isInverted, isTop, isBottom;
     DigitalInput bottomSwitch = new DigitalInput(0);
     DigitalInput topSwitch = new DigitalInput(1);
     
-    //compressor stuff
+    // compressor stuff
     public static final Compressor compressor = new Compressor(61);
 
     @Override
@@ -55,6 +58,7 @@ public class Robot extends IterativeRobot {
         UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
         camera.setVideoMode(new VideoMode(VideoMode.PixelFormat.kMJPEG, 600, 600, 10));
 
+        // Auton chooser
         this.chooser.addDefault("Left Right Baseline", new LeftRightBaseline());
         //this.chooser.addDefault("Move 12 then Turn 90", new Move12ThenTurn90());
         this.chooser.addObject("Turn 90 Degrees", new Turn90());
@@ -63,6 +67,7 @@ public class Robot extends IterativeRobot {
         this.chooser.addObject("Ramp Test Procedure", new Ramp());
         SmartDashboard.putData("Auto mode", this.chooser);
 
+        // Compressor
         compressor.setClosedLoopControl(true);
         compressor.clearAllPCMStickyFaults();
     }
