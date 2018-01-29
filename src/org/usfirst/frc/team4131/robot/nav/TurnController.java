@@ -15,10 +15,8 @@ import java.util.function.DoubleConsumer;
  *
  * @see #getInstance()
  */
-
 public class TurnController implements PIDOutput {
-
-	/** The singleton instance of the turn controller */
+    /** The singleton instance of the turn controller */
     private static final TurnController INSTANCE = new TurnController();
 
     // Internal navX and PID control device

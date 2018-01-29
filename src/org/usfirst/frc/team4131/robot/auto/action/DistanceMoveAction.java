@@ -7,14 +7,12 @@ import org.usfirst.frc.team4131.robot.subsystem.DriveBaseSubsystem;
  * An action that will cause the robot to be moved a
  * certain given distance, in inches.
  */
-
 public class DistanceMoveAction implements Action {
     /**
      * The number of polls in loop to reasonably declare
      * PID victory
      */
     private static final int V_GRANULARITY = 200;
-
     /**
      * The amount of acceptable error for the target tick
      * distance
@@ -23,7 +21,6 @@ public class DistanceMoveAction implements Action {
 
     /** The drive base used to move the robot */
     private final DriveBaseSubsystem driveBase;
-    
     /** The distance that should be moved, in ticks */
     private final int distance;
 
