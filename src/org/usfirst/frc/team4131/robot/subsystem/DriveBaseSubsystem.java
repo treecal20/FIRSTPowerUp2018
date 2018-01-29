@@ -132,8 +132,11 @@ public class DriveBaseSubsystem extends Subsystem {
      * @param pos the target tick to move
      */
     public void gotoPosition(int pos) {
-        this.left.set(ControlMode.Position, pos);
-        this.right.set(ControlMode.Position, -pos);
+        while (this.left.getSelectedSensorPosition(PID_IDX) < pos) {
+    		this.left.set(ControlMode.PercentOutput, 0.3);
+        	this.right.set(ControlMode.PercentOutput, -0.3);
+        }
+        doThrottle(0.0, 0.0);
     }
 
     // Sensor polling methods ------------------------------
