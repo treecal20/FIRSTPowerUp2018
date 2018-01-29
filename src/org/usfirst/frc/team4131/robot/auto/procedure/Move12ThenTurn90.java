@@ -12,8 +12,10 @@ import java.util.List;
  * A sample procedure that moves the robot forward 12 inches
  * and then turns 90 degrees to the right.
  */
+
 public class Move12ThenTurn90 implements Procedure {
-    @Override
+    
+	@Override
     public int estimateLen() {
         return 2;
     }
