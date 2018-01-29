@@ -7,8 +7,10 @@ import org.usfirst.frc.team4131.robot.subsystem.DriveBaseSubsystem;
 /**
  * A command that allows joystick control of the drive base
  */
+
 public class MoveCommand extends SingleSubsystemCmd<DriveBaseSubsystem> {
-    public MoveCommand(DriveBaseSubsystem subsystem) {
+
+	public MoveCommand(DriveBaseSubsystem subsystem) {
         super(subsystem);
     }
 

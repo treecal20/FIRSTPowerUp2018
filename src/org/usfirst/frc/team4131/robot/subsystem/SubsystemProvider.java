@@ -3,8 +3,10 @@ package org.usfirst.frc.team4131.robot.subsystem;
 /**
  * Provides subsystem wrapper singletons
  */
+
 public class SubsystemProvider {
-    private final DriveBaseSubsystem driveBase;
+
+	private final DriveBaseSubsystem driveBase;
     private final ClawSubsystem claw;
     private final ClimberSubsystem climber;
 
