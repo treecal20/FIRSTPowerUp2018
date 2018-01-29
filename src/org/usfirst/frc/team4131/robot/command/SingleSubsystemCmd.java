@@ -8,8 +8,10 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  *
  * @param <T> the type of subsystem that will be commanded
  */
+
 public abstract class SingleSubsystemCmd<T extends Subsystem> extends Command {
-    /** The subsystem being commanded */
+    
+	/** The subsystem being commanded */
     protected final T subsystem;
 
     /**
