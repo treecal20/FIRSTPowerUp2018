@@ -11,10 +11,8 @@ import java.util.List;
 /**
  * Ramping procedure
  */
-
 public class Ramp implements Procedure {
-    
-	@Override
+    @Override
     public int estimateLen() {
         return 4;
     }
