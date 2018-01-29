@@ -55,10 +55,11 @@ public class Robot extends IterativeRobot {
         UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
         camera.setVideoMode(new VideoMode(VideoMode.PixelFormat.kMJPEG, 600, 600, 10));
 
-        this.chooser.addDefault("Move 12 then Turn 90", new Move12ThenTurn90());
+        this.chooser.addDefault("Left Right Baseline", new LeftRightBaseline());
+        //this.chooser.addDefault("Move 12 then Turn 90", new Move12ThenTurn90());
         this.chooser.addObject("Turn 90 Degrees", new Turn90());
         this.chooser.addObject("Move 12 Inches", new Move12());
-        this.chooser.addObject("Turn 180 degrees", new Turn180());
+        //this.chooser.addObject("Turn 180 degrees", new Turn180());
         this.chooser.addObject("Ramp Test Procedure", new Ramp());
         SmartDashboard.putData("Auto mode", this.chooser);
 
