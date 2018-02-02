@@ -10,6 +10,7 @@ package org.usfirst.frc.team4131.robot;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.cscore.VideoMode;
 import edu.wpi.first.wpilibj.CameraServer;
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -36,10 +37,13 @@ import java.util.function.Supplier;
 public class Robot extends IterativeRobot {
     private SubsystemProvider provider;
     private final SendableChooser<Procedure> chooser = new SendableChooser<>();
-    public static boolean isInverted, isTop, isBottom;
     
+    public static boolean isInverted, isTop, isBottom;
     DigitalInput bottomSwitch = new DigitalInput(0);
     DigitalInput topSwitch = new DigitalInput(1);
+    
+    //compressor stuff
+    public static final Compressor compressor = new Compressor(61);
 
     @Override
     public void robotInit() {
@@ -51,12 +55,16 @@ public class Robot extends IterativeRobot {
         UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
         camera.setVideoMode(new VideoMode(VideoMode.PixelFormat.kMJPEG, 600, 600, 10));
 
-        this.chooser.addDefault("Move 12 then Turn 90", new Move12ThenTurn90());
+        this.chooser.addDefault("Left Right Baseline", new LeftRightBaseline());
+        //this.chooser.addDefault("Move 12 then Turn 90", new Move12ThenTurn90());
         this.chooser.addObject("Turn 90 Degrees", new Turn90());
         this.chooser.addObject("Move 12 Inches", new Move12());
-        this.chooser.addObject("Turn 180 degrees", new Turn180());
+        //this.chooser.addObject("Turn 180 degrees", new Turn180());
         this.chooser.addObject("Ramp Test Procedure", new Ramp());
         SmartDashboard.putData("Auto mode", this.chooser);
+
+        compressor.setClosedLoopControl(true);
+        compressor.clearAllPCMStickyFaults();
     }
 
     // AUTONOMOUS ------------------------------------------
@@ -109,17 +117,7 @@ public class Robot extends IterativeRobot {
 
     private static int round;
     public static void debug(Supplier<String> string) {
-        if (round++ == 900) {
-            System.out.println("DEBUG: " + string.get());
-            round = 0;
-        }
-    }
-
-    // ----------------------------------------------------
-
-    private static int round;
-    public static void debug(Supplier<String> string) {
-        if (round++ == 900) {
+        if (round++ == 2000) {
             System.out.println("DEBUG: " + string.get());
             round = 0;
         }
