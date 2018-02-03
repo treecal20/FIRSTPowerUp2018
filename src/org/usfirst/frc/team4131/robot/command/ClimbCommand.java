@@ -14,39 +14,39 @@ public class ClimbCommand extends SingleSubsystemCmd<ClimberSubsystem> {
         super(subsystem);
     }
 
+    private static boolean up() {
+        return Oi.CLIMB.get();
+    }
+
+    private static boolean down() {
+        return Oi.LOWER.get();
+    }
+
     @Override
     protected void execute() {
         if (up() && down()) {
-        	this.subsystem.doStop();
+            this.subsystem.doStop();
         } else if (up()) {
-        	this.subsystem.doClimb(true);
-        	if (Robot.isTop) {
-        		this.subsystem.doStop();
-        	}
+            this.subsystem.doClimb(true);
+            if (Robot.isTop) {
+                this.subsystem.doStop();
+            }
         } else if (down()) {
-        	this.subsystem.doClimb(false);
-        	if (!Robot.isBottom) {
-        		this.subsystem.doStop();
-        	}
+            this.subsystem.doClimb(false);
+            if (!Robot.isBottom) {
+                this.subsystem.doStop();
+            }
         } else {
-        	this.subsystem.doStop();
+            this.subsystem.doStop();
         }
     }
-    
+
     protected boolean isFinished() {
         return false;
     }
-    
+
     @Override
     protected void interrupted() {
         this.subsystem.doStop();
-    }
-    
-    private static boolean up() {
-    	return Oi.CLIMB.get();
-    }
-    
-    private static boolean down() {
-    	return Oi.LOWER.get();
     }
 }

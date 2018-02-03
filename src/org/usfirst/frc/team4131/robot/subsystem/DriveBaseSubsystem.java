@@ -54,7 +54,7 @@ public class DriveBaseSubsystem extends Subsystem {
      */
     private void setupEncoder() {
         ErrorCode code = ErrorCode.worstOne(
-                this.left.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0),
+                this.left.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, PID_IDX, SENSOR_TIMEOUT),
                 this.right.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, PID_IDX, SENSOR_TIMEOUT));
         if (code.value != 0) {
             DriverStation.reportError("Error occurred configuring quad encoders", false);
@@ -121,22 +121,20 @@ public class DriveBaseSubsystem extends Subsystem {
      * @param r the right motor speed
      */
     public void doThrottle(double l, double r) {
-        this.left.set(ControlMode.PercentOutput, -l);
-        this.right.set(ControlMode.PercentOutput, r);
+        this.left.set(ControlMode.PercentOutput, l);
+        this.right.set(ControlMode.PercentOutput, -r);
     }
 
     /**
      * Performs a PID-controlled movement using the
      * encoder target tick.
      *
-     * @param pos the target tick to move
+     * @param left the ticks to move the left wheel
+     * @param right the ticks to move the right wheel
      */
-    public void gotoPosition(int pos) {
-        while (this.left.getSelectedSensorPosition(PID_IDX) < pos) {
-    		this.left.set(ControlMode.PercentOutput, 0.3);
-        	this.right.set(ControlMode.PercentOutput, -0.3);
-        }
-        doThrottle(0.0, 0.0);
+    public void gotoPosition(int left, int right) {
+        this.left.set(ControlMode.Position, left);
+        this.right.set(ControlMode.Position, -right);
     }
 
     // Sensor polling methods ------------------------------

@@ -21,8 +21,10 @@ public class DistanceMoveAction implements Action {
 
     /** The drive base used to move the robot */
     private final DriveBaseSubsystem driveBase;
-    /** The distance that should be moved, in ticks */
-    private final int distance;
+    /** The number of ticks used to move the left wheel */
+    private final int leftDist;
+    /** The number of ticks used to move the right wheel */
+    private final int rightDist;
 
     /**
      * Creates a new action that will move the robot the
@@ -33,24 +35,14 @@ public class DistanceMoveAction implements Action {
      */
     public DistanceMoveAction(DriveBaseSubsystem driveBase, double distance) {
         this.driveBase = driveBase;
-        this.distance = inToTicks(distance);
-    }
-
-    /**
-     * Converts the given distance in inches to encoder
-     * ticks that may be passed to the talons.
-     *
-     * @param inches the distance to convert
-     * @return the whole number of ticks
-     */
-    public static int inToTicks(double inches) {
-        return (int) Math.round(inches / 0.01308125);
+        this.leftDist = (int) (74.9151910531 * distance);
+        this.rightDist = (int) (75.5747883349 * distance);
     }
 
     @Override
     public void doAction() {
         this.driveBase.reset();
-        this.driveBase.gotoPosition(this.distance);
+        this.driveBase.gotoPosition(this.leftDist, this.rightDist);
 
         int tLeft = this.driveBase.getLeftDist();
         int tRight = this.driveBase.getRightDist();
