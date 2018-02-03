@@ -24,6 +24,7 @@ import org.usfirst.frc.team4131.robot.auto.procedure.*;
 import org.usfirst.frc.team4131.robot.subsystem.ClawSubsystem;
 import org.usfirst.frc.team4131.robot.subsystem.ClimberSubsystem;
 import org.usfirst.frc.team4131.robot.subsystem.DriveBaseSubsystem;
+import org.usfirst.frc.team4131.robot.subsystem.ElevatorSubsystem;
 import org.usfirst.frc.team4131.robot.subsystem.SubsystemProvider;
 
 import java.util.ArrayList;
@@ -49,7 +50,7 @@ public class Robot extends IterativeRobot {
     public void robotInit() {
         // Init subsystems
         this.provider = new SubsystemProvider(new DriveBaseSubsystem(),
-        new ClawSubsystem(), new ClimberSubsystem());
+        new ClawSubsystem(), new ClimberSubsystem(), new ElevatorSubsystem());
 
         // Init camera
         UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();

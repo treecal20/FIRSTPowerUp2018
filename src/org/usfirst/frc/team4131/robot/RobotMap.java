@@ -20,17 +20,20 @@ public final class RobotMap {
     public static final int PCM_ID = 61;
     public static final int PDP_ID = 62;
 
-    // Left gears
+    // Left motors
     public static final int L1 = 1;
     public static final int L2 = 2;
 
-    // Right gears
+    // Right motors
     public static final int R1 = 3;
     public static final int R2 = 4;
   
     // Climber motors
     public static final int C1 = 5;
     public static final int C2 = 6;
+    
+    // Claw elevator motor
+    public static final int E = 7;
 
     private RobotMap() { // Prevent instantiation
     }
