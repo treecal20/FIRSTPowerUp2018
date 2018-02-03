@@ -12,7 +12,8 @@ package org.usfirst.frc.team4131.robot;
  * robot to identify gears and controllers.
  */
 public final class RobotMap {
-    public static final int L_JOY_PORT = 1;
+    // Joysticks
+	public static final int L_JOY_PORT = 1;
     public static final int R_JOY_PORT = 0;
     public static final int AUX_JOY_PORT = 2;
 
@@ -20,13 +21,13 @@ public final class RobotMap {
     public static final int PCM_ID = 61;
     public static final int PDP_ID = 62;
 
-    // Left gears
-    public static final int L1 = 3;
-    public static final int L2 = 4;
+    // Left motors
+    public static final int L1 = 1;
+    public static final int L2 = 2;
 
-    // Right gears
-    public static final int R1 = 1;
-    public static final int R2 = 2;
+    // Right motors
+    public static final int R1 = 3;
+    public static final int R2 = 4;
 
     // Climber motors
     public static final int C1 = 5;

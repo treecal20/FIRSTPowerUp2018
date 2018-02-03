@@ -32,6 +32,14 @@ public final class Oi {
     public static final JoystickButton CLIMB = new JoystickButton(AUX_JOYSTICK, 1);
     public static final JoystickButton LOWER = new JoystickButton(AUX_JOYSTICK, 2);
 
+    public static int sigr() {
+    	return -1;
+    }
+    
+    public static int sigl() {
+    	return 1;
+    }
+    
     private Oi() { // Prevent instantiation
     }
 }

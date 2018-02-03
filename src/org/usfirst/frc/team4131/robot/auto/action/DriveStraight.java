@@ -11,7 +11,7 @@ import java.util.function.DoubleConsumer;
  * A turn action causes the robot to rotate until the given
  * arguments have been reached.
  */
-public class TurnAction implements Action {
+public class DriveStraight implements Action {
     /**
      * The amount of rounds in which the target turn angle
      * must be within bounds before the turn can exit.
@@ -21,8 +21,10 @@ public class TurnAction implements Action {
     /** The drive base */
     private final DriveBaseSubsystem driveBase;
     /** The value to turn */
-    private final float delta;
-
+    private final double targetThrottle;
+    private final double targetAngularDelta = 0;
+    private double targetL;
+    private double targetR;
     /**
      * Creates a new turning action that moves a specified
      * relative delta value.
@@ -30,34 +32,40 @@ public class TurnAction implements Action {
      * @param driveBase the drive base
      * @param delta the delta angle to turn
      */
-    public TurnAction(DriveBaseSubsystem driveBase, float delta) {
+    public DriveStraight(DriveBaseSubsystem driveBase, double targetThrottle) {
         this.driveBase = driveBase;
-        this.delta = delta;
+        this.targetThrottle = targetThrottle;
+        targetL = targetThrottle;
+        targetR = targetThrottle;
+        		
     }
 
     @Override
     public void doAction() {
         DoubleConsumer consumer = value -> {
-            value = value < 0.1 ? 0.1 : value;
-            this.driveBase.doThrottle(-value, value);
+        	value *= 10; //tuning
+            this.driveBase.doThrottle(targetThrottle - value, targetThrottle+value);
+            double temp = value;
+            Robot.debug(()->(String.valueOf(temp)));
         };
 
         TurnController controller = TurnController.getInstance();
-        controller.begin(this.delta);
+        controller.begin(targetAngularDelta);
         int roundsSinceChange = 0;
+        this.driveBase.doThrottle(targetThrottle, targetThrottle);
         while (true) {
             Robot.debug(controller::getYaw);
             if (controller.targetReached()) {
                 roundsSinceChange++;
             }
-
+            /*
             if (roundsSinceChange >= V_GRANULARITY) {
                 break;
-            }
+            }*/
 
             controller.pollData(consumer);
         }
-        controller.finish();
-        this.driveBase.doThrottle(0, 0);
+        //controller.finish();
+        //this.driveBase.doThrottle(0, 0);
     }
 }

@@ -33,7 +33,7 @@ public class DriveBaseSubsystem extends Subsystem {
 
         new TalonSRX(RobotMap.L2).follow(this.left);
         new TalonSRX(RobotMap.R2).follow(this.right);
-
+        
         this.setupEncoder();
         this.reset();
 
@@ -82,7 +82,7 @@ public class DriveBaseSubsystem extends Subsystem {
      * will be configured
      */
     private void setupPid(TalonSRX talon) {
-        ErrorCode code = ErrorCode.worstOne(talon.config_kP(PID_IDX, 0.5, SENSOR_TIMEOUT),
+        ErrorCode code = ErrorCode.worstOne(talon.config_kP(PID_IDX, 0.8, SENSOR_TIMEOUT),
                 talon.config_kI(PID_IDX, 0, SENSOR_TIMEOUT),
                 talon.config_kD(PID_IDX, 0, SENSOR_TIMEOUT),
                 talon.config_kF(PID_IDX, 0, SENSOR_TIMEOUT));
@@ -121,8 +121,8 @@ public class DriveBaseSubsystem extends Subsystem {
      * @param r the right motor speed
      */
     public void doThrottle(double l, double r) {
-        this.left.set(ControlMode.PercentOutput, l);
-        this.right.set(ControlMode.PercentOutput, -r);
+        this.left.set(ControlMode.PercentOutput, -l);
+        this.right.set(ControlMode.PercentOutput, r);
     }
 
     /**
@@ -136,10 +136,29 @@ public class DriveBaseSubsystem extends Subsystem {
         this.left.set(ControlMode.Position, left);
         this.right.set(ControlMode.Position, -right);
     }
+    
+    public void setVelocity(int vel) {
+    	this.right.set(ControlMode.Velocity, -vel);
+    	this.left.set(ControlMode.Velocity, vel);
+    }
+    public void setVelocityLeft(int vel) {
+    	this.left.set(ControlMode.Velocity, vel);
+    }
+    public void setVelocityRight(int vel) {
+    	this.right.set(ControlMode.Velocity, -vel);
+    }
 
     // Sensor polling methods ------------------------------
     // DO NOT use SensorCollection here
-
+    
+    public int getLeftVelocity() {
+    	return this.left.getSelectedSensorVelocity(PID_IDX);
+    }
+    
+    public int getRightVelocity() {
+    	return this.right.getSelectedSensorVelocity(PID_IDX);
+    }
+    
     /**
      * Obtains the tick count for the left encoder.
      *
