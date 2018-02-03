@@ -2,14 +2,15 @@ package org.usfirst.frc.team4131.robot.command;
 
 import org.usfirst.frc.team4131.robot.Oi;
 import org.usfirst.frc.team4131.robot.Robot;
-import org.usfirst.frc.team4131.robot.subsystem.ClimberSubsystem;
+import org.usfirst.frc.team4131.robot.subsystem.ElevatorSubsystem;
 
 /**
  * A command which will activate the climber and raise the
  * robot using the pull-up bar.
  */
-public class ClimbCommand extends SingleSubsystemCmd<ClimberSubsystem> {
-    public ClimbCommand(ClimberSubsystem subsystem) {
+//TODO test when bot is built
+public class ElevatorCommand extends SingleSubsystemCmd<ElevatorSubsystem> {
+    public ElevatorCommand(ElevatorSubsystem subsystem) {
         super(subsystem);
     }
 
@@ -42,10 +43,10 @@ public class ClimbCommand extends SingleSubsystemCmd<ClimberSubsystem> {
     }
     
     private static boolean up() {
-    	return Oi.CLIMB.get();
+    	return Oi.CLAWUP.get();
     }
     
     private static boolean down() {
-    	return Oi.DESCEND.get();
+    	return Oi.CLAWDOWN.get();
     }
 }
