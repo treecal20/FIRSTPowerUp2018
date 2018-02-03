@@ -11,10 +11,8 @@ import java.util.function.DoubleConsumer;
  * A turn action causes the robot to rotate until the given
  * arguments have been reached.
  */
-
 public class TurnAction implements Action {
-    
-	/**
+    /**
      * The amount of rounds in which the target turn angle
      * must be within bounds before the turn can exit.
      */
@@ -22,7 +20,6 @@ public class TurnAction implements Action {
 
     /** The drive base */
     private final DriveBaseSubsystem driveBase;
-    
     /** The value to turn */
     private final float delta;
 
@@ -33,7 +30,6 @@ public class TurnAction implements Action {
      * @param driveBase the drive base
      * @param delta the delta angle to turn
      */
-    
     public TurnAction(DriveBaseSubsystem driveBase, float delta) {
         this.driveBase = driveBase;
         this.delta = delta;

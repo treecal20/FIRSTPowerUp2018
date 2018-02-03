@@ -15,10 +15,8 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
  * buttons, etc.) to representations useful for commands to
  * poll their state.
  */
-
 public final class Oi {
-    
-	// Joysticks
+    // JoySticks
 	public static final Joystick L_JOYSTICK = new Joystick(RobotMap.L_JOY_PORT);
     public static final Joystick R_JOYSTICK = new Joystick(RobotMap.R_JOY_PORT);
     public static final Joystick AUX_JOYSTICK = new Joystick(RobotMap.AUX_JOY_PORT);
@@ -33,7 +31,6 @@ public final class Oi {
     // Aux stick buttons
     public static final JoystickButton CLIMB = new JoystickButton(AUX_JOYSTICK, 1);
     public static final JoystickButton LOWER = new JoystickButton(AUX_JOYSTICK, 2);
-    
     private Oi() { // Prevent instantiation
     }
 }

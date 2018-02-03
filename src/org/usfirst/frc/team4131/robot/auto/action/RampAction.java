@@ -8,15 +8,11 @@ import org.usfirst.frc.team4131.robot.subsystem.DriveBaseSubsystem;
  * metrics about amperage, velocity, and voltage used by
  * the talons.
  */
-
 public class RampAction implements Action {
-
-	/** The drive base */
+    /** The drive base */
     private final DriveBaseSubsystem driveBase;
-    
     /** The direction */
     private final int sigint;
-    
     /** The current input */
     private double cur;
 

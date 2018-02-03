@@ -6,10 +6,8 @@ import org.usfirst.frc.team4131.robot.command.ClawCommand;
 /**
  * Links control for the claw-related motors.
  */
-
 public class ClawSubsystem extends Subsystem {
-    
-	/**
+    /**
      * Initializes and caches the motor wrapper for the claw
      * subsystem
      */
