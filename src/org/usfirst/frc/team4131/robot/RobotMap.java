@@ -32,6 +32,9 @@ public final class RobotMap {
     // Climber motors
     public static final int C1 = 5;
     public static final int C2 = 6;
+    
+    // Claw elevator motor
+    public static final int E = 7;
 
     private RobotMap() { // Prevent instantiation
     }

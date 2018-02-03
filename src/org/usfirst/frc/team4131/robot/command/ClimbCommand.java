@@ -18,7 +18,7 @@ public class ClimbCommand extends SingleSubsystemCmd<ClimberSubsystem> {
     }
 
     private static boolean down() {
-        return Oi.LOWER.get();
+        return Oi.DESCEND.get();
     }
 
     @Override
