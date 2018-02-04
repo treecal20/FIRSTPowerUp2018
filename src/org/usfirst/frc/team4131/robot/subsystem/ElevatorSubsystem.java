@@ -31,7 +31,7 @@ public class ElevatorSubsystem extends Subsystem {
      * Performs the climbing action and hoists the robot
      * up the pull-up bar.
      */
-    public void doClimb(boolean upDown) {
+    public void doMove(boolean upDown) {
     	if (upDown) {
     		this.motor.set(ControlMode.PercentOutput, 0.5);
     	} else {

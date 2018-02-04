@@ -34,11 +34,21 @@ import java.util.function.Supplier;
 public class Robot extends IterativeRobot {
     //compressor stuff
     public static final Compressor compressor = new Compressor(61);
-    public static boolean isInverted, isTop, isBottom;
+    
+    //Booleans for random functions
+    public static boolean isInverted, isClimberTop, isClimberBottom, isElevatorTop, isElevatorBottom;
     private static int round;
+    
+    // Auton chooser
     private final SendableChooser<Procedure> chooser = new SendableChooser<>();
-    DigitalInput bottomSwitch = new DigitalInput(0);
-    DigitalInput topSwitch = new DigitalInput(1);
+    
+    // Limit Switches
+    DigitalInput topClimberSwitch = new DigitalInput(0);
+    DigitalInput bottomClimberSwitch = new DigitalInput(1);
+    DigitalInput topElevatorSwitch = new DigitalInput(2);
+    DigitalInput bottomElevatorSwitch = new DigitalInput(3);
+    
+    // Subsystem stuff
     private SubsystemProvider provider;
 
     // AUTONOMOUS ------------------------------------------
@@ -107,11 +117,13 @@ public class Robot extends IterativeRobot {
     public void teleopPeriodic() {
         Scheduler.getInstance().run();
 
-        // climber stuff
-        isBottom = bottomSwitch.get();
-        isTop = topSwitch.get();
+        // Limit switch stuff
+        isClimberTop = topClimberSwitch.get();
+        isClimberBottom = bottomClimberSwitch.get();
+        isElevatorTop = topElevatorSwitch.get();
+        isElevatorBottom = bottomElevatorSwitch.get();
 
-        // inverting controls
+        // Inverting controls
         if (Oi.INVERT_L_1.get() && Oi.INVERT_L_2.get() && Oi.INVERT_R_1.get() && Oi.INVERT_R_2.get()) {
             isInverted = true;
         } else {
