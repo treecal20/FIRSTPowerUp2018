@@ -13,13 +13,9 @@ package org.usfirst.frc.team4131.robot;
  */
 public final class RobotMap {
     // Joysticks
-	public static final int L_JOY_PORT = 1;
+    public static final int L_JOY_PORT = 1;
     public static final int R_JOY_PORT = 0;
     public static final int AUX_JOY_PORT = 2;
-
-    // Other devices
-    public static final int PCM_ID = 61;
-    public static final int PDP_ID = 62;
 
     // Left motors
     public static final int L1 = 1;
@@ -32,7 +28,7 @@ public final class RobotMap {
     // Climber motors
     public static final int C1 = 5;
     public static final int C2 = 6;
-    
+
     // Claw elevator motor
     public static final int E = 7;
 

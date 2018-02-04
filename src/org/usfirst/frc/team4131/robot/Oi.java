@@ -34,14 +34,26 @@ public final class Oi {
     public static final JoystickButton CLAWUP = new JoystickButton(AUX_JOYSTICK, 3);
     public static final JoystickButton CLAWDOWN = new JoystickButton(AUX_JOYSTICK, 4);
 
-    public static int sigr() {
-    	return -1;
-    }
-    
-    public static int sigl() {
-    	return 1;
+    private Oi() { // Prevent instantiation
     }
 
-    private Oi() { // Prevent instantiation
+    /**
+     * Obtains the direction sign for the left side motors.
+     *
+     * @return the sign on input/output on the left side
+     * motors
+     */
+    public static int sigl() {
+        return -1;
+    }
+
+    /**
+     * Obtains the direction sign for the right side motors.
+     *
+     * @return the sign on the input/output on the right
+     * side motors
+     */
+    public static int sigr() {
+        return -1;
     }
 }

@@ -40,6 +40,7 @@ public class ClimbCommand extends SingleSubsystemCmd<ClimberSubsystem> {
         }
     }
 
+    @Override
     protected boolean isFinished() {
         return false;
     }

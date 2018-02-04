@@ -2,7 +2,7 @@ package org.usfirst.frc.team4131.robot.auto.action;
 
 import org.usfirst.frc.team4131.robot.Robot;
 import org.usfirst.frc.team4131.robot.auto.Action;
-import org.usfirst.frc.team4131.robot.nav.TurnController;
+import org.usfirst.frc.team4131.robot.ctl.TurnCtl;
 import org.usfirst.frc.team4131.robot.subsystem.DriveBaseSubsystem;
 
 import java.util.function.DoubleConsumer;
@@ -42,7 +42,7 @@ public class TurnAction implements Action {
             this.driveBase.doThrottle(-value, value);
         };
 
-        TurnController controller = TurnController.getInstance();
+        TurnCtl controller = TurnCtl.getInstance();
         controller.begin(this.delta);
         int roundsSinceChange = 0;
         while (true) {

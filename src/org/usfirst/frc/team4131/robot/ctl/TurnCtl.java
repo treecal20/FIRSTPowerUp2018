@@ -1,14 +1,12 @@
-package org.usfirst.frc.team4131.robot.nav;
+package org.usfirst.frc.team4131.robot.ctl;
 
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.SPI;
-import sun.security.util.Debug;
+import org.usfirst.frc.team4131.robot.Robot;
 
 import java.util.function.DoubleConsumer;
-
-import org.usfirst.frc.team4131.robot.Robot;
 
 /**
  * A turn controller used to ensure accurate rotation using
@@ -17,9 +15,9 @@ import org.usfirst.frc.team4131.robot.Robot;
  *
  * @see #getInstance()
  */
-public class TurnController implements PIDOutput {
+public class TurnCtl implements PIDOutput {
     /** The singleton instance of the turn controller */
-    private static final TurnController INSTANCE = new TurnController();
+    private static final TurnCtl INSTANCE = new TurnCtl();
 
     // Internal navX and PID control device
     private final AHRS dev;
@@ -30,7 +28,7 @@ public class TurnController implements PIDOutput {
     private boolean isTurning;
     private double throttleDelta;
 
-    private TurnController() {
+    private TurnCtl() {
         this.dev = new AHRS(SPI.Port.kMXP);
 
         PIDController controller = new PIDController(.006, 0, 0, 0, this.dev, this);
@@ -48,7 +46,7 @@ public class TurnController implements PIDOutput {
      *
      * @return the turn controller wrapper
      */
-    public static TurnController getInstance() {
+    public static TurnCtl getInstance() {
         return INSTANCE;
     }
 
@@ -65,10 +63,10 @@ public class TurnController implements PIDOutput {
      * {@code -180 <= delta <= 180}
      */
     public void begin(double delta) {
-    	Robot.debug(() -> "TurnController begun, isTurning = " + String.valueOf(isTurning));
+        Robot.debug(() -> "TurnController begun, isTurning = " + String.valueOf(this.isTurning));
         if (!this.isTurning) {
             this.dev.zeroYaw();
-            Robot.debug(()-> "Yaw Zeroed");
+            Robot.debug(() -> "Yaw Zeroed");
             this.isTurning = true;
             this.cached = null;
             this.controller.setSetpoint(delta);

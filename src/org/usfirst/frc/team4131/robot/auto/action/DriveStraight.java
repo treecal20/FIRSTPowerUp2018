@@ -2,7 +2,7 @@ package org.usfirst.frc.team4131.robot.auto.action;
 
 import org.usfirst.frc.team4131.robot.Robot;
 import org.usfirst.frc.team4131.robot.auto.Action;
-import org.usfirst.frc.team4131.robot.nav.TurnController;
+import org.usfirst.frc.team4131.robot.ctl.TurnCtl;
 import org.usfirst.frc.team4131.robot.subsystem.DriveBaseSubsystem;
 
 import java.util.function.DoubleConsumer;
@@ -23,8 +23,9 @@ public class DriveStraight implements Action {
     /** The value to turn */
     private final double targetThrottle;
     private final double targetAngularDelta = 0;
-    private double targetL;
-    private double targetR;
+    private final double targetL;
+    private final double targetR;
+
     /**
      * Creates a new turning action that moves a specified
      * relative delta value.
@@ -35,24 +36,23 @@ public class DriveStraight implements Action {
     public DriveStraight(DriveBaseSubsystem driveBase, double targetThrottle) {
         this.driveBase = driveBase;
         this.targetThrottle = targetThrottle;
-        targetL = targetThrottle;
-        targetR = targetThrottle;
-        		
+        this.targetL = targetThrottle;
+        this.targetR = targetThrottle;
     }
 
     @Override
     public void doAction() {
         DoubleConsumer consumer = value -> {
-        	value *= 10; //tuning
-            this.driveBase.doThrottle(targetThrottle - value, targetThrottle+value);
+            value *= 10; //tuning
+            this.driveBase.doThrottle(this.targetThrottle - value, this.targetThrottle + value);
             double temp = value;
-            Robot.debug(()->(String.valueOf(temp)));
+            Robot.debug(() -> String.valueOf(temp));
         };
 
-        TurnController controller = TurnController.getInstance();
-        controller.begin(targetAngularDelta);
+        TurnCtl controller = TurnCtl.getInstance();
+        controller.begin(this.targetAngularDelta);
         int roundsSinceChange = 0;
-        this.driveBase.doThrottle(targetThrottle, targetThrottle);
+        this.driveBase.doThrottle(this.targetThrottle, this.targetThrottle);
         while (true) {
             Robot.debug(controller::getYaw);
             if (controller.targetReached()) {

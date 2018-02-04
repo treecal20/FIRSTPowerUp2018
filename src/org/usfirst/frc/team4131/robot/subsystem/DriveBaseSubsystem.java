@@ -9,6 +9,9 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import org.usfirst.frc.team4131.robot.RobotMap;
 import org.usfirst.frc.team4131.robot.command.MoveCommand;
 
+import static org.usfirst.frc.team4131.robot.Oi.sigl;
+import static org.usfirst.frc.team4131.robot.Oi.sigr;
+
 /**
  * The drive base subsystem, linking the 4 Talon SRX
  * controllers and their respective motors.
@@ -30,10 +33,11 @@ public class DriveBaseSubsystem extends Subsystem {
     public DriveBaseSubsystem() {
         this.left = new TalonSRX(RobotMap.L1);
         this.right = new TalonSRX(RobotMap.R1);
+        this.right.setInverted(true);
 
         new TalonSRX(RobotMap.L2).follow(this.left);
         new TalonSRX(RobotMap.R2).follow(this.right);
-        
+
         this.setupEncoder();
         this.reset();
 
@@ -121,8 +125,8 @@ public class DriveBaseSubsystem extends Subsystem {
      * @param r the right motor speed
      */
     public void doThrottle(double l, double r) {
-        this.left.set(ControlMode.PercentOutput, -l);
-        this.right.set(ControlMode.PercentOutput, r);
+        this.left.set(ControlMode.PercentOutput, sigl() * l);
+        this.right.set(ControlMode.PercentOutput, sigr() * r);
     }
 
     /**
@@ -133,32 +137,34 @@ public class DriveBaseSubsystem extends Subsystem {
      * @param right the ticks to move the right wheel
      */
     public void gotoPosition(int left, int right) {
-        this.left.set(ControlMode.Position, left);
-        this.right.set(ControlMode.Position, -right);
+        this.left.set(ControlMode.Position, sigl() * left);
+        this.right.set(ControlMode.Position, sigr() * right);
     }
-    
+
     public void setVelocity(int vel) {
-    	this.right.set(ControlMode.Velocity, -vel);
-    	this.left.set(ControlMode.Velocity, vel);
+        this.left.set(ControlMode.Velocity, sigl() * vel);
+        this.right.set(ControlMode.Velocity, sigr() * vel);
     }
+
     public void setVelocityLeft(int vel) {
-    	this.left.set(ControlMode.Velocity, vel);
+        this.left.set(ControlMode.Velocity, sigl() * vel);
     }
+
     public void setVelocityRight(int vel) {
-    	this.right.set(ControlMode.Velocity, -vel);
+        this.right.set(ControlMode.Velocity, sigr() * vel);
     }
 
     // Sensor polling methods ------------------------------
     // DO NOT use SensorCollection here
-    
+
     public int getLeftVelocity() {
-    	return this.left.getSelectedSensorVelocity(PID_IDX);
+        return sigl() * this.left.getSelectedSensorVelocity(PID_IDX);
     }
-    
+
     public int getRightVelocity() {
-    	return this.right.getSelectedSensorVelocity(PID_IDX);
+        return sigr() * this.right.getSelectedSensorVelocity(PID_IDX);
     }
-    
+
     /**
      * Obtains the tick count for the left encoder.
      *
@@ -166,7 +172,7 @@ public class DriveBaseSubsystem extends Subsystem {
      * the left encoder
      */
     public int getLeftDist() {
-        return this.left.getSelectedSensorPosition(PID_IDX);
+        return sigl() * this.left.getSelectedSensorPosition(PID_IDX);
     }
 
     /**
@@ -176,6 +182,6 @@ public class DriveBaseSubsystem extends Subsystem {
      * the right encoder
      */
     public int getRightDist() {
-        return -this.right.getSelectedSensorPosition(PID_IDX);
+        return sigr() * this.right.getSelectedSensorPosition(PID_IDX);
     }
 }

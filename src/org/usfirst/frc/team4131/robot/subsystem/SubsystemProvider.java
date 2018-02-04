@@ -30,8 +30,8 @@ public class SubsystemProvider {
     public ClimberSubsystem getClimber() {
         return this.climber;
     }
-    
+
     public ElevatorSubsystem getElevator() {
-    	return this.elevator;
+        return this.elevator;
     }
 }

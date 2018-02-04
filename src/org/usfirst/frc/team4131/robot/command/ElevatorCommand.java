@@ -14,39 +14,40 @@ public class ElevatorCommand extends SingleSubsystemCmd<ElevatorSubsystem> {
         super(subsystem);
     }
 
+    private static boolean up() {
+        return Oi.CLAWUP.get();
+    }
+
+    private static boolean down() {
+        return Oi.CLAWDOWN.get();
+    }
+
     @Override
     protected void execute() {
         if (up() && down()) {
-        	this.subsystem.doStop();
+            this.subsystem.doStop();
         } else if (up()) {
-        	this.subsystem.doMove(true);
-        	if (Robot.isElevatorTop) {
-        		this.subsystem.doStop();
-        	}
+            this.subsystem.doMove(true);
+            if (Robot.isElevatorTop) {
+                this.subsystem.doStop();
+            }
         } else if (down()) {
-        	this.subsystem.doMove(false);
-        	if (!Robot.isElevatorBottom) {
-        		this.subsystem.doStop();
-        	}
+            this.subsystem.doMove(false);
+            if (!Robot.isElevatorBottom) {
+                this.subsystem.doStop();
+            }
         } else {
-        	this.subsystem.doStop();
+            this.subsystem.doStop();
         }
     }
-    
+
+    @Override
     protected boolean isFinished() {
         return false;
     }
-    
+
     @Override
     protected void interrupted() {
         this.subsystem.doStop();
-    }
-    
-    private static boolean up() {
-    	return Oi.CLAWUP.get();
-    }
-    
-    private static boolean down() {
-    	return Oi.CLAWDOWN.get();
     }
 }
