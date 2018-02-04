@@ -8,7 +8,7 @@ import org.usfirst.frc.team4131.robot.subsystem.ElevatorSubsystem;
  * A command which will activate the climber and raise the
  * robot using the pull-up bar.
  */
-//TODO test when bot is built
+//TODO test when elevator is built
 public class ElevatorCommand extends SingleSubsystemCmd<ElevatorSubsystem> {
     public ElevatorCommand(ElevatorSubsystem subsystem) {
         super(subsystem);
@@ -19,13 +19,13 @@ public class ElevatorCommand extends SingleSubsystemCmd<ElevatorSubsystem> {
         if (up() && down()) {
         	this.subsystem.doStop();
         } else if (up()) {
-        	this.subsystem.doClimb(true);
-        	if (Robot.isTop) {
+        	this.subsystem.doMove(true);
+        	if (Robot.isElevatorTop) {
         		this.subsystem.doStop();
         	}
         } else if (down()) {
-        	this.subsystem.doClimb(false);
-        	if (!Robot.isBottom) {
+        	this.subsystem.doMove(false);
+        	if (!Robot.isElevatorBottom) {
         		this.subsystem.doStop();
         	}
         } else {
