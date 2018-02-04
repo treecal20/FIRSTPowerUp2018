@@ -44,7 +44,7 @@ public final class Oi {
      * motors
      */
     public static int sigl() {
-        return -1;
+        return 1;
     }
 
     /**
@@ -54,6 +54,6 @@ public final class Oi {
      * side motors
      */
     public static int sigr() {
-        return -1;
+        return 1;
     }
 }

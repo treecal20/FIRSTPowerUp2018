@@ -10,7 +10,6 @@ import org.usfirst.frc.team4131.robot.RobotMap;
 import org.usfirst.frc.team4131.robot.command.MoveCommand;
 
 import static org.usfirst.frc.team4131.robot.Oi.sigl;
-import static org.usfirst.frc.team4131.robot.Oi.sigr;
 
 /**
  * The drive base subsystem, linking the 4 Talon SRX
@@ -25,24 +24,26 @@ public class DriveBaseSubsystem extends Subsystem {
 
     // Physical drive mappings
     private final TalonSRX left;
-    private final TalonSRX right;
+    // private final TalonSRX right;
 
     /**
      * Creates and caches the motors used for the drive base
      */
     public DriveBaseSubsystem() {
         this.left = new TalonSRX(RobotMap.L1);
-        this.right = new TalonSRX(RobotMap.R1);
-        this.right.setInverted(true);
-
         new TalonSRX(RobotMap.L2).follow(this.left);
-        new TalonSRX(RobotMap.R2).follow(this.right);
+
+        TalonSRX r1 = new TalonSRX(RobotMap.R1);
+        r1.follow(this.left);
+        r1.setInverted(true);
+        TalonSRX r2 = new TalonSRX(RobotMap.R2);
+        r2.follow(this.left);
+        r2.setInverted(true);
 
         this.setupEncoder();
         this.reset();
 
         this.setupPid(this.left);
-        this.setupPid(this.right);
     }
 
     @Override
@@ -57,9 +58,7 @@ public class DriveBaseSubsystem extends Subsystem {
      * encoder on the left and right motors.
      */
     private void setupEncoder() {
-        ErrorCode code = ErrorCode.worstOne(
-                this.left.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, PID_IDX, SENSOR_TIMEOUT),
-                this.right.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, PID_IDX, SENSOR_TIMEOUT));
+        ErrorCode code = this.left.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, PID_IDX, SENSOR_TIMEOUT);
         if (code.value != 0) {
             DriverStation.reportError("Error occurred configuring quad encoders", false);
         }
@@ -70,10 +69,8 @@ public class DriveBaseSubsystem extends Subsystem {
      * {@code 0}.
      */
     public void reset() {
-        ErrorCode code0 = ErrorCode.worstOne(
-                this.left.setSelectedSensorPosition(0, PID_IDX, SENSOR_TIMEOUT),
-                this.right.setSelectedSensorPosition(0, PID_IDX, SENSOR_TIMEOUT));
-        if (code0.value != 0) {
+        ErrorCode code = this.left.setSelectedSensorPosition(0, PID_IDX, SENSOR_TIMEOUT);
+        if (code.value != 0) {
             DriverStation.reportError("Error occurred resetting quad encoders", false);
         }
     }
@@ -126,7 +123,6 @@ public class DriveBaseSubsystem extends Subsystem {
      */
     public void doThrottle(double l, double r) {
         this.left.set(ControlMode.PercentOutput, sigl() * l);
-        this.right.set(ControlMode.PercentOutput, sigr() * r);
     }
 
     /**
@@ -138,20 +134,14 @@ public class DriveBaseSubsystem extends Subsystem {
      */
     public void gotoPosition(int left, int right) {
         this.left.set(ControlMode.Position, sigl() * left);
-        this.right.set(ControlMode.Position, sigr() * right);
     }
 
     public void setVelocity(int vel) {
         this.left.set(ControlMode.Velocity, sigl() * vel);
-        this.right.set(ControlMode.Velocity, sigr() * vel);
     }
 
     public void setVelocityLeft(int vel) {
         this.left.set(ControlMode.Velocity, sigl() * vel);
-    }
-
-    public void setVelocityRight(int vel) {
-        this.right.set(ControlMode.Velocity, sigr() * vel);
     }
 
     // Sensor polling methods ------------------------------
@@ -161,9 +151,6 @@ public class DriveBaseSubsystem extends Subsystem {
         return sigl() * this.left.getSelectedSensorVelocity(PID_IDX);
     }
 
-    public int getRightVelocity() {
-        return sigr() * this.right.getSelectedSensorVelocity(PID_IDX);
-    }
 
     /**
      * Obtains the tick count for the left encoder.
@@ -173,15 +160,5 @@ public class DriveBaseSubsystem extends Subsystem {
      */
     public int getLeftDist() {
         return sigl() * this.left.getSelectedSensorPosition(PID_IDX);
-    }
-
-    /**
-     * Obtains the tick count for the right encoder.
-     *
-     * @return the ticks since the last reset travelled by
-     * the right encoder
-     */
-    public int getRightDist() {
-        return sigr() * this.right.getSelectedSensorPosition(PID_IDX);
     }
 }

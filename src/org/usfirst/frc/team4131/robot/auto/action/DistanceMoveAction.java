@@ -45,25 +45,15 @@ public class DistanceMoveAction implements Action {
         this.driveBase.gotoPosition(this.leftDist, this.rightDist);
 
         int lastLeftValue = this.driveBase.getLeftDist();
-        int lastRightValue = this.driveBase.getRightDist();
         int roundsSinceLastChange = 0;
         while (true) {
             int newLeftValue = this.driveBase.getLeftDist();
-            int newRightValue = this.driveBase.getRightDist();
-            boolean hasChanged = false;
 
             int lDiff = Math.abs(newLeftValue - lastLeftValue);
             if (lDiff > ERR_BOUND) {
                 lastLeftValue = newLeftValue;
                 roundsSinceLastChange = 0;
-                hasChanged = true;
-            }
-
-            int rDiff = Math.abs(newRightValue - lastRightValue);
-            if (rDiff > ERR_BOUND) {
-                lastRightValue = newRightValue;
-                roundsSinceLastChange = 0;
-            } else if (!hasChanged) {
+            } else {
                 roundsSinceLastChange++;
             }
 
