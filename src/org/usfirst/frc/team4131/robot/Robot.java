@@ -9,11 +9,7 @@ package org.usfirst.frc.team4131.robot;
 
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.cscore.VideoMode;
-import edu.wpi.first.wpilibj.CameraServer;
-import edu.wpi.first.wpilibj.Compressor;
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -36,31 +32,40 @@ import java.util.function.Supplier;
  * Robot lifecycle handler.
  */
 public class Robot extends IterativeRobot {
-    private SubsystemProvider provider;
-    private final SendableChooser<Procedure> chooser = new SendableChooser<>();
-    
-    public static boolean isInverted, isTop, isBottom;
-    DigitalInput bottomSwitch = new DigitalInput(0);
-    DigitalInput topSwitch = new DigitalInput(1);
-    
     //compressor stuff
     public static final Compressor compressor = new Compressor(61);
+    public static boolean isInverted, isTop, isBottom;
+    private static int round;
+    private final SendableChooser<Procedure> chooser = new SendableChooser<>();
+    DigitalInput bottomSwitch = new DigitalInput(0);
+    DigitalInput topSwitch = new DigitalInput(1);
+    private SubsystemProvider provider;
+
+    // AUTONOMOUS ------------------------------------------
+
+    public static void debug(Supplier<String> string) {
+        if (round++ == 2000) {
+            System.out.println("DEBUG: " + string.get());
+            round = 0;
+        }
+    }
 
     @Override
     public void robotInit() {
         // Init subsystems
         this.provider = new SubsystemProvider(new DriveBaseSubsystem(),
-        new ClawSubsystem(), new ClimberSubsystem(), new ElevatorSubsystem());
+        		new ClawSubsystem(), new ClimberSubsystem(), new ElevatorSubsystem());
 
         // Init camera
         UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
         camera.setVideoMode(new VideoMode(VideoMode.PixelFormat.kMJPEG, 600, 600, 10));
 
         this.chooser.addDefault("Left Right Baseline", new LeftRightBaseline());
-        //this.chooser.addDefault("Move 12 then Turn 90", new Move12ThenTurn90());
+        this.chooser.addObject("Encoder Calibration", new EncoderCalibration());
+        this.chooser.addObject("Move 12 then Turn 90", new Move12ThenTurn90());
         this.chooser.addObject("Turn 90 Degrees", new Turn90());
         this.chooser.addObject("Move 12 Inches", new Move12());
-        //this.chooser.addObject("Turn 180 degrees", new Turn180());
+        this.chooser.addObject("Turn 180 degrees", new Turn180());
         this.chooser.addObject("Ramp Test Procedure", new Ramp());
         SmartDashboard.putData("Auto mode", this.chooser);
 
@@ -68,7 +73,7 @@ public class Robot extends IterativeRobot {
         compressor.clearAllPCMStickyFaults();
     }
 
-    // AUTONOMOUS ------------------------------------------
+    // HUMAN-OPERATED --------------------------------------
 
     @Override
     public void autonomousInit() {
@@ -92,7 +97,7 @@ public class Robot extends IterativeRobot {
     public void autonomousPeriodic() {
     }
 
-    // HUMAN-OPERATED --------------------------------------
+    // ----------------------------------------------------
 
     @Override
     public void teleopInit() {
@@ -100,27 +105,17 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void teleopPeriodic() {
-    	Scheduler.getInstance().run();
-    	
-    	//climber stuff
-    	isBottom = bottomSwitch.get();
-    	isTop = topSwitch.get();
-    	
-    	//inverting controls
-    	if (Oi.INVERT_L_1.get() && Oi.INVERT_L_2.get() && Oi.INVERT_R_1.get() && Oi.INVERT_R_2.get()) {
-    		isInverted = true;
-    	} else {
-    		isInverted = false;
-    	}
-    }
+        Scheduler.getInstance().run();
 
-    // ----------------------------------------------------
+        // climber stuff
+        isBottom = bottomSwitch.get();
+        isTop = topSwitch.get();
 
-    private static int round;
-    public static void debug(Supplier<String> string) {
-        if (round++ == 2000) {
-            System.out.println("DEBUG: " + string.get());
-            round = 0;
+        // inverting controls
+        if (Oi.INVERT_L_1.get() && Oi.INVERT_L_2.get() && Oi.INVERT_R_1.get() && Oi.INVERT_R_2.get()) {
+            isInverted = true;
+        } else {
+            isInverted = false;
         }
     }
 }

@@ -33,7 +33,7 @@ public class DriveBaseSubsystem extends Subsystem {
 
         new TalonSRX(RobotMap.L2).follow(this.left);
         new TalonSRX(RobotMap.R2).follow(this.right);
-
+        
         this.setupEncoder();
         this.reset();
 
@@ -54,7 +54,7 @@ public class DriveBaseSubsystem extends Subsystem {
      */
     private void setupEncoder() {
         ErrorCode code = ErrorCode.worstOne(
-                this.left.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, 0),
+                this.left.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, PID_IDX, SENSOR_TIMEOUT),
                 this.right.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, PID_IDX, SENSOR_TIMEOUT));
         if (code.value != 0) {
             DriverStation.reportError("Error occurred configuring quad encoders", false);
@@ -82,7 +82,7 @@ public class DriveBaseSubsystem extends Subsystem {
      * will be configured
      */
     private void setupPid(TalonSRX talon) {
-        ErrorCode code = ErrorCode.worstOne(talon.config_kP(PID_IDX, 0.5, SENSOR_TIMEOUT),
+        ErrorCode code = ErrorCode.worstOne(talon.config_kP(PID_IDX, 0.8, SENSOR_TIMEOUT),
                 talon.config_kI(PID_IDX, 0, SENSOR_TIMEOUT),
                 talon.config_kD(PID_IDX, 0, SENSOR_TIMEOUT),
                 talon.config_kF(PID_IDX, 0, SENSOR_TIMEOUT));
@@ -129,19 +129,36 @@ public class DriveBaseSubsystem extends Subsystem {
      * Performs a PID-controlled movement using the
      * encoder target tick.
      *
-     * @param pos the target tick to move
+     * @param left the ticks to move the left wheel
+     * @param right the ticks to move the right wheel
      */
-    public void gotoPosition(int pos) {
-        while (this.left.getSelectedSensorPosition(PID_IDX) < pos) {
-    		this.left.set(ControlMode.PercentOutput, 0.3);
-        	this.right.set(ControlMode.PercentOutput, -0.3);
-        }
-        doThrottle(0.0, 0.0);
+    public void gotoPosition(int left, int right) {
+        this.left.set(ControlMode.Position, left);
+        this.right.set(ControlMode.Position, -right);
+    }
+    
+    public void setVelocity(int vel) {
+    	this.right.set(ControlMode.Velocity, -vel);
+    	this.left.set(ControlMode.Velocity, vel);
+    }
+    public void setVelocityLeft(int vel) {
+    	this.left.set(ControlMode.Velocity, vel);
+    }
+    public void setVelocityRight(int vel) {
+    	this.right.set(ControlMode.Velocity, -vel);
     }
 
     // Sensor polling methods ------------------------------
     // DO NOT use SensorCollection here
-
+    
+    public int getLeftVelocity() {
+    	return this.left.getSelectedSensorVelocity(PID_IDX);
+    }
+    
+    public int getRightVelocity() {
+    	return this.right.getSelectedSensorVelocity(PID_IDX);
+    }
+    
     /**
      * Obtains the tick count for the left encoder.
      *

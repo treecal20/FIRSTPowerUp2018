@@ -12,38 +12,38 @@ public class MoveCommand extends SingleSubsystemCmd<DriveBaseSubsystem> {
         super(subsystem);
     }
 
+    private static double getLeft() {
+        if (Robot.isInverted) {
+            return -Oi.R_JOYSTICK.getRawAxis(1);
+        } else {
+            return Oi.L_JOYSTICK.getRawAxis(1);
+        }
+    }
+
+    private static double getRight() {
+        if (Robot.isInverted) {
+            return -Oi.L_JOYSTICK.getRawAxis(1);
+        } else {
+            return Oi.R_JOYSTICK.getRawAxis(1);
+        }
+    }
+
+    // CLEAN UP --------------------------------------------
+
     @Override
     protected void execute() {
         this.subsystem.doThrottle(getLeft(), getRight());
     }
+
+    // JOYSTICK --------------------------------------------
 
     @Override
     protected boolean isFinished() {
         return false;
     }
 
-    // CLEAN UP --------------------------------------------
-
     @Override
     protected void interrupted() {
         this.subsystem.doThrottle(0, 0);
-    }
-
-    // JOYSTICK --------------------------------------------
-
-    private static double getLeft() {
-        if (Robot.isInverted) {
-        	return -Oi.R_JOYSTICK.getRawAxis(1);
-        } else {
-        	return Oi.L_JOYSTICK.getRawAxis(1);
-        }
-    }
-
-    private static double getRight() {
-    	if (Robot.isInverted) {
-        	return -Oi.L_JOYSTICK.getRawAxis(1);
-        } else {
-        	return Oi.R_JOYSTICK.getRawAxis(1);
-        }
     }
 }

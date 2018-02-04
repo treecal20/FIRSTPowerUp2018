@@ -6,7 +6,6 @@ import java.util.List;
 
 /**
  * Represents a procedure that will be run autonomously.
- *
  * <p>See the examples in the {@link org.usfirst.frc.team4131.robot.auto}.</p>
  */
 @FunctionalInterface

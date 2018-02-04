@@ -4,13 +4,15 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.SPI;
+import sun.security.util.Debug;
 
 import java.util.function.DoubleConsumer;
+
+import org.usfirst.frc.team4131.robot.Robot;
 
 /**
  * A turn controller used to ensure accurate rotation using
  * the navX onboard controller.
- *
  * <p>See the usage of this class in {@link org.usfirst.frc.team4131.robot.auto.action.TurnAction}</p>.
  *
  * @see #getInstance()
@@ -40,10 +42,6 @@ public class TurnController implements PIDOutput {
         this.controller = controller;
     }
 
-    public String getYaw() {
-        return String.valueOf(this.dev.getYaw());
-    }
-
     /**
      * Obtains the singleton instance of the navX turn
      * controller.
@@ -52,6 +50,10 @@ public class TurnController implements PIDOutput {
      */
     public static TurnController getInstance() {
         return INSTANCE;
+    }
+
+    public String getYaw() {
+        return String.valueOf(this.dev.getYaw());
     }
 
     /**
@@ -63,11 +65,12 @@ public class TurnController implements PIDOutput {
      * {@code -180 <= delta <= 180}
      */
     public void begin(double delta) {
+    	Robot.debug(() -> "TurnController begun, isTurning = " + String.valueOf(isTurning));
         if (!this.isTurning) {
             this.dev.zeroYaw();
+            Robot.debug(()-> "Yaw Zeroed");
             this.isTurning = true;
             this.cached = null;
-
             this.controller.setSetpoint(delta);
             this.throttleDelta = 0;
             this.controller.enable();
@@ -95,7 +98,6 @@ public class TurnController implements PIDOutput {
 
     /**
      * Determines whether the target has been reached.
-     *
      * <p>This method does not detect whether or not the
      * PID operation has completed or not, so be cautious
      * to continue polling until this method returns
