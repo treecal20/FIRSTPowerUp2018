@@ -27,12 +27,12 @@ public class ClimbCommand extends SingleSubsystemCmd<ClimberSubsystem> {
             this.subsystem.doStop();
         } else if (up()) {
             this.subsystem.doClimb(true);
-            if (Robot.isTop) {
+            if (Robot.isClimberTop) {
                 this.subsystem.doStop();
             }
         } else if (down()) {
             this.subsystem.doClimb(false);
-            if (!Robot.isBottom) {
+            if (!Robot.isClimberBottom) {
                 this.subsystem.doStop();
             }
         } else {
@@ -40,6 +40,7 @@ public class ClimbCommand extends SingleSubsystemCmd<ClimberSubsystem> {
         }
     }
 
+    @Override
     protected boolean isFinished() {
         return false;
     }
