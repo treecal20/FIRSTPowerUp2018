@@ -31,7 +31,7 @@ public class TurnCtl implements PIDOutput {
     private TurnCtl() {
         this.dev = new AHRS(SPI.Port.kMXP);
 
-        PIDController controller = new PIDController(.006, 0, 0, 0, this.dev, this);
+        PIDController controller = new PIDController(.0065, 0, 0, 0, this.dev, this);
         controller.setInputRange(-180, 180);
         controller.setOutputRange(-1, 1);
         controller.setAbsoluteTolerance(2);
@@ -63,10 +63,9 @@ public class TurnCtl implements PIDOutput {
      * {@code -180 <= delta <= 180}
      */
     public void begin(double delta) {
-        Robot.debug(() -> "TurnController begun, isTurning = " + String.valueOf(this.isTurning));
         if (!this.isTurning) {
             this.dev.zeroYaw();
-            Robot.debug(() -> "Yaw Zeroed");
+            
             this.isTurning = true;
             this.cached = null;
             this.controller.setSetpoint(delta);

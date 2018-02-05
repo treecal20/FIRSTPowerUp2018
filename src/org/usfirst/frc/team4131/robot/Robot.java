@@ -88,7 +88,8 @@ public class Robot extends IterativeRobot {
         for (int i = 0, s = str.length(); i < s; i++) {
             sides[i] = Side.decode(str.charAt(i));
         }
-
+        
+        this.provider.getDriveBase().prepareAuto();
         Procedure procedure = this.chooser.getSelected();
         List<Action> actions = new ArrayList<>(procedure.estimateLen());
         procedure.populate(this.provider, Arrays.asList(sides), actions);
@@ -107,6 +108,7 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void teleopInit() {
+    	this.provider.getDriveBase().prepareTeleop();
     }
 
     @Override

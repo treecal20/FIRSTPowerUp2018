@@ -1,5 +1,6 @@
 package org.usfirst.frc.team4131.robot.auto.action;
 
+import org.usfirst.frc.team4131.robot.Robot;
 import org.usfirst.frc.team4131.robot.auto.Action;
 import org.usfirst.frc.team4131.robot.subsystem.DriveBaseSubsystem;
 
@@ -12,20 +13,18 @@ public class DistanceMoveAction implements Action {
      * The number of polls in loop to reasonably declare
      * PID victory
      */
-    private static final int V_GRANULARITY = 200;
+    private static final int V_GRANULARITY = 500;
     /**
      * The amount of acceptable error for the target tick
      * distance
      */
-    private static final int ERR_BOUND = 30;
+    private static final int ERR_BOUND = 1;
 
     /** The drive base used to move the robot */
     private final DriveBaseSubsystem driveBase;
-    /** The number of ticks used to move the left wheel */
-    private final int leftDist;
-    /** The number of ticks used to move the right wheel */
-    private final int rightDist;
-
+    /** The number of ticks to move the robot */
+    private final int distance;
+    
     /**
      * Creates a new action that will move the robot the
      * given distance, with a velocity of 0.3
@@ -35,14 +34,13 @@ public class DistanceMoveAction implements Action {
      */
     public DistanceMoveAction(DriveBaseSubsystem driveBase, double distance) {
         this.driveBase = driveBase;
-        this.leftDist = (int) (74.9151910531 * distance);
-        this.rightDist = (int) (75.5747883349 * distance);
+        this.distance = (int) (74.9151910531 * distance);
     }
 
     @Override
     public void doAction() {
         this.driveBase.reset();
-        this.driveBase.gotoPosition(this.leftDist, this.rightDist);
+        this.driveBase.gotoPosition(this.distance);
 
         int lastLeftValue = this.driveBase.getLeftDist();
         int roundsSinceLastChange = 0;
@@ -50,7 +48,7 @@ public class DistanceMoveAction implements Action {
             int newLeftValue = this.driveBase.getLeftDist();
 
             int lDiff = Math.abs(newLeftValue - lastLeftValue);
-            if (lDiff > ERR_BOUND) {
+            if (lDiff >= ERR_BOUND) {
                 lastLeftValue = newLeftValue;
                 roundsSinceLastChange = 0;
             } else {
