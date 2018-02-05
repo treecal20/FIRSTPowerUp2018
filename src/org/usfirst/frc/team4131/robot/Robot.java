@@ -17,11 +17,7 @@ import org.usfirst.frc.team4131.robot.auto.Action;
 import org.usfirst.frc.team4131.robot.auto.Procedure;
 import org.usfirst.frc.team4131.robot.auto.Side;
 import org.usfirst.frc.team4131.robot.auto.procedure.*;
-import org.usfirst.frc.team4131.robot.subsystem.ClawSubsystem;
-import org.usfirst.frc.team4131.robot.subsystem.ClimberSubsystem;
-import org.usfirst.frc.team4131.robot.subsystem.DriveBaseSubsystem;
-import org.usfirst.frc.team4131.robot.subsystem.ElevatorSubsystem;
-import org.usfirst.frc.team4131.robot.subsystem.SubsystemProvider;
+import org.usfirst.frc.team4131.robot.subsystem.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,26 +28,28 @@ import java.util.function.Supplier;
  * Robot lifecycle handler.
  */
 public class Robot extends IterativeRobot {
-    //compressor stuff
-    public static final Compressor compressor = new Compressor(61);
-    
-    //Booleans for random functions
-    public static boolean isInverted, isClimberTop, isClimberBottom, isElevatorTop, isElevatorBottom;
+    // Compressor stuff
+    private static final Compressor compressor = new Compressor(61);
+
+    // Booleans for random functions
+    public static boolean isInverted;
+    public static boolean isClimberTop;
+    public static boolean isClimberBottom;
+    public static boolean isElevatorTop;
+    public static boolean isElevatorBottom;
     private static int round;
-    
+
     // Auton chooser
     private final SendableChooser<Procedure> chooser = new SendableChooser<>();
-    
+
     // Limit Switches
-    DigitalInput topClimberSwitch = new DigitalInput(0);
-    DigitalInput bottomClimberSwitch = new DigitalInput(1);
-    DigitalInput topElevatorSwitch = new DigitalInput(2);
-    DigitalInput bottomElevatorSwitch = new DigitalInput(3);
-    
+    private final DigitalInput topClimberSwitch = new DigitalInput(0);
+    private final DigitalInput bottomClimberSwitch = new DigitalInput(1);
+    private final DigitalInput topElevatorSwitch = new DigitalInput(2);
+    private final DigitalInput bottomElevatorSwitch = new DigitalInput(3);
+
     // Subsystem stuff
     private SubsystemProvider provider;
-
-    // AUTONOMOUS ------------------------------------------
 
     public static void debug(Supplier<String> string) {
         if (round++ == 2000) {
@@ -64,7 +62,7 @@ public class Robot extends IterativeRobot {
     public void robotInit() {
         // Init subsystems
         this.provider = new SubsystemProvider(new DriveBaseSubsystem(),
-        		new ClawSubsystem(), new ClimberSubsystem(), new ElevatorSubsystem());
+                new ClawSubsystem(), new ClimberSubsystem(), new ElevatorSubsystem());
 
         // Init camera
         UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
@@ -83,8 +81,6 @@ public class Robot extends IterativeRobot {
         compressor.clearAllPCMStickyFaults();
     }
 
-    // HUMAN-OPERATED --------------------------------------
-
     @Override
     public void autonomousInit() {
         String str = DriverStation.getInstance().getGameSpecificMessage();
@@ -92,7 +88,8 @@ public class Robot extends IterativeRobot {
         for (int i = 0, s = str.length(); i < s; i++) {
             sides[i] = Side.decode(str.charAt(i));
         }
-
+        
+        this.provider.getDriveBase().prepareAuto();
         Procedure procedure = this.chooser.getSelected();
         List<Action> actions = new ArrayList<>(procedure.estimateLen());
         procedure.populate(this.provider, Arrays.asList(sides), actions);
@@ -111,6 +108,7 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void teleopInit() {
+    	this.provider.getDriveBase().prepareTeleop();
     }
 
     @Override
@@ -118,16 +116,12 @@ public class Robot extends IterativeRobot {
         Scheduler.getInstance().run();
 
         // Limit switch stuff
-        isClimberTop = topClimberSwitch.get();
-        isClimberBottom = bottomClimberSwitch.get();
-        isElevatorTop = topElevatorSwitch.get();
-        isElevatorBottom = bottomElevatorSwitch.get();
+        isClimberTop = this.topClimberSwitch.get();
+        isClimberBottom = this.bottomClimberSwitch.get();
+        isElevatorTop = this.topElevatorSwitch.get();
+        isElevatorBottom = this.bottomElevatorSwitch.get();
 
         // Inverting controls
-        if (Oi.INVERT_L_1.get() && Oi.INVERT_L_2.get() && Oi.INVERT_R_1.get() && Oi.INVERT_R_2.get()) {
-            isInverted = true;
-        } else {
-            isInverted = false;
-        }
+        isInverted = Oi.INVERT_L_1.get() && Oi.INVERT_L_2.get() && Oi.INVERT_R_1.get() && Oi.INVERT_R_2.get();
     }
 }
