@@ -39,21 +39,6 @@ public class EncoderCalibration implements Procedure {
             }
 
             System.out.println("FINAL LEFT: " + base.getLeftDist());
-
-            base.reset();
-            while (base.getRightDist() < dist) {
-                base.doThrottle(0, speed);
-                Robot.debug(() -> String.valueOf(base.getRightDist()));
-            }
-
-            base.doThrottle(0, 0);
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            System.out.println("FINAL RIGHT: " + base.getRightDist());
         });
     }
 }
