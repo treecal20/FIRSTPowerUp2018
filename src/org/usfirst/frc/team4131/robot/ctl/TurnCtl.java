@@ -4,7 +4,6 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.SPI;
-import org.usfirst.frc.team4131.robot.Robot;
 
 import java.util.function.DoubleConsumer;
 
@@ -50,8 +49,13 @@ public class TurnCtl implements PIDOutput {
         return INSTANCE;
     }
 
-    public String getYaw() {
-        return String.valueOf(this.dev.getYaw());
+    /**
+     * Obtains the yaw read off of the navX.
+     *
+     * @return the yaw
+     */
+    public double getYaw() {
+        return this.dev.getYaw();
     }
 
     /**
@@ -65,7 +69,7 @@ public class TurnCtl implements PIDOutput {
     public void begin(double delta) {
         if (!this.isTurning) {
             this.dev.zeroYaw();
-            
+
             this.isTurning = true;
             this.cached = null;
             this.controller.setSetpoint(delta);
