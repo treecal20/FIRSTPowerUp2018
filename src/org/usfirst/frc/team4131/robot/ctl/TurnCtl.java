@@ -49,8 +49,13 @@ public class TurnCtl implements PIDOutput {
         return INSTANCE;
     }
 
-    public String getYaw() {
-        return String.valueOf(this.dev.getYaw());
+    /**
+     * Obtains the yaw read off of the navX.
+     *
+     * @return the yaw
+     */
+    public double getYaw() {
+        return this.dev.getYaw();
     }
 
     /**
@@ -64,16 +69,16 @@ public class TurnCtl implements PIDOutput {
     public void begin(double delta) {
         if (!this.isTurning) {
             this.dev.zeroYaw();
-            
+
             this.isTurning = true;
             this.cached = null;
-            
+
             if (delta < 0) {
                 this.controller.setP(.015);
             } else {
                 this.controller.setP(.0116);
             }
-            
+
             this.controller.setSetpoint(delta);
             this.throttleDelta = 0;
             this.controller.enable();

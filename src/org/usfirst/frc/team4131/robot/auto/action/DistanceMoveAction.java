@@ -23,7 +23,7 @@ public class DistanceMoveAction implements Action {
     private final DriveBaseSubsystem driveBase;
     /** The number of ticks to move the robot */
     private final int distance;
-    
+
     /**
      * Creates a new action that will move the robot the
      * given distance, with a velocity of 0.3
