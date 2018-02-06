@@ -1,6 +1,7 @@
 package org.usfirst.frc.team4131.robot.auto.action;
 
 import org.usfirst.frc.team4131.robot.Oi;
+import org.usfirst.frc.team4131.robot.Robot;
 import org.usfirst.frc.team4131.robot.auto.Action;
 import org.usfirst.frc.team4131.robot.ctl.TurnCtl;
 import org.usfirst.frc.team4131.robot.subsystem.DriveBaseSubsystem;
@@ -37,16 +38,13 @@ public class TurnAction implements Action {
         };
 
         this.driveBase.prepareTeleop();
-<<<<<<< HEAD
 
-=======
         this.driveBase.doThrottle(0, 0);
-        
->>>>>>> aa95d8d7c2c4ed61f8c08f9d7c1841d5347bd5b1
+       
         TurnCtl controller = TurnCtl.getInstance();
         controller.begin(this.delta);
         while (true) {
-        	Robot.debug(() -> String.valueOf(controller.getYaw()));
+            Robot.debug(() -> String.valueOf(controller.getYaw()));
             if (controller.targetReached()) {
                 break;
             }

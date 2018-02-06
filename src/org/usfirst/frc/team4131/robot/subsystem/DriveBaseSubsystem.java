@@ -134,8 +134,8 @@ public class DriveBaseSubsystem extends Subsystem implements PIDSource {
      * @param r the right motor speed
      */
     public void doThrottle(double l, double r) {
-    	l = l * l * l;
-    	r = r * r * r;
+        l = l * l * l;
+        r = r * r * r;
         this.left.set(ControlMode.PercentOutput, sigl() * l);
         this.right.set(ControlMode.PercentOutput, sigr() * r);
         this.right2.set(ControlMode.PercentOutput, sigr() * r);
@@ -212,13 +212,13 @@ public class DriveBaseSubsystem extends Subsystem implements PIDSource {
     // PID Fallback source methods -------------------------
 
     @Override
-    public void setPIDSourceType(PIDSourceType pidSource) {
-        throw new UnsupportedOperationException();
+    public PIDSourceType getPIDSourceType() {
+        return PIDSourceType.kRate;
     }
 
     @Override
-    public PIDSourceType getPIDSourceType() {
-        return PIDSourceType.kRate;
+    public void setPIDSourceType(PIDSourceType pidSource) {
+        throw new UnsupportedOperationException();
     }
 
     @Override

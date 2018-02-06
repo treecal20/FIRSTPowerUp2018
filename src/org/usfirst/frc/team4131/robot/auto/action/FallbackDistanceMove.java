@@ -18,7 +18,7 @@ public class FallbackDistanceMove implements Action {
 
     @Override
     public void doAction() {
-        Consumer consumer = new Consumer();
+        FallbackDistanceMove.Consumer consumer = new FallbackDistanceMove.Consumer();
 
         DriveCtl ctl = this.driveBase.getCtl();
         TurnCtl turnCtl = TurnCtl.getInstance();
