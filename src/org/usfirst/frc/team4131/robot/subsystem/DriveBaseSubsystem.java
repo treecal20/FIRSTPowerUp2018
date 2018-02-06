@@ -134,8 +134,11 @@ public class DriveBaseSubsystem extends Subsystem implements PIDSource {
      * @param r the right motor speed
      */
     public void doThrottle(double l, double r) {
+    	l = l * l * l;
+    	r = r * r * r;
         this.left.set(ControlMode.PercentOutput, sigl() * l);
         this.right.set(ControlMode.PercentOutput, sigr() * r);
+        this.right2.set(ControlMode.PercentOutput, sigr() * r);
     }
 
     /**
