@@ -38,21 +38,22 @@ public class TurnAction implements Action {
         };
 
         this.driveBase.prepareTeleop();
+
         this.driveBase.doThrottle(0, 0);
-        
+       
         TurnCtl controller = TurnCtl.getInstance();
         controller.begin(this.delta);
         while (true) {
-        	Robot.debug(() -> String.valueOf(controller.getYaw()));
+            Robot.debug(() -> String.valueOf(controller.getYaw()));
             if (controller.targetReached()) {
-            	break;
+                break;
             }
 
             controller.pollData(consumer);
         }
         this.driveBase.doThrottle(0, 0);
         controller.finish();
-        
+
         this.driveBase.prepareAuto();
     }
 }
