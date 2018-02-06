@@ -1,6 +1,5 @@
 package org.usfirst.frc.team4131.robot.auto.action;
 
-import org.usfirst.frc.team4131.robot.Robot;
 import org.usfirst.frc.team4131.robot.auto.Action;
 import org.usfirst.frc.team4131.robot.subsystem.DriveBaseSubsystem;
 

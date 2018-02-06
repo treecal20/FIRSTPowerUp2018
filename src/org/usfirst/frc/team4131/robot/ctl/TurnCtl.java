@@ -4,7 +4,6 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.SPI;
-import org.usfirst.frc.team4131.robot.Robot;
 
 import java.util.function.DoubleConsumer;
 
@@ -70,9 +69,9 @@ public class TurnCtl implements PIDOutput {
             this.cached = null;
             
             if (delta < 0) {
-            	this.controller.setP(.015);
+                this.controller.setP(.015);
             } else {
-            	this.controller.setP(.0116);
+                this.controller.setP(.0116);
             }
             
             this.controller.setSetpoint(delta);

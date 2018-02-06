@@ -122,8 +122,8 @@ public class DriveBaseSubsystem extends Subsystem {
      * @param r the right motor speed
      */
     public void doThrottle(double l, double r) {
-    	l = l * l * l;
-    	r = r * r * r;
+        l = l * l * l;
+        r = r * r * r;
         this.left.set(ControlMode.PercentOutput, sigl() * l);
         this.right.set(ControlMode.PercentOutput, sigr() * r);
         this.right2.set(ControlMode.PercentOutput, sigr() * r);
@@ -135,10 +135,10 @@ public class DriveBaseSubsystem extends Subsystem {
      * method.
      */
     public void prepareAuto() {
-    	this.right.follow(this.left);
-    	this.right2.follow(this.left);
-    	this.right.setInverted(true);
-    	this.right2.setInverted(true);
+        this.right.follow(this.left);
+        this.right2.follow(this.left);
+        this.right.setInverted(true);
+        this.right2.setInverted(true);
     }
     
     /**
@@ -158,10 +158,10 @@ public class DriveBaseSubsystem extends Subsystem {
      * correctly.
      */
     public void prepareTeleop() {
-    	this.right.set(ControlMode.PercentOutput, 0);
-    	this.right2.follow(this.right);    	
-    	this.right.setInverted(false);
-    	this.right2.setInverted(false);
+        this.right.set(ControlMode.PercentOutput, 0);
+        this.right2.follow(this.right);
+        this.right.setInverted(false);
+        this.right2.setInverted(false);
     }
 
     public void setVelocity(int vel) {
@@ -180,7 +180,7 @@ public class DriveBaseSubsystem extends Subsystem {
     }
 
     public int getRightVelocity() {
-    	return sigr() * this.right.getSelectedSensorVelocity(PID_IDX);
+        return sigr() * this.right.getSelectedSensorVelocity(PID_IDX);
     }
 
     /**
@@ -194,6 +194,6 @@ public class DriveBaseSubsystem extends Subsystem {
     }
     
     public int getRightDist() {
-    	return sigr() * this.right.getSelectedSensorPosition(PID_IDX);
+        return sigr() * this.right.getSelectedSensorPosition(PID_IDX);
     }
 }

@@ -108,7 +108,7 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void teleopInit() {
-    	this.provider.getDriveBase().prepareTeleop();
+        this.provider.getDriveBase().prepareTeleop();
     }
 
     @Override
