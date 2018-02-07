@@ -30,7 +30,7 @@ public final class RobotMap {
     public static final int C2 = 6;
 
     // Claw elevator motor
-    public static final int E = 7;
+    public static final int E = 0;
 
     private RobotMap() { // Prevent instantiation
     }

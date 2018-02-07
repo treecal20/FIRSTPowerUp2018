@@ -52,7 +52,7 @@ public class Robot extends IterativeRobot {
     private SubsystemProvider provider;
 
     public static void debug(Supplier<String> string) {
-        if (round++ == 2000) {
+        if (round++ == 20000) {
             System.out.println("DEBUG: " + string.get());
             round = 0;
         }
@@ -70,11 +70,10 @@ public class Robot extends IterativeRobot {
 
         this.chooser.addDefault("Left Right Baseline", new LeftRightBaseline());
         this.chooser.addObject("Encoder Calibration", new EncoderCalibration());
-        this.chooser.addObject("Move 12 then Turn 90", new Move12ThenTurn90());
-        this.chooser.addObject("Turn 90 Degrees", new Turn90());
-        this.chooser.addObject("Move 12 Inches", new Move12());
-        this.chooser.addObject("Turn 180 degrees", new Turn180());
-        this.chooser.addObject("Ramp Test Procedure", new Ramp());
+        
+        this.chooser.addObject("DS2ToSwitch", new ds2ToSwitch());
+        this.chooser.addObject("leftToSwitchOrScale", new leftToSwitchOrScale());
+        this.chooser.addObject("rightToSwitchOrScale", new rightToSwitchOrScale());
         SmartDashboard.putData("Auto mode", this.chooser);
 
         compressor.setClosedLoopControl(true);
@@ -88,7 +87,7 @@ public class Robot extends IterativeRobot {
         for (int i = 0, s = str.length(); i < s; i++) {
             sides[i] = Side.decode(str.charAt(i));
         }
-        
+
         this.provider.getDriveBase().prepareAuto();
         Procedure procedure = this.chooser.getSelected();
         List<Action> actions = new ArrayList<>(procedure.estimateLen());
@@ -108,7 +107,7 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void teleopInit() {
-    	this.provider.getDriveBase().prepareTeleop();
+        this.provider.getDriveBase().prepareTeleop();
     }
 
     @Override
