@@ -1,7 +1,6 @@
 package org.usfirst.frc.team4131.robot.subsystem;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.usfirst.frc.team4131.robot.RobotMap;
 import org.usfirst.frc.team4131.robot.command.ElevatorCommand;
@@ -14,10 +13,10 @@ public class ElevatorSubsystem extends Subsystem {
      * Initializes and caches the climbing mechanism motors.
      */
 
-    private final TalonSRX motor;
+    private final Spark motor;
 
     public ElevatorSubsystem() {
-        this.motor = new TalonSRX(RobotMap.E);
+        this.motor = new Spark(RobotMap.E);
     }
 
     @Override
@@ -31,13 +30,13 @@ public class ElevatorSubsystem extends Subsystem {
      */
     public void doMove(boolean upDown) {
         if (upDown) {
-            this.motor.set(ControlMode.PercentOutput, 0.5);
+            this.motor.set(0.5);
         } else {
-            this.motor.set(ControlMode.PercentOutput, -0.5);
+            this.motor.set(-0.5);
         }
     }
 
     public void doStop() {
-        this.motor.set(ControlMode.PercentOutput, 0);
+        this.motor.set(0);
     }
 }
