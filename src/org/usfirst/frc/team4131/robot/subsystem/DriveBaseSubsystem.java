@@ -5,9 +5,12 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.PIDSource;
+import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.usfirst.frc.team4131.robot.RobotMap;
 import org.usfirst.frc.team4131.robot.command.MoveCommand;
+import org.usfirst.frc.team4131.robot.ctl.DriveCtl;
 
 import static org.usfirst.frc.team4131.robot.Oi.sigl;
 import static org.usfirst.frc.team4131.robot.Oi.sigr;
@@ -16,12 +19,15 @@ import static org.usfirst.frc.team4131.robot.Oi.sigr;
  * The drive base subsystem, linking the 4 Talon SRX
  * controllers and their respective motors.
  */
-public class DriveBaseSubsystem extends Subsystem {
+public class DriveBaseSubsystem extends Subsystem implements PIDSource {
     // Sensor constants
     private static final int PID_IDX = 0;
     private static final int SENSOR_TIMEOUT = 0;
 
     private static final int ERROR_DELTA = 0;
+
+    // Drive fallback PID controller
+    private final DriveCtl ctl;
 
     // Physical drive mappings
     private final TalonSRX left;
@@ -32,6 +38,8 @@ public class DriveBaseSubsystem extends Subsystem {
      * Creates and caches the motors used for the drive base
      */
     public DriveBaseSubsystem() {
+        this.ctl = new DriveCtl(this);
+
         this.left = new TalonSRX(RobotMap.L1);
         new TalonSRX(RobotMap.L2).follow(this.left);
 
@@ -49,6 +57,10 @@ public class DriveBaseSubsystem extends Subsystem {
     @Override
     protected void initDefaultCommand() {
         this.setDefaultCommand(new MoveCommand(this));
+    }
+
+    public DriveCtl getCtl() {
+        return this.ctl;
     }
 
     // Talon setup methods ---------------------------------
@@ -122,8 +134,11 @@ public class DriveBaseSubsystem extends Subsystem {
      * @param r the right motor speed
      */
     public void doThrottle(double l, double r) {
+        l = l * l * l;
+        r = r * r * r;
         this.left.set(ControlMode.PercentOutput, sigl() * l);
         this.right.set(ControlMode.PercentOutput, sigr() * r);
+        this.right2.set(ControlMode.PercentOutput, sigr() * r);
     }
 
     /**
@@ -132,12 +147,12 @@ public class DriveBaseSubsystem extends Subsystem {
      * method.
      */
     public void prepareAuto() {
-    	this.right.follow(this.left);
-    	this.right2.follow(this.left);
-    	this.right.setInverted(true);
-    	this.right2.setInverted(true);
+        this.right.follow(this.left);
+        this.right2.follow(this.left);
+        this.right.setInverted(true);
+        this.right2.setInverted(true);
     }
-    
+
     /**
      * Performs a PID-controlled movement using the
      * encoder target tick.
@@ -148,17 +163,17 @@ public class DriveBaseSubsystem extends Subsystem {
     public void gotoPosition(int ticks) {
         this.left.set(ControlMode.Position, ticks);
     }
-    
+
     /**
      * Ends autonomous configuration on the talons,
      * resets them so that teleop will work
      * correctly.
      */
     public void prepareTeleop() {
-    	this.right.set(ControlMode.PercentOutput, 0);
-    	this.right2.follow(this.right);    	
-    	this.right.setInverted(false);
-    	this.right2.setInverted(false);
+        this.right.set(ControlMode.PercentOutput, 0);
+        this.right2.follow(this.right);
+        this.right.setInverted(false);
+        this.right2.setInverted(false);
     }
 
     public void setVelocity(int vel) {
@@ -177,7 +192,7 @@ public class DriveBaseSubsystem extends Subsystem {
     }
 
     public int getRightVelocity() {
-    	return sigr() * this.right.getSelectedSensorVelocity(PID_IDX);
+        return sigr() * this.right.getSelectedSensorVelocity(PID_IDX);
     }
 
     /**
@@ -189,8 +204,25 @@ public class DriveBaseSubsystem extends Subsystem {
     public int getLeftDist() {
         return sigl() * this.left.getSelectedSensorPosition(PID_IDX);
     }
-    
+
     public int getRightDist() {
-    	return sigr() * this.right.getSelectedSensorPosition(PID_IDX);
+        return sigr() * this.right.getSelectedSensorPosition(PID_IDX);
+    }
+
+    // PID Fallback source methods -------------------------
+
+    @Override
+    public PIDSourceType getPIDSourceType() {
+        return PIDSourceType.kRate;
+    }
+
+    @Override
+    public void setPIDSourceType(PIDSourceType pidSource) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public double pidGet() {
+        return this.getLeftVelocity();
     }
 }
