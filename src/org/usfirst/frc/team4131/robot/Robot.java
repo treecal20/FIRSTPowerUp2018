@@ -70,11 +70,10 @@ public class Robot extends IterativeRobot {
 
         this.chooser.addDefault("Left Right Baseline", new LeftRightBaseline());
         this.chooser.addObject("Encoder Calibration", new EncoderCalibration());
-        this.chooser.addObject("Move 12 then Turn 90", new Move12ThenTurn90());
-        this.chooser.addObject("Turn 90 Degrees", new Turn90());
-        this.chooser.addObject("Move 12 Inches", new Move12());
-        this.chooser.addObject("Turn 180 degrees", new Turn180());
-        this.chooser.addObject("Ramp Test Procedure", new Ramp());
+        
+        this.chooser.addObject("DS2ToSwitch", new ds2ToSwitch());
+        this.chooser.addObject("leftToSwitchOrScale", new leftToSwitchOrScale());
+        this.chooser.addObject("rightToSwitchOrScale", new rightToSwitchOrScale());
         SmartDashboard.putData("Auto mode", this.chooser);
 
         compressor.setClosedLoopControl(true);
