@@ -70,7 +70,7 @@ public class Robot extends IterativeRobot {
 
         this.chooser.addDefault("Left Right Baseline", new LeftRightBaseline());
         this.chooser.addObject("Encoder Calibration", new EncoderCalibration());
-        
+
         this.chooser.addObject("DS2ToSwitch", new ds2ToSwitch());
         this.chooser.addObject("leftToSwitchOrScale", new leftToSwitchOrScale());
         this.chooser.addObject("rightToSwitchOrScale", new rightToSwitchOrScale());
