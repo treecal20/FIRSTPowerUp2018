@@ -40,7 +40,7 @@ public class TurnAction implements Action {
         this.driveBase.prepareTeleop();
 
         this.driveBase.doThrottle(0, 0);
-       
+
         TurnCtl controller = TurnCtl.getInstance();
         controller.begin(this.delta);
         while (true) {
