@@ -14,6 +14,5 @@ public class ClawCommand extends SingleSubsystemCmd<ClawSubsystem> {
 
     @Override
     protected void execute() {
-        this.subsystem.doClamp();
     }
 }

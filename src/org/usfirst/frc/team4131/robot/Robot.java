@@ -52,7 +52,7 @@ public class Robot extends IterativeRobot {
     private SubsystemProvider provider;
 
     public static void debug(Supplier<String> string) {
-        if (round++ == 20000) {
+        if (round++ == 2000000) {
             System.out.println("DEBUG: " + string.get());
             round = 0;
         }
@@ -88,7 +88,6 @@ public class Robot extends IterativeRobot {
             sides[i] = Side.decode(str.charAt(i));
         }
 
-        this.provider.getDriveBase().prepareAuto();
         Procedure procedure = this.chooser.getSelected();
         List<Action> actions = new ArrayList<>(procedure.estimateLen());
         procedure.populate(this.provider, Arrays.asList(sides), actions);
@@ -107,7 +106,7 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void teleopInit() {
-        this.provider.getDriveBase().prepareTeleop();
+    	this.provider.getDriveBase().prepareTeleop();
     }
 
     @Override
