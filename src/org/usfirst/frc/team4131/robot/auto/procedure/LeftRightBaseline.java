@@ -19,6 +19,6 @@ public class LeftRightBaseline implements Procedure {
 
     @Override
     public void populate(SubsystemProvider provider, List<Side> data, List<Action> procedure) {
-        procedure.add(new DistanceMoveAction(provider.getDriveBase(), 144));
+        procedure.add(new DistanceMoveAction(provider.getDriveBase(), 60));
     }
 }

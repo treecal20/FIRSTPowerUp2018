@@ -85,23 +85,8 @@ public class TurnCtl implements PIDOutput {
         }
     }
 
-    /**
-     * Polls data and passes it to the given consumer. Must
-     * be called within a victory loop in order to poll
-     * data and supply the motors with throttle deltas.
-     *
-     * @param dataConsumer the throttle data consumer
-     */
-    public void pollData(DoubleConsumer dataConsumer) {
-        if (this.cached != null) {
-            if (this.cached != dataConsumer) {
-                throw new RuntimeException("Incorrect usage of data polling");
-            }
-        } else {
-            this.cached = dataConsumer;
-        }
-
-        dataConsumer.accept(this.throttleDelta);
+    public double getDelta() {
+    	return this.throttleDelta;
     }
 
     /**
