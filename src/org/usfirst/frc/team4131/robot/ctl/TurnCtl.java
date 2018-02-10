@@ -4,10 +4,9 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.SPI;
+import org.usfirst.frc.team4131.robot.Robot;
 
 import java.util.function.DoubleConsumer;
-
-import org.usfirst.frc.team4131.robot.Robot;
 
 /**
  * A turn controller used to ensure accurate rotation using
@@ -88,13 +87,17 @@ public class TurnCtl implements PIDOutput {
         }
     }
 
-<<<<<<< HEAD
-=======
+    /**
+     * Obtains the throttle delta value that is produced by
+     * running the PID function.
+     *
+     * @return the throttle
+     */
     public double getDelta() {
-    	return this.throttleDelta;
+        return this.throttleDelta;
     }
 
->>>>>>> dee077e3ce5544c139199c2bc4a658cc192e2a22
+
     /**
      * Determines whether the target has been reached.
      * <p>This method does not detect whether or not the
@@ -120,10 +123,6 @@ public class TurnCtl implements PIDOutput {
             this.isTurning = false;
             this.controller.disable();
         }
-    }
-    
-    public double getDelta() {
-    	return this.throttleDelta;
     }
 
     @Override

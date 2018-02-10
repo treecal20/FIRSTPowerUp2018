@@ -15,8 +15,6 @@ import org.usfirst.frc.team4131.robot.ctl.DriveCtl;
 import static org.usfirst.frc.team4131.robot.Oi.sigl;
 import static org.usfirst.frc.team4131.robot.Oi.sigr;
 
-import org.usfirst.frc.team4131.robot.Oi;
-
 /**
  * The drive base subsystem, linking the 4 Talon SRX
  * controllers and their respective motors.
@@ -50,13 +48,6 @@ public class DriveBaseSubsystem extends Subsystem implements PIDSource {
 
         this.setupEncoder();
         this.reset();
-<<<<<<< HEAD
-        this.setupPid(this.left, 0);
-        this.setupPid(this.right, 0.7);
-        this.setupPid(this.right2, .7);
-=======
-        this.setupPid(this.left);
->>>>>>> dee077e3ce5544c139199c2bc4a658cc192e2a22
     }
 
     @Override
@@ -105,14 +96,11 @@ public class DriveBaseSubsystem extends Subsystem implements PIDSource {
                 talon.config_kD(PID_IDX, 0, SENSOR_TIMEOUT),
                 talon.config_kF(PID_IDX, 0, SENSOR_TIMEOUT));
         ErrorCode code0 = ErrorCode.worstOne(talon.configAllowableClosedloopError(PID_IDX, ERROR_DELTA, SENSOR_TIMEOUT),
-<<<<<<< HEAD
                 // talon.configVoltageCompSaturation(5, SENSOR_TIMEOUT),
                 talon.configClosedloopRamp(0.3 + limit, SENSOR_TIMEOUT));
         // talon.configOpenloopRamp(0.3, SENSOR_TIMEOUT));
         // talon.enableVoltageCompensation(true);
-=======
-                talon.configOpenloopRamp(0.3, SENSOR_TIMEOUT));
->>>>>>> dee077e3ce5544c139199c2bc4a658cc192e2a22
+                talon.configOpenloopRamp(0.3, SENSOR_TIMEOUT);
         if (code.value != 0 || code0.value != 0) {
             DriverStation.reportError("Error occurred configuring PIDF", false);
         }
@@ -134,8 +122,8 @@ public class DriveBaseSubsystem extends Subsystem implements PIDSource {
     }
     
     public void prepareTeleop() {
-    	this.left.configOpenloopRamp(0, SENSOR_TIMEOUT);
-    	this.right.configOpenloopRamp(0, SENSOR_TIMEOUT);
+        this.left.configOpenloopRamp(0, SENSOR_TIMEOUT);
+        this.right.configOpenloopRamp(0, SENSOR_TIMEOUT);
     }
 
     // Talon control ---------------------------------------
@@ -173,33 +161,10 @@ public class DriveBaseSubsystem extends Subsystem implements PIDSource {
         this.left.set(ControlMode.Position, ticks);
     }
 
-<<<<<<< HEAD
-    /**
-     * Ends autonomous configuration on the talons,
-     * resets them so that teleop will work
-     * correctly.
-     */
-    public void prepareTeleop() {
-        this.right.set(ControlMode.PercentOutput, 0);
-        this.right2.follow(this.right);
-        this.right.setInverted(false);
-        this.right2.setInverted(false);
-    }
-
     public void setVelocity(double vel) {
         this.left.set(ControlMode.PercentOutput, sigl() * vel);
     }
 
-    public void setVelocityLeft(double vel) {
-        this.left.set(ControlMode.PercentOutput, vel);
-    }
-    
-    public void setVelocityRight(double vel) {
-    	this.right.set(ControlMode.PercentOutput, -vel);
-    }
-
-=======
->>>>>>> dee077e3ce5544c139199c2bc4a658cc192e2a22
     // Sensor polling methods ------------------------------
     // DO NOT use SensorCollection here
 

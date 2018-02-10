@@ -68,9 +68,7 @@ public class Robot extends IterativeRobot {
         UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
         camera.setVideoMode(new VideoMode(VideoMode.PixelFormat.kMJPEG, 600, 600, 10));
 
-        this.chooser.addDefault("Left Right Baseline", new LeftRightBaseline());
         this.chooser.addObject("Encoder Calibration", new EncoderCalibration());
-
         this.chooser.addObject("DS2ToSwitch", new ds2ToSwitch());
         this.chooser.addObject("leftToSwitchOrScale", new leftToSwitchOrScale());
         this.chooser.addObject("rightToSwitchOrScale", new rightToSwitchOrScale());
@@ -106,7 +104,7 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void teleopInit() {
-    	this.provider.getDriveBase().prepareTeleop();
+        this.provider.getDriveBase().prepareTeleop();
     }
 
     @Override

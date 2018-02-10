@@ -1,8 +1,5 @@
 package org.usfirst.frc.team4131.robot.subsystem;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.usfirst.frc.team4131.robot.RobotMap;
@@ -33,13 +30,13 @@ public class ElevatorSubsystem extends Subsystem {
      */
     public void doClimb() {
 
-		this.motor.set(0.5);
-	}
+        this.motor.set(0.5);
+    }
 
-	public void doLower() {
+    public void doLower() {
 
-		this.motor.set(-0.5);
-	}
+        this.motor.set(-0.5);
+    }
 
     public void doStop() {
         this.motor.set(0);
