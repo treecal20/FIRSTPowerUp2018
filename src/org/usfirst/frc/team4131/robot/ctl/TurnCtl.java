@@ -88,6 +88,13 @@ public class TurnCtl implements PIDOutput {
         }
     }
 
+<<<<<<< HEAD
+=======
+    public double getDelta() {
+    	return this.throttleDelta;
+    }
+
+>>>>>>> dee077e3ce5544c139199c2bc4a658cc192e2a22
     /**
      * Determines whether the target has been reached.
      * <p>This method does not detect whether or not the

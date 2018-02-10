@@ -39,6 +39,16 @@ public final class Oi {
     }
 
     /**
+     * Obtains the direction sign for the right side motors.
+     *
+     * @return the sign on the input/output on the right
+     * side motors
+     */
+    public static int sigr() {
+        return 1;
+    }
+    
+    /**
      * Obtains the direction sign for the left side motors.
      *
      * @return the sign on input/output on the left side
@@ -48,13 +58,4 @@ public final class Oi {
         return -1;
     }
 
-    /**
-     * Obtains the direction sign for the right side motors.
-     *
-     * @return the sign on the input/output on the right
-     * side motors
-     */
-    public static int sigr() {
-        return 1;
-    }
 }
