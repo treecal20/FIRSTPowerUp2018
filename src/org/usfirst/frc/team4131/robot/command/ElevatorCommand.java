@@ -24,21 +24,26 @@ public class ElevatorCommand extends SingleSubsystemCmd<ElevatorSubsystem> {
 
     @Override
     protected void execute() {
-        if (up() && down()) {
-            this.subsystem.doStop();
-        } else if (up()) {
-            this.subsystem.doMove(true);
-            if (Robot.isElevatorTop) {
-                this.subsystem.doStop();
-            }
-        } else if (down()) {
-            this.subsystem.doMove(false);
-            if (!Robot.isElevatorBottom) {
-                this.subsystem.doStop();
-            }
-        } else {
-            this.subsystem.doStop();
-        }
+    	if (up() && down()) {
+			this.subsystem.doStop();
+		} else if (up()) {
+			
+			if (!Robot.isElevatorTop) {
+				this.subsystem.doStop();
+			}
+			else {
+				this.subsystem.doClimb();
+			}
+		} else if (down()) {
+			if (!Robot.isElevatorBottom) {
+				this.subsystem.doStop();
+			}
+			else {
+				this.subsystem.doLower();
+			}
+		} else {
+			this.subsystem.doStop();
+		}
     }
 
     @Override

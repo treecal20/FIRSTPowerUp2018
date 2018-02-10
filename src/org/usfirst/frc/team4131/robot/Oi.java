@@ -35,6 +35,7 @@ public final class Oi {
     public static final JoystickButton CLAWDOWN = new JoystickButton(AUX_JOYSTICK, 4);
 
     private Oi() { // Prevent instantiation
+    	
     }
 
     /**

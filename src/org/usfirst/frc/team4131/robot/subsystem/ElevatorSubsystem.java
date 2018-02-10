@@ -1,5 +1,8 @@
 package org.usfirst.frc.team4131.robot.subsystem;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import org.usfirst.frc.team4131.robot.RobotMap;
@@ -16,7 +19,7 @@ public class ElevatorSubsystem extends Subsystem {
     private final Spark motor;
 
     public ElevatorSubsystem() {
-        this.motor = new Spark(RobotMap.E);
+        this.motor = new Spark (RobotMap.E);
     }
 
     @Override
@@ -28,13 +31,15 @@ public class ElevatorSubsystem extends Subsystem {
      * Performs the climbing action and hoists the robot
      * up the pull-up bar.
      */
-    public void doMove(boolean upDown) {
-        if (upDown) {
-            this.motor.set(0.5);
-        } else {
-            this.motor.set(-0.5);
-        }
-    }
+    public void doClimb() {
+
+		this.motor.set(0.5);
+	}
+
+	public void doLower() {
+
+		this.motor.set(-0.5);
+	}
 
     public void doStop() {
         this.motor.set(0);

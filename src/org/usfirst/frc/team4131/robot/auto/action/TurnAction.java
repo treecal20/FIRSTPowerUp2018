@@ -32,6 +32,10 @@ public class TurnAction implements Action {
 
     @Override
     public void doAction() {
+<<<<<<< HEAD
+        this.driveBase.prepareTeleop();
+=======
+>>>>>>> dee077e3ce5544c139199c2bc4a658cc192e2a22
         this.driveBase.doThrottle(0, 0);
 
         TurnCtl controller = TurnCtl.getInstance();
@@ -44,7 +48,10 @@ public class TurnAction implements Action {
 
             double value = controller.getDelta();
             value = Math.abs(value) < 0.5 ? 0.5 : value;
+<<<<<<< HEAD
+=======
             
+>>>>>>> dee077e3ce5544c139199c2bc4a658cc192e2a22
             this.driveBase.doThrottle(Oi.sigl() * value, Oi.sigr() * value);
         }
         this.driveBase.doThrottle(0, 0);

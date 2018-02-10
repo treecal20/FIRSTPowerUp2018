@@ -7,6 +7,8 @@ import edu.wpi.first.wpilibj.SPI;
 
 import java.util.function.DoubleConsumer;
 
+import org.usfirst.frc.team4131.robot.Robot;
+
 /**
  * A turn controller used to ensure accurate rotation using
  * the navX onboard controller.
@@ -69,6 +71,7 @@ public class TurnCtl implements PIDOutput {
     public void begin(double delta) {
         if (!this.isTurning) {
             this.dev.zeroYaw();
+            while (Math.abs(this.dev.getYaw()) < 0.2) Robot.debug(()->String.valueOf(this.dev.getYaw()));
 
             this.isTurning = true;
             this.cached = null;
@@ -85,10 +88,13 @@ public class TurnCtl implements PIDOutput {
         }
     }
 
+<<<<<<< HEAD
+=======
     public double getDelta() {
     	return this.throttleDelta;
     }
 
+>>>>>>> dee077e3ce5544c139199c2bc4a658cc192e2a22
     /**
      * Determines whether the target has been reached.
      * <p>This method does not detect whether or not the
@@ -114,6 +120,10 @@ public class TurnCtl implements PIDOutput {
             this.isTurning = false;
             this.controller.disable();
         }
+    }
+    
+    public double getDelta() {
+    	return this.throttleDelta;
     }
 
     @Override
