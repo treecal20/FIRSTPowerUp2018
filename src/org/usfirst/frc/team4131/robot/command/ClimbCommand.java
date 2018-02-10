@@ -9,50 +9,50 @@ import org.usfirst.frc.team4131.robot.subsystem.ClimberSubsystem;
  * robot using the pull-up bar.
  */
 public class ClimbCommand extends SingleSubsystemCmd<ClimberSubsystem> {
-	public ClimbCommand(ClimberSubsystem subsystem) {
-		super(subsystem);
-	}
+    public ClimbCommand(ClimberSubsystem subsystem) {
+        super(subsystem);
+    }
 
-	private static boolean up() {
-		return Oi.CLIMB.get();
-	}
+    private static boolean up() {
+        return Oi.CLIMB.get();
+    }
 
-	private static boolean down() {
-		return Oi.DESCEND.get();
-	}
+    private static boolean down() {
+        return Oi.DESCEND.get();
+    }
 
-	@Override
-	protected void execute() {
-		
-		if (up() && down()) {
-			this.subsystem.doStop();
-		} else if (up()) {
-			
-			if (!Robot.isClimberTop) {
-				this.subsystem.doStop();
-			}
-			else {
-				this.subsystem.doClimb();
-			}
-		} else if (down()) {
-			if (!Robot.isClimberBottom) {
-				this.subsystem.doStop();
-			}
-			else {
-				this.subsystem.doLower();
-			}
-		} else {
-			this.subsystem.doStop();
-		}
-	}
+    @Override
+    protected void execute() {
 
-	@Override
-	protected boolean isFinished() {
-		return false;
-	}
+        if (up() && down()) {
+            this.subsystem.doStop();
+        } else if (up()) {
 
-	@Override
-	protected void interrupted() {
-		this.subsystem.doStop();
-	}
+            if (!Robot.isClimberTop) {
+                this.subsystem.doStop();
+            }
+            else {
+                this.subsystem.doClimb();
+            }
+        } else if (down()) {
+            if (!Robot.isClimberBottom) {
+                this.subsystem.doStop();
+            }
+            else {
+                this.subsystem.doLower();
+            }
+        } else {
+            this.subsystem.doStop();
+        }
+    }
+
+    @Override
+    protected boolean isFinished() {
+        return false;
+    }
+
+    @Override
+    protected void interrupted() {
+        this.subsystem.doStop();
+    }
 }

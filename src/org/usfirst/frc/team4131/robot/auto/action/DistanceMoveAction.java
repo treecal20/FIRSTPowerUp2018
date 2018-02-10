@@ -36,9 +36,9 @@ public class DistanceMoveAction implements Action {
 
     @Override
     public void doAction() {
-    	this.driveBase.reset();
-    	
-    	DriveCtl ctl = this.driveBase.getCtl();
+        this.driveBase.reset();
+
+        DriveCtl ctl = this.driveBase.getCtl();
         TurnCtl turnCtl = TurnCtl.getInstance();
 
         int turns = 0;
@@ -49,20 +49,20 @@ public class DistanceMoveAction implements Action {
             double baseDelta = -ctl.getDelta();
             double turnDelta = turnCtl.getDelta();
 
-            double leftDelta = this.constrain(baseDelta + (-Oi.sigl() * turnDelta));
+            double leftDelta = DistanceMoveAction.constrain(baseDelta + Oi.sigl() * turnDelta);
             this.driveBase.setVelocityLeft(leftDelta);
             
-            double rightDelta = constrain(baseDelta - (-Oi.sigr() * turnDelta));
+            double rightDelta = constrain(baseDelta + Oi.sigr() * turnDelta);
             this.driveBase.setVelocityRight(rightDelta);
             
             if (ctl.onTarget()) {
-            	turns++;
+                turns++;
             } else {
-            	turns = 0;
+                turns = 0;
             }
             
             if (turns > V_GRANULARITY) {
-            	break;
+                break;
             }
         }
         ctl.finish();
@@ -71,7 +71,7 @@ public class DistanceMoveAction implements Action {
         this.driveBase.doThrottle(0, 0);
     }
     
-    private double constrain(double d) {
-    	return Math.abs(d) < 0.1 ? Math.signum(d) * 0.1 : d;
+    private static double constrain(double d) {
+        return Math.abs(d) < 0.1 ? Math.signum(d) * 0.1 : d;
     }
 }
