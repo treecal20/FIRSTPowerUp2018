@@ -32,13 +32,7 @@ public class TurnAction implements Action {
 
     @Override
     public void doAction() {
-        DoubleConsumer consumer = value -> {
-            value = Math.abs(value) < 0.5 ? 0.5 : value;
-            this.driveBase.doThrottle(Oi.sigl() * value, Oi.sigr() * value);
-        };
-
         this.driveBase.prepareTeleop();
-
         this.driveBase.doThrottle(0, 0);
        
         TurnCtl controller = TurnCtl.getInstance();
@@ -49,7 +43,9 @@ public class TurnAction implements Action {
                 break;
             }
 
-            controller.pollData(consumer);
+            double value = controller.getDelta();
+            value = Math.abs(value) < 0.5 ? 0.5 : value;
+            this.driveBase.doThrottle(Oi.sigl() * value, Oi.sigr() * value);
         }
         this.driveBase.doThrottle(0, 0);
         controller.finish();

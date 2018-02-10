@@ -7,6 +7,8 @@ import edu.wpi.first.wpilibj.SPI;
 
 import java.util.function.DoubleConsumer;
 
+import org.usfirst.frc.team4131.robot.Robot;
+
 /**
  * A turn controller used to ensure accurate rotation using
  * the navX onboard controller.
@@ -69,6 +71,7 @@ public class TurnCtl implements PIDOutput {
     public void begin(double delta) {
         if (!this.isTurning) {
             this.dev.zeroYaw();
+            while (Math.abs(this.dev.getYaw()) < 0.2) Robot.debug(()->String.valueOf(this.dev.getYaw()));
 
             this.isTurning = true;
             this.cached = null;
@@ -83,25 +86,6 @@ public class TurnCtl implements PIDOutput {
             this.throttleDelta = 0;
             this.controller.enable();
         }
-    }
-
-    /**
-     * Polls data and passes it to the given consumer. Must
-     * be called within a victory loop in order to poll
-     * data and supply the motors with throttle deltas.
-     *
-     * @param dataConsumer the throttle data consumer
-     */
-    public void pollData(DoubleConsumer dataConsumer) {
-        if (this.cached != null) {
-            if (this.cached != dataConsumer) {
-                throw new RuntimeException("Incorrect usage of data polling");
-            }
-        } else {
-            this.cached = dataConsumer;
-        }
-
-        dataConsumer.accept(this.throttleDelta);
     }
 
     /**
@@ -129,6 +113,10 @@ public class TurnCtl implements PIDOutput {
             this.isTurning = false;
             this.controller.disable();
         }
+    }
+    
+    public double getDelta() {
+    	return this.throttleDelta;
     }
 
     @Override

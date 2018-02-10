@@ -49,9 +49,9 @@ public class DriveBaseSubsystem extends Subsystem implements PIDSource {
 
         this.setupEncoder();
         this.reset();
-        this.setupPid(this.left);
-        this.setupPid(this.right);
-        this.setupPid(this.right2);
+        this.setupPid(this.left, 0);
+        this.setupPid(this.right, 0.7);
+        this.setupPid(this.right2, .7);
     }
 
     @Override
@@ -94,14 +94,14 @@ public class DriveBaseSubsystem extends Subsystem implements PIDSource {
      * @param talon the talon on which the PID constants
      * will be configured
      */
-    private void setupPid(TalonSRX talon) {
-        ErrorCode code = ErrorCode.worstOne(talon.config_kP(PID_IDX, 0.4, SENSOR_TIMEOUT),
+    private void setupPid(TalonSRX talon, double limit) {
+        ErrorCode code = ErrorCode.worstOne(talon.config_kP(PID_IDX, 0.5, SENSOR_TIMEOUT),
                 talon.config_kI(PID_IDX, 0, SENSOR_TIMEOUT),
                 talon.config_kD(PID_IDX, 0, SENSOR_TIMEOUT),
                 talon.config_kF(PID_IDX, 0, SENSOR_TIMEOUT));
         ErrorCode code0 = ErrorCode.worstOne(talon.configAllowableClosedloopError(PID_IDX, ERROR_DELTA, SENSOR_TIMEOUT),
                 // talon.configVoltageCompSaturation(5, SENSOR_TIMEOUT),
-                talon.configClosedloopRamp(0.3, SENSOR_TIMEOUT));
+                talon.configClosedloopRamp(0.3 + limit, SENSOR_TIMEOUT));
         // talon.configOpenloopRamp(0.3, SENSOR_TIMEOUT));
         // talon.enableVoltageCompensation(true);
         if (code.value != 0 || code0.value != 0) {
@@ -176,12 +176,16 @@ public class DriveBaseSubsystem extends Subsystem implements PIDSource {
         this.right2.setInverted(false);
     }
 
-    public void setVelocity(int vel) {
-        this.left.set(ControlMode.Velocity, sigl() * vel);
+    public void setVelocity(double vel) {
+        this.left.set(ControlMode.PercentOutput, sigl() * vel);
     }
 
-    public void setVelocityLeft(int vel) {
-        this.left.set(ControlMode.Velocity, sigl() * vel);
+    public void setVelocityLeft(double vel) {
+        this.left.set(ControlMode.PercentOutput, vel);
+    }
+    
+    public void setVelocityRight(double vel) {
+    	this.right.set(ControlMode.PercentOutput, -vel);
     }
 
     // Sensor polling methods ------------------------------

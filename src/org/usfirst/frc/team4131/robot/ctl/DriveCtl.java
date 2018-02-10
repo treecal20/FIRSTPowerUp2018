@@ -14,9 +14,9 @@ public class DriveCtl implements PIDOutput {
     private double delta;
 
     public DriveCtl(DriveBaseSubsystem driveBase) {
-        PIDController controller = new PIDController(.005, 0, 0, driveBase, this);
+        PIDController controller = new PIDController(.001, 0, 0, driveBase, this);
         controller.setInputRange(Integer.MIN_VALUE, Integer.MAX_VALUE);
-        controller.setOutputRange(-1, 1);
+        controller.setOutputRange(-0.7, 0.7);
         controller.setAbsoluteTolerance(30);
         controller.setContinuous(false);
         controller.disable();
@@ -34,23 +34,15 @@ public class DriveCtl implements PIDOutput {
         }
     }
 
-    public void poll(DoubleConsumer dataConsumer) {
-        if (this.cached != null) {
-            if (this.cached != dataConsumer) {
-                throw new IllegalArgumentException("Do not pass in a new consumer");
-            }
-        } else {
-            this.cached = dataConsumer;
-        }
-
-        dataConsumer.accept(this.delta);
-    }
-
     public void finish() {
         if (this.isDriving) {
             this.isDriving = false;
             this.controller.disable();
         }
+    }
+    
+    public double getDelta() {
+    	return this.delta;
     }
 
     @Override

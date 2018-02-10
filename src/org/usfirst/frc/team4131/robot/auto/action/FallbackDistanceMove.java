@@ -1,5 +1,7 @@
 package org.usfirst.frc.team4131.robot.auto.action;
 
+import org.usfirst.frc.team4131.robot.Oi;
+import org.usfirst.frc.team4131.robot.Robot;
 import org.usfirst.frc.team4131.robot.auto.Action;
 import org.usfirst.frc.team4131.robot.ctl.DriveCtl;
 import org.usfirst.frc.team4131.robot.ctl.TurnCtl;
@@ -26,11 +28,11 @@ public class FallbackDistanceMove implements Action {
         turnCtl.begin(0);
         ctl.begin(this.ticks);
         while (true) {
-            ctl.poll(consumer);
-            turnCtl.pollData(consumer);
-
-            double value = consumer.getValue();
-            this.driveBase.setVelocity((int) value);
+        	double moveDelta = ctl.getDelta();
+        	double turn = turnCtl.getDelta();
+        	Robot.debug(() -> String.valueOf(moveDelta));
+            this.driveBase.setVelocityLeft(moveDelta + (Oi.sigl() * turn));
+            this.driveBase.setVelocityRight(moveDelta + (Oi.sigr() * turn));
 
             consumer.reset();
         }
