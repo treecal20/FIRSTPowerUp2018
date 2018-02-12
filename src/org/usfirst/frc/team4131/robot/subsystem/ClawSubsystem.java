@@ -25,4 +25,13 @@ public class ClawSubsystem extends Subsystem {
      */
     public void doClamp() {
     }
+    
+    public void doRelease() {
+    }
+    
+    public void doRaise() {
+    }
+    
+    public void doLower() {
+    }
 }

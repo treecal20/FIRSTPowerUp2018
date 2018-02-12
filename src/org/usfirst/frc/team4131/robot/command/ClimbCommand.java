@@ -23,17 +23,23 @@ public class ClimbCommand extends SingleSubsystemCmd<ClimberSubsystem> {
 
     @Override
     protected void execute() {
+
         if (up() && down()) {
             this.subsystem.doStop();
         } else if (up()) {
-            this.subsystem.doClimb(true);
-            if (Robot.isClimberTop) {
+
+            if (!Robot.isClimberTop) {
                 this.subsystem.doStop();
             }
+            else {
+                this.subsystem.doClimb();
+            }
         } else if (down()) {
-            this.subsystem.doClimb(false);
             if (!Robot.isClimberBottom) {
                 this.subsystem.doStop();
+            }
+            else {
+                this.subsystem.doLower();
             }
         } else {
             this.subsystem.doStop();

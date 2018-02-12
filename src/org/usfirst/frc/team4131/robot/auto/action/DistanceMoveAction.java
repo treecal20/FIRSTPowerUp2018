@@ -1,6 +1,9 @@
 package org.usfirst.frc.team4131.robot.auto.action;
 
+import org.usfirst.frc.team4131.robot.Oi;
 import org.usfirst.frc.team4131.robot.auto.Action;
+import org.usfirst.frc.team4131.robot.ctl.DriveCtl;
+import org.usfirst.frc.team4131.robot.ctl.TurnCtl;
 import org.usfirst.frc.team4131.robot.subsystem.DriveBaseSubsystem;
 
 /**
@@ -13,11 +16,6 @@ public class DistanceMoveAction implements Action {
      * PID victory
      */
     private static final int V_GRANULARITY = 500;
-    /**
-     * The amount of acceptable error for the target tick
-     * distance
-     */
-    private static final int ERR_BOUND = 1;
 
     /** The drive base used to move the robot */
     private final DriveBaseSubsystem driveBase;
@@ -39,25 +37,41 @@ public class DistanceMoveAction implements Action {
     @Override
     public void doAction() {
         this.driveBase.reset();
-        this.driveBase.gotoPosition(this.distance);
 
-        int lastLeftValue = this.driveBase.getLeftDist();
-        int roundsSinceLastChange = 0;
+        DriveCtl ctl = this.driveBase.getCtl();
+        TurnCtl turnCtl = TurnCtl.getInstance();
+
+        int turns = 0;
+        
+        turnCtl.begin(0);
+        ctl.begin(this.distance);
         while (true) {
-            int newLeftValue = this.driveBase.getLeftDist();
+            double baseDelta = -ctl.getDelta();
+            double turnDelta = turnCtl.getDelta();
 
-            int lDiff = Math.abs(newLeftValue - lastLeftValue);
-            if (lDiff >= ERR_BOUND) {
-                lastLeftValue = newLeftValue;
-                roundsSinceLastChange = 0;
+            double leftDelta = DistanceMoveAction.constrain(baseDelta + Oi.sigl() * turnDelta);
+            this.driveBase.setVelocityLeft(leftDelta);
+            
+            double rightDelta = constrain(baseDelta + Oi.sigr() * turnDelta);
+            this.driveBase.setVelocityRight(rightDelta);
+            
+            if (ctl.onTarget()) {
+                turns++;
             } else {
-                roundsSinceLastChange++;
+                turns = 0;
             }
-
-            // Victory
-            if (roundsSinceLastChange >= V_GRANULARITY) {
+            
+            if (turns > V_GRANULARITY) {
                 break;
             }
         }
+        ctl.finish();
+        turnCtl.finish();
+        
+        this.driveBase.doThrottle(0, 0);
+    }
+    
+    private static double constrain(double d) {
+        return Math.abs(d) < 0.1 ? Math.signum(d) * 0.1 : d;
     }
 }

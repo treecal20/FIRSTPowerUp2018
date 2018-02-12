@@ -6,8 +6,6 @@ import org.usfirst.frc.team4131.robot.auto.Action;
 import org.usfirst.frc.team4131.robot.ctl.TurnCtl;
 import org.usfirst.frc.team4131.robot.subsystem.DriveBaseSubsystem;
 
-import java.util.function.DoubleConsumer;
-
 /**
  * A turn action causes the robot to rotate until the given
  * arguments have been reached.
@@ -32,15 +30,8 @@ public class TurnAction implements Action {
 
     @Override
     public void doAction() {
-        DoubleConsumer consumer = value -> {
-            value = Math.abs(value) < 0.5 ? 0.5 : value;
-            this.driveBase.doThrottle(Oi.sigl() * value, Oi.sigr() * value);
-        };
-
-        this.driveBase.prepareTeleop();
-
         this.driveBase.doThrottle(0, 0);
-       
+
         TurnCtl controller = TurnCtl.getInstance();
         controller.begin(this.delta);
         while (true) {
@@ -49,11 +40,12 @@ public class TurnAction implements Action {
                 break;
             }
 
-            controller.pollData(consumer);
+            double value = controller.getDelta();
+            value = Math.abs(value) < 0.5 ? Math.signum(value) * 0.5 : value;
+
+            this.driveBase.doThrottle(Oi.sigl() * value, Oi.sigr() * value);
         }
         this.driveBase.doThrottle(0, 0);
         controller.finish();
-
-        this.driveBase.prepareAuto();
     }
 }
