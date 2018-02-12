@@ -31,14 +31,15 @@ public class ClimberSubsystem extends Subsystem {
      * Performs the climbing action and hoists the robot
      * up the pull-up bar.
      */
-    public void doClimb(boolean upDown) {
-        if (upDown) {
-            this.one.set(ControlMode.PercentOutput, 0.5);
-            this.two.set(ControlMode.PercentOutput, 0.5);
-        } else {
-            this.one.set(ControlMode.PercentOutput, -0.5);
-            this.two.set(ControlMode.PercentOutput, -0.5);
-        }
+    public void doClimb() {
+
+        this.one.set(ControlMode.PercentOutput, 0.75);
+        this.two.set(ControlMode.PercentOutput, 0.75);
+    }
+
+    public void doLower() {
+        this.one.set(ControlMode.PercentOutput, -0.5);
+        this.two.set(ControlMode.PercentOutput, -0.5);
     }
 
     public void doStop() {

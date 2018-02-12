@@ -27,14 +27,19 @@ public class ElevatorCommand extends SingleSubsystemCmd<ElevatorSubsystem> {
         if (up() && down()) {
             this.subsystem.doStop();
         } else if (up()) {
-            this.subsystem.doMove(true);
-            if (Robot.isElevatorTop) {
+
+            if (!Robot.isElevatorTop) {
                 this.subsystem.doStop();
             }
+            else {
+                this.subsystem.doClimb();
+            }
         } else if (down()) {
-            this.subsystem.doMove(false);
             if (!Robot.isElevatorBottom) {
                 this.subsystem.doStop();
+            }
+            else {
+                this.subsystem.doLower();
             }
         } else {
             this.subsystem.doStop();

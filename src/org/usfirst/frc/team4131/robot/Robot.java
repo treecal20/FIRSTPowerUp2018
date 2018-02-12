@@ -52,7 +52,7 @@ public class Robot extends IterativeRobot {
     private SubsystemProvider provider;
 
     public static void debug(Supplier<String> string) {
-        if (round++ == 20000) {
+        if (round++ == 2000000) {
             System.out.println("DEBUG: " + string.get());
             round = 0;
         }
@@ -68,9 +68,7 @@ public class Robot extends IterativeRobot {
         UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
         camera.setVideoMode(new VideoMode(VideoMode.PixelFormat.kMJPEG, 600, 600, 10));
 
-        this.chooser.addDefault("Left Right Baseline", new LeftRightBaseline());
         this.chooser.addObject("Encoder Calibration", new EncoderCalibration());
-        
         this.chooser.addObject("DS2ToSwitch", new ds2ToSwitch());
         this.chooser.addObject("leftToSwitchOrScale", new leftToSwitchOrScale());
         this.chooser.addObject("rightToSwitchOrScale", new rightToSwitchOrScale());
@@ -88,7 +86,6 @@ public class Robot extends IterativeRobot {
             sides[i] = Side.decode(str.charAt(i));
         }
 
-        this.provider.getDriveBase().prepareAuto();
         Procedure procedure = this.chooser.getSelected();
         List<Action> actions = new ArrayList<>(procedure.estimateLen());
         procedure.populate(this.provider, Arrays.asList(sides), actions);

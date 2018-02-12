@@ -4,6 +4,7 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.SPI;
+import org.usfirst.frc.team4131.robot.Robot;
 
 import java.util.function.DoubleConsumer;
 
@@ -69,6 +70,7 @@ public class TurnCtl implements PIDOutput {
     public void begin(double delta) {
         if (!this.isTurning) {
             this.dev.zeroYaw();
+            while (Math.abs(this.dev.getYaw()) < 0.2) Robot.debug(()->String.valueOf(this.dev.getYaw()));
 
             this.isTurning = true;
             this.cached = null;
@@ -86,23 +88,15 @@ public class TurnCtl implements PIDOutput {
     }
 
     /**
-     * Polls data and passes it to the given consumer. Must
-     * be called within a victory loop in order to poll
-     * data and supply the motors with throttle deltas.
+     * Obtains the throttle delta value that is produced by
+     * running the PID function.
      *
-     * @param dataConsumer the throttle data consumer
+     * @return the throttle
      */
-    public void pollData(DoubleConsumer dataConsumer) {
-        if (this.cached != null) {
-            if (this.cached != dataConsumer) {
-                throw new RuntimeException("Incorrect usage of data polling");
-            }
-        } else {
-            this.cached = dataConsumer;
-        }
-
-        dataConsumer.accept(this.throttleDelta);
+    public double getDelta() {
+        return this.throttleDelta;
     }
+
 
     /**
      * Determines whether the target has been reached.
