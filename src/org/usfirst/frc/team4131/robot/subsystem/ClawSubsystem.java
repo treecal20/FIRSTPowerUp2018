@@ -1,6 +1,9 @@
 package org.usfirst.frc.team4131.robot.subsystem;
 
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
+
+import org.usfirst.frc.team4131.robot.RobotMap;
 import org.usfirst.frc.team4131.robot.command.ClawCommand;
 
 /**
@@ -11,7 +14,11 @@ public class ClawSubsystem extends Subsystem {
      * Initializes and caches the motor wrapper for the claw
      * subsystem
      */
+	
+	private final Solenoid claw;
+	
     public ClawSubsystem() {
+    	claw = new Solenoid(RobotMap.PCM, RobotMap.CLAW);
     }
 
     @Override
@@ -24,14 +31,10 @@ public class ClawSubsystem extends Subsystem {
      * power cube
      */
     public void doClamp() {
+    	claw.set(true);
     }
     
     public void doRelease() {
-    }
-    
-    public void doRaise() {
-    }
-    
-    public void doLower() {
+    	claw.set(false);
     }
 }
