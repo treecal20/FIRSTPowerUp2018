@@ -24,16 +24,15 @@ public class ClawCommand extends SingleSubsystemCmd<ClawSubsystem> {
     
     @Override
     protected void execute() {
-    	if (buttonClaw()) {
+    	if (buttonClaw() && buttonEject()) {
     		this.subsystem.doRelease();
-    		if (buttonEject()) {
-    			this.subsystem.doEject();
-    		} else {
-    			this.subsystem.doRetract();
-    		}
-    	} else {
+    		this.subsystem.doEject();
+    	} else if (buttonClaw()){
+    		this.subsystem.doRelease();
     		this.subsystem.doRetract();
+    	} else {
     		this.subsystem.doClamp();
+    		this.subsystem.doRetract();
     	}
     }
     
