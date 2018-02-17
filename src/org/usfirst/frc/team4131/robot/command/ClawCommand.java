@@ -45,5 +45,6 @@ public class ClawCommand extends SingleSubsystemCmd<ClawSubsystem> {
     @Override
     protected void interrupted() {
         this.subsystem.doClamp();
+        this.subsystem.doRetract();
     }
 }

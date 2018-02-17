@@ -15,11 +15,13 @@ public class ClawSubsystem extends Subsystem {
      * subsystem
      */
 	
-	private final Solenoid claw, eject;
+	private final Solenoid clawOne, clawTwo, ejectOne, ejectTwo;
 	
     public ClawSubsystem() {
-    	claw = new Solenoid(RobotMap.PCM, RobotMap.CLAW);
-    	eject = new Solenoid(RobotMap.PCM, RobotMap.EJECT);
+    	clawOne = new Solenoid(RobotMap.PCM, RobotMap.CLAWONE);
+    	clawTwo = new Solenoid(RobotMap.PCM, RobotMap.CLAWTWO);
+    	ejectOne = new Solenoid(RobotMap.PCM, RobotMap.EJECTONE);
+    	ejectTwo = new Solenoid(RobotMap.PCM, RobotMap.EJECTTWO);
     }
 
     @Override
@@ -32,18 +34,22 @@ public class ClawSubsystem extends Subsystem {
      * power cube
      */
     public void doClamp() {
-    	claw.set(true);
+    	clawOne.set(true);
+    	clawTwo.set(false);
     }
     
     public void doRelease() {
-    	claw.set(false);
+    	clawOne.set(false);
+    	clawTwo.set(true);
     }
     
     public void doEject() {
-    	eject.set(true);
+    	ejectOne.set(true);
+    	ejectOne.set(false);
     }
     
     public void doRetract() {
-    	eject.set(false);
+    	ejectOne.set(false);
+    	ejectTwo.set(true);
     }
 }

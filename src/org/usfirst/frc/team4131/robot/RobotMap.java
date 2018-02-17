@@ -37,9 +37,12 @@ public final class RobotMap {
     public static final int E = 0;
 
     // Solenoids
-    public static final int CLAW = 0;
-    public static final int EJECT = 1;
-    public static final int LOWER = 2;
+    public static final int CLAWONE = 0;
+    public static final int CLAWTWO = 1;
+    public static final int EJECTONE = 2;
+    public static final int EJECTTWO = 3;
+    public static final int LOWERONE = 4;
+    public static final int LOWERTWO = 5;
     
     private RobotMap() { // Prevent instantiation
     }

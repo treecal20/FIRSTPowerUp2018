@@ -32,7 +32,8 @@ public class Robot extends IterativeRobot {
     private static final Compressor compressor = new Compressor(61);
     
     // Claw lowering
-    private Solenoid lower = new Solenoid(RobotMap.PCM, RobotMap.LOWER);
+    private Solenoid lowerOne = new Solenoid(RobotMap.PCM, RobotMap.LOWERONE);
+    private Solenoid lowerTwo = new Solenoid(RobotMap.PCM, RobotMap.LOWERTWO);
 
     // Booleans for random functions
     public static boolean isInverted;
@@ -94,7 +95,8 @@ public class Robot extends IterativeRobot {
         procedure.populate(this.provider, Arrays.asList(sides), actions);
 
         // Claw lower
-        this.lower.set(true);
+        this.lowerOne.set(true);
+        this.lowerTwo.set(false);
         
         for (int i = 0, s = actions.size(); i < s; i++) {
             Action action = actions.get(i);
@@ -104,7 +106,8 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void autonomousPeriodic() {
-    	this.lower.set(false);
+    	this.lowerOne.set(false);
+    	this.lowerTwo.set(true);
     }
 
     // ----------------------------------------------------
@@ -112,12 +115,14 @@ public class Robot extends IterativeRobot {
     @Override
     public void teleopInit() {
         this.provider.getDriveBase().prepareTeleop();
-        lower.set(true);
+        lowerOne.set(true);
+        lowerTwo.set(false);
     }
 
     @Override
     public void teleopPeriodic() {
-        this.lower.set(false);
+        this.lowerOne.set(false);
+        this.lowerTwo.set(true);
     	
     	Scheduler.getInstance().run();
 
