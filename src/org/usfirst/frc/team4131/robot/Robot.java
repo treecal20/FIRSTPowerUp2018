@@ -30,6 +30,9 @@ import java.util.function.Supplier;
 public class Robot extends IterativeRobot {
     // Compressor stuff
     private static final Compressor compressor = new Compressor(61);
+    
+    // Claw lowering
+    private Solenoid lower = new Solenoid(RobotMap.PCM, RobotMap.LOWER);
 
     // Booleans for random functions
     public static boolean isInverted;
@@ -90,6 +93,9 @@ public class Robot extends IterativeRobot {
         List<Action> actions = new ArrayList<>(procedure.estimateLen());
         procedure.populate(this.provider, Arrays.asList(sides), actions);
 
+        // Claw lower
+        this.lower.set(true);
+        
         for (int i = 0, s = actions.size(); i < s; i++) {
             Action action = actions.get(i);
             action.doAction();
@@ -98,6 +104,7 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void autonomousPeriodic() {
+    	this.lower.set(false);
     }
 
     // ----------------------------------------------------
@@ -105,11 +112,14 @@ public class Robot extends IterativeRobot {
     @Override
     public void teleopInit() {
         this.provider.getDriveBase().prepareTeleop();
+        lower.set(true);
     }
 
     @Override
     public void teleopPeriodic() {
-        Scheduler.getInstance().run();
+        this.lower.set(false);
+    	
+    	Scheduler.getInstance().run();
 
         // Limit switch stuff
         isClimberTop = this.topClimberSwitch.get();
