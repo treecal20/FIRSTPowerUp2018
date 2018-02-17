@@ -47,10 +47,10 @@ public class Robot extends IterativeRobot {
     private final SendableChooser<Procedure> chooser = new SendableChooser<>();
 
     // Limit Switches
-    private final DigitalInput topClimberSwitch = new DigitalInput(0);
-    private final DigitalInput bottomClimberSwitch = new DigitalInput(1);
-    private final DigitalInput topElevatorSwitch = new DigitalInput(2);
-    private final DigitalInput bottomElevatorSwitch = new DigitalInput(3);
+    private final DigitalInput topClimberSwitch = new DigitalInput(3);
+    private final DigitalInput bottomClimberSwitch = new DigitalInput(2);
+    private final DigitalInput topElevatorSwitch = new DigitalInput(1);
+    private final DigitalInput bottomElevatorSwitch = new DigitalInput(0);
 
     // Subsystem stuff
     private SubsystemProvider provider;
