@@ -39,7 +39,6 @@ public final class Oi {
     public static final JoystickButton EJECT = new JoystickButton(AUX_JOYSTICK, 2);
 
     private Oi() { // Prevent instantiation
-
     }
 
     /**
