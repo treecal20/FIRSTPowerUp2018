@@ -17,6 +17,10 @@ public final class RobotMap {
     public static final int R_JOY_PORT = 0;
     public static final int AUX_JOY_PORT = 2;
 
+    // CAN devices
+    public static final int PCM = 61;
+    public static final int PDP = 62;
+    
     // Left motors
     public static final int L1 = 1;
     public static final int L2 = 2;
@@ -32,6 +36,11 @@ public final class RobotMap {
     // Claw elevator motor
     public static final int E = 0;
 
+    // Solenoids
+    public static final int CLAW = 0;
+    public static final int EJECT = 1;
+    public static final int LOWER = 2;
+    
     private RobotMap() { // Prevent instantiation
     }
 }
