@@ -15,10 +15,11 @@ public class ClawSubsystem extends Subsystem {
      * subsystem
      */
 	
-	private final Solenoid claw;
+	private final Solenoid claw, eject;
 	
     public ClawSubsystem() {
     	claw = new Solenoid(RobotMap.PCM, RobotMap.CLAW);
+    	eject = new Solenoid(RobotMap.PCM, RobotMap.EJECT);
     }
 
     @Override
@@ -36,5 +37,13 @@ public class ClawSubsystem extends Subsystem {
     
     public void doRelease() {
     	claw.set(false);
+    }
+    
+    public void doEject() {
+    	eject.set(true);
+    }
+    
+    public void doRetract() {
+    	eject.set(false);
     }
 }
