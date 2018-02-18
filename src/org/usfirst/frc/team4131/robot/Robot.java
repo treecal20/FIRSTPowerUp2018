@@ -30,10 +30,6 @@ import java.util.function.Supplier;
 public class Robot extends IterativeRobot {
     // Compressor stuff
     private static final Compressor compressor = new Compressor(61);
-    
-    // Claw lowering
-    private Solenoid lowerOne = new Solenoid(RobotMap.PCM, RobotMap.LOWERONE);
-    private Solenoid lowerTwo = new Solenoid(RobotMap.PCM, RobotMap.LOWERTWO);
 
     // Booleans for random functions
     public static boolean isInverted;
@@ -47,10 +43,10 @@ public class Robot extends IterativeRobot {
     private final SendableChooser<Procedure> chooser = new SendableChooser<>();
 
     // Limit Switches
-    private final DigitalInput topClimberSwitch = new DigitalInput(3);
-    private final DigitalInput bottomClimberSwitch = new DigitalInput(2);
-    private final DigitalInput topElevatorSwitch = new DigitalInput(1);
-    private final DigitalInput bottomElevatorSwitch = new DigitalInput(0);
+    private final DigitalInput topClimberSwitch = new DigitalInput(1);
+    private final DigitalInput bottomClimberSwitch = new DigitalInput(0);
+    private final DigitalInput topElevatorSwitch = new DigitalInput(3);
+    private final DigitalInput bottomElevatorSwitch = new DigitalInput(2);
 
     // Subsystem stuff
     private SubsystemProvider provider;
@@ -94,10 +90,6 @@ public class Robot extends IterativeRobot {
         Procedure procedure = this.chooser.getSelected();
         List<Action> actions = new ArrayList<>(procedure.estimateLen());
         procedure.populate(this.provider, Arrays.asList(sides), actions);
-
-        // Claw lower
-        this.lowerOne.set(true);
-        this.lowerTwo.set(false);
         
         for (int i = 0, s = actions.size(); i < s; i++) {
             Action action = actions.get(i);
@@ -107,8 +99,6 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void autonomousPeriodic() {
-    	this.lowerOne.set(false);
-    	this.lowerTwo.set(true);
     }
 
     // ----------------------------------------------------
@@ -116,16 +106,11 @@ public class Robot extends IterativeRobot {
     @Override
     public void teleopInit() {
         this.provider.getDriveBase().prepareTeleop();
-        lowerOne.set(true);
-        lowerTwo.set(false);
     }
 
     @Override
     public void teleopPeriodic() {
-        this.lowerOne.set(false);
-        this.lowerTwo.set(true);
-    	
-    	Scheduler.getInstance().run();
+        Scheduler.getInstance().run();
 
         // Limit switch stuff
         isClimberTop = this.topClimberSwitch.get();

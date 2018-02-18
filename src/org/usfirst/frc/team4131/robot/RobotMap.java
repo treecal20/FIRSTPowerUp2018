@@ -13,8 +13,8 @@ package org.usfirst.frc.team4131.robot;
  */
 public final class RobotMap {
     // Joysticks
-    public static final int L_JOY_PORT = 1;
-    public static final int R_JOY_PORT = 0;
+    public static final int L_JOY_PORT = 0;
+    public static final int R_JOY_PORT = 1;
     public static final int AUX_JOY_PORT = 2;
 
     // CAN devices
@@ -36,7 +36,6 @@ public final class RobotMap {
     // Claw elevator motor
     public static final int E = 0;
 
-    // Solenoids
     public static final int CLAWONE = 5;
     public static final int CLAWTWO = 4;
     public static final int EJECTONE = 6;

@@ -34,13 +34,13 @@ public class ClawSubsystem extends Subsystem {
      * power cube
      */
     public void doClamp() {
-    	clawOne.set(true);
-    	clawTwo.set(false);
+    	clawOne.set(false);
+    	clawTwo.set(true);
     }
     
     public void doRelease() {
-    	clawOne.set(false);
-    	clawTwo.set(true);
+    	clawOne.set(true);
+    	clawTwo.set(false);
     }
     
     public void doEject() {
