@@ -35,8 +35,8 @@ public final class Oi {
     public static final JoystickButton CLIMB = new JoystickButton(AUX_JOYSTICK, 6);
     public static final JoystickButton DESCEND = new JoystickButton(AUX_JOYSTICK, 4);
     
-    public static final JoystickButton CLAW = new JoystickButton(AUX_JOYSTICK, 1);
-    public static final JoystickButton EJECT = new JoystickButton(AUX_JOYSTICK, 2);
+    public static final JoystickButton CLAW = new JoystickButton(R_JOYSTICK, 1);
+    public static final JoystickButton EJECT = new JoystickButton(R_JOYSTICK, 2);
 
     private Oi() { // Prevent instantiation
     }
