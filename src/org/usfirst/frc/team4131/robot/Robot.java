@@ -84,7 +84,8 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void autonomousInit() {
-        String str = DriverStation.getInstance().getGameSpecificMessage();
+    	
+    	String str = DriverStation.getInstance().getGameSpecificMessage();
         Side[] sides = new Side[str.length()];
         for (int i = 0, s = str.length(); i < s; i++) {
             sides[i] = Side.decode(str.charAt(i));
