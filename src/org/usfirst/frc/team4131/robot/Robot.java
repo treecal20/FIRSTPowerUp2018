@@ -43,10 +43,10 @@ public class Robot extends IterativeRobot {
     private final SendableChooser<Procedure> chooser = new SendableChooser<>();
 
     // Limit Switches
-    private final DigitalInput topClimberSwitch = new DigitalInput(0);
-    private final DigitalInput bottomClimberSwitch = new DigitalInput(1);
-    private final DigitalInput topElevatorSwitch = new DigitalInput(2);
-    private final DigitalInput bottomElevatorSwitch = new DigitalInput(3);
+    private final DigitalInput topClimberSwitch = new DigitalInput(1);
+    private final DigitalInput bottomClimberSwitch = new DigitalInput(0);
+    private final DigitalInput topElevatorSwitch = new DigitalInput(3);
+    private final DigitalInput bottomElevatorSwitch = new DigitalInput(2);
 
     // Subsystem stuff
     private SubsystemProvider provider;
@@ -80,7 +80,8 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void autonomousInit() {
-        String str = DriverStation.getInstance().getGameSpecificMessage();
+    	
+    	String str = DriverStation.getInstance().getGameSpecificMessage();
         Side[] sides = new Side[str.length()];
         for (int i = 0, s = str.length(); i < s; i++) {
             sides[i] = Side.decode(str.charAt(i));
@@ -89,7 +90,7 @@ public class Robot extends IterativeRobot {
         Procedure procedure = this.chooser.getSelected();
         List<Action> actions = new ArrayList<>(procedure.estimateLen());
         procedure.populate(this.provider, Arrays.asList(sides), actions);
-
+        
         for (int i = 0, s = actions.size(); i < s; i++) {
             Action action = actions.get(i);
             action.doAction();
