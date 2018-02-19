@@ -46,4 +46,13 @@ public class ClimberSubsystem extends Subsystem {
         this.one.set(ControlMode.PercentOutput, 0);
         this.two.set(ControlMode.PercentOutput, 0);
     }
+    
+    public void goToBottom() {
+    	
+    }
+    
+    public void goToTop() {
+    	
+    }
+    
 }
