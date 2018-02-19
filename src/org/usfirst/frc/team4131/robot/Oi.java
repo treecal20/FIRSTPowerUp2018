@@ -29,15 +29,24 @@ public final class Oi {
     public static final JoystickButton INVERT_R_2 = new JoystickButton(R_JOYSTICK, 3);
 
     // Aux stick buttons
-    public static final JoystickButton CLIMB = new JoystickButton(AUX_JOYSTICK, 1);
-    public static final JoystickButton DESCEND = new JoystickButton(AUX_JOYSTICK, 2);
-    public static final JoystickButton CLAWUP = new JoystickButton(AUX_JOYSTICK, 3);
-    public static final JoystickButton CLAWDOWN = new JoystickButton(AUX_JOYSTICK, 4);
+    public static final JoystickButton CLAWUP = new JoystickButton(AUX_JOYSTICK, 5);
+    public static final JoystickButton CLAWDOWN = new JoystickButton(AUX_JOYSTICK, 3);
+    
+    public static final JoystickButton CLIMB = new JoystickButton(AUX_JOYSTICK, 6);
+    public static final JoystickButton DESCEND = new JoystickButton(AUX_JOYSTICK, 4);
+    
+    public static final JoystickButton CLAW = new JoystickButton(R_JOYSTICK, 1);
+    public static final JoystickButton EJECT = new JoystickButton(R_JOYSTICK, 2);
 
     private Oi() { // Prevent instantiation
+<<<<<<< HEAD
 
     }
 
+=======
+    }
+
+>>>>>>> e0e7d78e4d2901a955ef0f33dab6576bf2c8eee9
     /**
      * Obtains the direction sign for the left side motors.
      *

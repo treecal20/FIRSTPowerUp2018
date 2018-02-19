@@ -16,7 +16,7 @@ public class ElevatorSubsystem extends Subsystem {
     private final Spark motor;
 
     public ElevatorSubsystem() {
-        this.motor = new Spark (RobotMap.E);
+        this.motor = new Spark(RobotMap.E);
     }
 
     @Override
@@ -29,13 +29,20 @@ public class ElevatorSubsystem extends Subsystem {
      * up the pull-up bar.
      */
     public void doClimb() {
+    	this.motor.set(-0.5);
+    }
 
+<<<<<<< HEAD
         this.motor.set(0.5);
     }
 
     public void doLower() {
 
         this.motor.set(-0.5);
+=======
+    public void doLower() {
+    	this.motor.set(0.5);
+>>>>>>> e0e7d78e4d2901a955ef0f33dab6576bf2c8eee9
     }
 
     public void doStop() {
