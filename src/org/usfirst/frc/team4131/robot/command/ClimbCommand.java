@@ -23,8 +23,7 @@ public class ClimbCommand extends SingleSubsystemCmd<ClimberSubsystem> {
 
     @Override
     protected void execute() {
-
-        if (up() && down()) {
+    	if (up() && down()) {
             this.subsystem.doStop();
         } else if (up()) {
 

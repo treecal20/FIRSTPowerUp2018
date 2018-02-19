@@ -3,6 +3,8 @@ package org.usfirst.frc.team4131.robot.subsystem;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.command.Subsystem;
+
+import org.usfirst.frc.team4131.robot.Robot;
 import org.usfirst.frc.team4131.robot.RobotMap;
 import org.usfirst.frc.team4131.robot.command.ClimbCommand;
 
@@ -48,11 +50,18 @@ public class ClimberSubsystem extends Subsystem {
     }
     
     public void goToBottom() {
-    	
+    	this.doStop();
+    	while (Robot.isClimberBottom) {
+    		this.doLower();
+    	}
+    	this.doStop();
     }
     
     public void goToTop() {
-    	
+    	this.doStop();
+    	while (Robot.isClimberTop) {
+    		this.doClimb();
+    	}
+    	this.doStop();
     }
-    
 }
