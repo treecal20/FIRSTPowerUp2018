@@ -24,8 +24,6 @@ public class DriveBaseSubsystem extends Subsystem implements PIDSource {
     private static final int PID_IDX = 0;
     private static final int SENSOR_TIMEOUT = 0;
 
-    private static final int ERROR_DELTA = 0;
-
     // Drive fallback PID controller
     private final DriveCtl ctl;
 
@@ -43,8 +41,7 @@ public class DriveBaseSubsystem extends Subsystem implements PIDSource {
         new TalonSRX(RobotMap.L2).follow(this.left);
 
         this.right = new TalonSRX(RobotMap.R1);
-        TalonSRX right2 = new TalonSRX(RobotMap.R2);
-        right2.follow(this.right);
+        new TalonSRX(RobotMap.R2).follow(this.right);
 
         this.setupEncoder();
         this.reset();
@@ -55,6 +52,12 @@ public class DriveBaseSubsystem extends Subsystem implements PIDSource {
         this.setDefaultCommand(new MoveCommand(this));
     }
 
+    /**
+     * Obtains the controller used for moving a certain
+     * distance.
+     *
+     * @return the distance drive controller
+     */
     public DriveCtl getCtl() {
         return this.ctl;
     }
@@ -84,43 +87,9 @@ public class DriveBaseSubsystem extends Subsystem implements PIDSource {
     }
 
     /**
-     * Configures the PID constants on the given talon
-     * device.
-     *
-     * @param talon the talon on which the PID constants
-     * will be configured
+     * Reduces ramping in order to allow teleop control to
+     * be more responsive.
      */
-    private void setupPid(TalonSRX talon, double limit) {
-        ErrorCode code = ErrorCode.worstOne(talon.config_kP(PID_IDX, 0.5, SENSOR_TIMEOUT),
-                talon.config_kI(PID_IDX, 0, SENSOR_TIMEOUT),
-                talon.config_kD(PID_IDX, 0, SENSOR_TIMEOUT),
-                talon.config_kF(PID_IDX, 0, SENSOR_TIMEOUT));
-        ErrorCode code0 = ErrorCode.worstOne(talon.configAllowableClosedloopError(PID_IDX, ERROR_DELTA, SENSOR_TIMEOUT),
-                // talon.configVoltageCompSaturation(5, SENSOR_TIMEOUT),
-                talon.configClosedloopRamp(0.3 + limit, SENSOR_TIMEOUT));
-        // talon.configOpenloopRamp(0.3, SENSOR_TIMEOUT));
-        // talon.enableVoltageCompensation(true);
-                talon.configOpenloopRamp(0.3, SENSOR_TIMEOUT);
-        if (code.value != 0 || code0.value != 0) {
-            DriverStation.reportError("Error occurred configuring PIDF", false);
-        }
-    }
-
-    /**
-     * Print Amperage Voltage Velocity
-     *
-     * @param speed the speed currently being input
-     * @param round the loop round
-     */
-    public void pavv(double speed, int round) {
-        if (round % 100000 == 0) {
-            System.out.println("INPUT=" + speed
-                    + " ENCODER VEL=" + this.left.getSelectedSensorVelocity(PID_IDX)
-                    + " AMPS=" + this.left.getOutputCurrent()
-                    + " VOLTS=" + this.left.getBusVoltage());
-        }
-    }
-    
     public void prepareTeleop() {
         this.left.configOpenloopRamp(0, SENSOR_TIMEOUT);
         this.right.configOpenloopRamp(0, SENSOR_TIMEOUT);
@@ -136,44 +105,30 @@ public class DriveBaseSubsystem extends Subsystem implements PIDSource {
      * @param r the right motor speed
      */
     public void doThrottle(double l, double r) {
-    	
         this.left.set(ControlMode.PercentOutput, Math.pow((sigl() * l), 3));
         this.right.set(ControlMode.PercentOutput, Math.pow((sigr() * r), 3));
     }
-    
+
+    /**
+     * Sets the throttle for the left motor.
+     *
+     * @param vel the throttle (-1 to 1)
+     */
     public void setVelocityLeft(double vel) {
         this.left.set(ControlMode.PercentOutput, sigl() * vel);
     }
-    
+
+    /**
+     * Sets the throttle for the right motor.
+     *
+     * @param vel the throttle (-1 to 1)
+     */
     public void setVelocityRight(double vel) {
         this.right.set(ControlMode.PercentOutput, sigr() * vel);
     }
 
-    /**
-     * Performs a PID-controlled movement using the
-     * encoder target tick.
-     *
-     * @param ticks the number of ticks to move the
-     * robot
-     */
-    public void gotoPosition(int ticks) {
-        this.left.set(ControlMode.Position, ticks);
-    }
-
-    public void setVelocity(double vel) {
-        this.left.set(ControlMode.PercentOutput, sigl() * vel);
-    }
-
     // Sensor polling methods ------------------------------
     // DO NOT use SensorCollection here
-
-    public int getLeftVelocity() {
-        return sigl() * this.left.getSelectedSensorVelocity(PID_IDX);
-    }
-
-    public int getRightVelocity() {
-        return sigr() * this.right.getSelectedSensorVelocity(PID_IDX);
-    }
 
     /**
      * Obtains the tick count for the left encoder.
@@ -183,10 +138,6 @@ public class DriveBaseSubsystem extends Subsystem implements PIDSource {
      */
     public int getLeftDist() {
         return this.left.getSelectedSensorPosition(PID_IDX);
-    }
-
-    public int getRightDist() {
-        return this.right.getSelectedSensorPosition(PID_IDX);
     }
 
     // PID Fallback source methods -------------------------

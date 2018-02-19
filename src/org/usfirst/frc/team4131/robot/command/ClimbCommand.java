@@ -13,46 +13,51 @@ public class ClimbCommand extends SingleSubsystemCmd<ClimberSubsystem> {
         super(subsystem);
     }
 
-    private static boolean up() {
+    /**
+     * Checks the climb button in order to determine whether
+     * the robot should climb.
+     *
+     * @return {@code true} to signal that climbing should
+     * commence
+     */
+    private static boolean shouldClimb() {
         return Oi.CLIMB.get();
     }
 
-    private static boolean down() {
+    /**
+     * Checks the lower button in order to determine whether
+     * the robot should lower itself.
+     *
+     * @return {@code true} to signal that the robot should
+     * lower itself
+     */
+    private static boolean shouldDescend() {
         return Oi.DESCEND.get();
     }
 
     @Override
     protected void execute() {
-
-        if (up() && down()) {
-            this.subsystem.doStop();
-        } else if (up()) {
-
+        if (shouldClimb() && shouldDescend()) {
+            this.subsystem.stop();
+        } else if (shouldClimb()) {
             if (!Robot.isClimberTop) {
-                this.subsystem.doStop();
+                this.subsystem.stop();
+            } else {
+                this.subsystem.climb();
             }
-            else {
-                this.subsystem.doClimb();
-            }
-        } else if (down()) {
+        } else if (shouldDescend()) {
             if (!Robot.isClimberBottom) {
-                this.subsystem.doStop();
-            }
-            else {
-                this.subsystem.doLower();
+                this.subsystem.stop();
+            } else {
+                this.subsystem.descend();
             }
         } else {
-            this.subsystem.doStop();
+            this.subsystem.stop();
         }
     }
 
     @Override
-    protected boolean isFinished() {
-        return false;
-    }
-
-    @Override
     protected void interrupted() {
-        this.subsystem.doStop();
+        this.subsystem.stop();
     }
 }

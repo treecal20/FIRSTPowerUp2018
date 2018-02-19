@@ -19,8 +19,7 @@ public final class RobotMap {
 
     // CAN devices
     public static final int PCM = 61;
-    public static final int PDP = 62;
-    
+
     // Left motors
     public static final int L1 = 1;
     public static final int L2 = 2;

@@ -68,7 +68,7 @@ public class DriveCtl implements PIDOutput {
     }
 
     /**
-     * Completes the loop controll.
+     * Completes the loop control.
      */
     public void finish() {
         if (this.isDriving) {

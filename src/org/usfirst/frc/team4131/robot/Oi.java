@@ -39,14 +39,8 @@ public final class Oi {
     public static final JoystickButton EJECT = new JoystickButton(R_JOYSTICK, 2);
 
     private Oi() { // Prevent instantiation
-<<<<<<< HEAD
-
     }
 
-=======
-    }
-
->>>>>>> e0e7d78e4d2901a955ef0f33dab6576bf2c8eee9
     /**
      * Obtains the direction sign for the left side motors.
      *
