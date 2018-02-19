@@ -37,6 +37,7 @@ public class Robot extends IterativeRobot {
     public static boolean isClimberBottom;
     public static boolean isElevatorTop;
     public static boolean isElevatorBottom;
+    public static boolean isThrottleMode;
     private static int round;
 
     // Auton chooser
@@ -122,6 +123,9 @@ public class Robot extends IterativeRobot {
         isElevatorTop = this.topElevatorSwitch.get();
         isElevatorBottom = this.bottomElevatorSwitch.get();
 
+        // Throttle Mode
+        isThrottleMode = Oi.THROTTLE_MODE.get();
+        
         // Inverting controls
         isInverted = Oi.INVERT_L_1.get() && Oi.INVERT_L_2.get() && Oi.INVERT_R_1.get() && Oi.INVERT_R_2.get();
     }
