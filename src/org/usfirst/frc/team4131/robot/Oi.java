@@ -16,7 +16,8 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
  * poll their state.
  */
 public final class Oi {
-    // JoySticks
+    
+	// JoySticks
     public static final Joystick L_JOYSTICK = new Joystick(RobotMap.L_JOY_PORT);
     public static final Joystick R_JOYSTICK = new Joystick(RobotMap.R_JOY_PORT);
     public static final Joystick AUX_JOYSTICK = new Joystick(RobotMap.AUX_JOY_PORT);
@@ -24,19 +25,22 @@ public final class Oi {
     // Stick one buttons
     public static final JoystickButton INVERT_L_1 = new JoystickButton(L_JOYSTICK, 6);
     public static final JoystickButton INVERT_L_2 = new JoystickButton(L_JOYSTICK, 4);
+    
+    public static final JoystickButton CLAW = new JoystickButton(L_JOYSTICK, 1);
+    public static final JoystickButton EJECT = new JoystickButton(L_JOYSTICK, 2);
 
+    // Stick two buttons
     public static final JoystickButton INVERT_R_1 = new JoystickButton(R_JOYSTICK, 5);
     public static final JoystickButton INVERT_R_2 = new JoystickButton(R_JOYSTICK, 3);
-
+    
+    public static final JoystickButton THROTTLE_MODE = new JoystickButton(R_JOYSTICK, 1);
+    
     // Aux stick buttons
     public static final JoystickButton CLAWUP = new JoystickButton(AUX_JOYSTICK, 5);
     public static final JoystickButton CLAWDOWN = new JoystickButton(AUX_JOYSTICK, 3);
     
     public static final JoystickButton CLIMB = new JoystickButton(AUX_JOYSTICK, 6);
     public static final JoystickButton DESCEND = new JoystickButton(AUX_JOYSTICK, 4);
-    
-    public static final JoystickButton CLAW = new JoystickButton(R_JOYSTICK, 1);
-    public static final JoystickButton EJECT = new JoystickButton(R_JOYSTICK, 2);
 
     private Oi() { // Prevent instantiation
     }
