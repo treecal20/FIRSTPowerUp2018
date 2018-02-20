@@ -29,27 +29,28 @@ public class ClawCommand extends SingleSubsystemCmd<ClawSubsystem> {
      *
      * @return {@code true} to eject the held crate
      */
-    private static boolean buttonEject() {
-        return Oi.EJECT.get();
+    private static boolean buttonArm() {
+        return Oi.ARM.get();
     }
     
     @Override
     protected void execute() {
-        if (buttonClaw() && buttonEject()) {
-            this.subsystem.release();
-            this.subsystem.eject();
-        } else if (buttonClaw()){
-            this.subsystem.release();
-            this.subsystem.retract();
-        } else {
-            this.subsystem.clamp();
-            this.subsystem.retract();
-        }
+       if (buttonClaw() && buttonArm()) {
+    	   this.subsystem.release();
+    	   this.subsystem.raise();
+       } else if (buttonClaw()) {
+    	   this.subsystem.release();
+       } else if (buttonArm()) {
+    	   this.subsystem.raise();
+       } else {
+    	   this.subsystem.clamp();
+    	   this.subsystem.lower();
+       }
     }
     
     @Override
     protected void interrupted() {
         this.subsystem.clamp();
-        this.subsystem.retract();
+        this.subsystem.lower();
     }
 }

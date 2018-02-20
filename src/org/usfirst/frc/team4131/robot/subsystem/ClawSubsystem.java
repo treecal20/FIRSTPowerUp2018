@@ -13,8 +13,8 @@ public class ClawSubsystem extends Subsystem {
     // Pneumatic devices
     private final Solenoid clawOne;
     private final Solenoid clawTwo;
-    private final Solenoid ejectOne;
-    private final Solenoid ejectTwo;
+    private final Solenoid armOne;
+    private final Solenoid armTwo;
 
     /**
      * Initializes and caches the motor wrapper for the claw
@@ -23,8 +23,8 @@ public class ClawSubsystem extends Subsystem {
     public ClawSubsystem() {
         this.clawOne = new Solenoid(RobotMap.PCM, RobotMap.CLAWONE);
         this.clawTwo = new Solenoid(RobotMap.PCM, RobotMap.CLAWTWO);
-        this.ejectOne = new Solenoid(RobotMap.PCM, RobotMap.EJECTONE);
-        this.ejectTwo = new Solenoid(RobotMap.PCM, RobotMap.EJECTTWO);
+        this.armOne = new Solenoid(RobotMap.PCM, RobotMap.ARMONE);
+        this.armTwo = new Solenoid(RobotMap.PCM, RobotMap.ARMTWO);
     }
 
     @Override
@@ -52,16 +52,16 @@ public class ClawSubsystem extends Subsystem {
     /**
      * Ejects the crate
      */
-    public void eject() {
-        this.ejectOne.set(true);
-        this.ejectOne.set(false);
+    public void lower() {
+        this.armOne.set(true);
+        this.armTwo.set(false);
     }
 
     /**
      * Causes the claw to retract
      */
-    public void retract() {
-        this.ejectOne.set(false);
-        this.ejectTwo.set(true);
+    public void raise() {
+    	this.armOne.set(false);
+        this.armTwo.set(true);
     }
 }

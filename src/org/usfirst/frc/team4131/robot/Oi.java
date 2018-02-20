@@ -26,14 +26,14 @@ public final class Oi {
     public static final JoystickButton INVERT_L_1 = new JoystickButton(L_JOYSTICK, 6);
     public static final JoystickButton INVERT_L_2 = new JoystickButton(L_JOYSTICK, 4);
     
-    public static final JoystickButton CLAW = new JoystickButton(L_JOYSTICK, 1);
-    public static final JoystickButton EJECT = new JoystickButton(L_JOYSTICK, 2);
+    public static final JoystickButton CLAW = new JoystickButton(R_JOYSTICK, 1);
+    public static final JoystickButton ARM = new JoystickButton(R_JOYSTICK, 2);
 
     // Stick two buttons
     public static final JoystickButton INVERT_R_1 = new JoystickButton(R_JOYSTICK, 5);
     public static final JoystickButton INVERT_R_2 = new JoystickButton(R_JOYSTICK, 3);
     
-    public static final JoystickButton THROTTLE_MODE = new JoystickButton(R_JOYSTICK, 1);
+    public static final JoystickButton THROTTLE_MODE = new JoystickButton(L_JOYSTICK, 1);
     
     // Aux stick buttons
     public static final JoystickButton CLAWUP = new JoystickButton(AUX_JOYSTICK, 5);
