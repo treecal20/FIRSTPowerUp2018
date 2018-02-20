@@ -27,8 +27,7 @@ public class ElevatorCommand extends SingleSubsystemCmd<ElevatorSubsystem> {
         if (up() && down()) {
             this.subsystem.doStop();
         } else if (up()) {
-
-            if (!Robot.isElevatorTop) {
+        	if (!Robot.isElevatorTop) {
                 this.subsystem.doStop();
             }
             else {
