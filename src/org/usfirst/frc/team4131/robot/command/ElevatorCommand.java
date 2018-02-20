@@ -5,8 +5,8 @@ import org.usfirst.frc.team4131.robot.Robot;
 import org.usfirst.frc.team4131.robot.subsystem.ElevatorSubsystem;
 
 /**
- * A command which will activate the climber and raise the
- * robot using the pull-up bar.
+ * A command used to raise or lower the crate held in the
+ * claw using the elevator subsystem.
  */
 //TODO test when elevator is built
 public class ElevatorCommand extends SingleSubsystemCmd<ElevatorSubsystem> {
@@ -14,44 +14,51 @@ public class ElevatorCommand extends SingleSubsystemCmd<ElevatorSubsystem> {
         super(subsystem);
     }
 
-    private static boolean up() {
+    /**
+     * Checks the claw elevator button in order to determine
+     * if the claw should be raised.
+     *
+     * @return {@code true} to signal that the claw should
+     * be raised
+     */
+    private static boolean shouldRaise() {
         return Oi.CLAWUP.get();
     }
 
-    private static boolean down() {
+    /**
+     * Checks the claw elevator button in order to determine
+     * if the claw should be lowered.
+     *
+     * @return {@code true} to signal that the claw should
+     * be lowered
+     */
+    private static boolean shouldLower() {
         return Oi.CLAWDOWN.get();
     }
 
     @Override
     protected void execute() {
-        if (up() && down()) {
-            this.subsystem.doStop();
-        } else if (up()) {
-        	if (!Robot.isElevatorTop) {
-                this.subsystem.doStop();
+        if (shouldRaise() && shouldLower()) {
+            this.subsystem.stop();
+        } else if (shouldRaise()) {
+            if (!Robot.isElevatorTop) {
+                this.subsystem.stop();
+            } else {
+                this.subsystem.raise();
             }
-            else {
-                this.subsystem.doClimb();
-            }
-        } else if (down()) {
+        } else if (shouldLower()) {
             if (!Robot.isElevatorBottom) {
-                this.subsystem.doStop();
-            }
-            else {
-                this.subsystem.doLower();
+                this.subsystem.stop();
+            } else {
+                this.subsystem.lower();
             }
         } else {
-            this.subsystem.doStop();
+            this.subsystem.stop();
         }
     }
 
     @Override
-    protected boolean isFinished() {
-        return false;
-    }
-
-    @Override
     protected void interrupted() {
-        this.subsystem.doStop();
+        this.subsystem.stop();
     }
 }

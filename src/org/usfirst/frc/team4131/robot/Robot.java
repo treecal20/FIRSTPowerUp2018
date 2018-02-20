@@ -69,24 +69,24 @@ public class Robot extends IterativeRobot {
         UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
         camera.setVideoMode(new VideoMode(VideoMode.PixelFormat.kMJPEG, 600, 600, 10));
 
-        this.chooser.addObject("Encoder Calibration", new EncoderCalibration());
-        this.chooser.addObject("DS2ToSwitch", new ds2ToSwitch());
-        this.chooser.addObject("leftToSwitchOrScale", new leftToSwitchOrScale());
-        this.chooser.addObject("rightToSwitchOrScale", new rightToSwitchOrScale());
-        SmartDashboard.putData("Auto mode", this.chooser);
-
+        // Compressor setup
         compressor.setClosedLoopControl(true);
         compressor.clearAllPCMStickyFaults();
+
+        // Display auto procedures on dashboard
+        this.chooser.addObject("Encoder Calibration", new EncoderCalibration());
+        this.chooser.addObject("DS2ToSwitch", new DriverStationToSwitch());
+        this.chooser.addObject("LeftToSwitchOrScale", new LeftToSwitchOrScale());
+        this.chooser.addObject("RightToSwitchOrScale", new RightToSwitchOrScale());
+        SmartDashboard.putData("Auto mode", this.chooser);
     }
 
     @Override
     public void autonomousInit() {
-    	
-    	String str = "";
-    	//wait until fms data is received
-    	while (str.length() != 3) {
-    		str = DriverStation.getInstance().getGameSpecificMessage();
-    	}
+        String str = "";
+        while (str.length() != 3) {
+            str = DriverStation.getInstance().getGameSpecificMessage();
+        }
         Side[] sides = new Side[str.length()];
         for (int i = 0, s = str.length(); i < s; i++) {
             sides[i] = Side.decode(str.charAt(i));
@@ -117,12 +117,15 @@ public class Robot extends IterativeRobot {
     public void teleopPeriodic() {
         Scheduler.getInstance().run();
 
+        // Inverting controls
+        isInverted = Oi.INVERT_L_1.get() && Oi.INVERT_L_2.get() && Oi.INVERT_R_1.get() && Oi.INVERT_R_2.get();
+
         // Limit switch stuff
         isClimberTop = this.topClimberSwitch.get();
         isClimberBottom = this.bottomClimberSwitch.get();
         isElevatorTop = this.topElevatorSwitch.get();
         isElevatorBottom = this.bottomElevatorSwitch.get();
-
+      
         // Throttle Mode
         isThrottleMode = Oi.THROTTLE_MODE.get();
         

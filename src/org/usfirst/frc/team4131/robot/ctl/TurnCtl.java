@@ -4,9 +4,6 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.SPI;
-import org.usfirst.frc.team4131.robot.Robot;
-
-import java.util.function.DoubleConsumer;
 
 /**
  * A turn controller used to ensure accurate rotation using
@@ -24,7 +21,6 @@ public class TurnCtl implements PIDOutput {
     private final PIDController controller;
 
     // Exposed methods used for supplying turn actions
-    private DoubleConsumer cached;
     private boolean isTurning;
     private double throttleDelta;
 
@@ -70,17 +66,9 @@ public class TurnCtl implements PIDOutput {
     public void begin(double delta) {
         if (!this.isTurning) {
             this.dev.zeroYaw();
-            while (Math.abs(this.dev.getYaw()) < 0.2) Robot.debug(()->String.valueOf(this.dev.getYaw()));
+            while (Math.abs(this.dev.getYaw()) < 0.2);
 
             this.isTurning = true;
-            this.cached = null;
-
-            if (delta < 0) {
-                this.controller.setP(.015);
-            } else {
-                this.controller.setP(.0116);
-            }
-
             this.controller.setSetpoint(delta);
             this.throttleDelta = 0;
             this.controller.enable();
