@@ -2,6 +2,8 @@ package org.usfirst.frc.team4131.robot.subsystem;
 
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.command.Subsystem;
+
+import org.usfirst.frc.team4131.robot.Robot;
 import org.usfirst.frc.team4131.robot.RobotMap;
 import org.usfirst.frc.team4131.robot.command.ElevatorCommand;
 
@@ -43,5 +45,21 @@ public class ElevatorSubsystem extends Subsystem {
      */
     public void stop() {
         this.motor.set(0);
+    }
+    
+    public void goToBottom() {
+    	this.doStop();
+    	while (Robot.isElevatorBottom) {
+    		this.doLower();
+    	}
+    	this.doStop();
+    }
+    
+    public void goToTop() {
+    	this.doStop();
+    	while (Robot.isElevatorTop) {
+    		this.doClimb();
+    	}
+    	this.doStop();
     }
 }
