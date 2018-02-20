@@ -25,7 +25,7 @@ public abstract class SingleSubsystemCmd<T extends Subsystem> extends Command {
     }
 
     @Override
-    protected final boolean isFinished() {
+    protected boolean isFinished() {
         return false;
     }
 }

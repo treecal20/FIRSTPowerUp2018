@@ -56,18 +56,18 @@ public class ClimberSubsystem extends Subsystem {
     }
     
     public void goToBottom() {
-    	this.doStop();
+    	this.stop();
     	while (Robot.isClimberBottom) {
-    		this.doLower();
+    		this.descend();
     	}
-    	this.doStop();
+    	this.stop();
     }
     
     public void goToTop() {
-    	this.doStop();
+    	this.stop();
     	while (Robot.isClimberTop) {
-    		this.doClimb();
+    		this.climb();
     	}
-    	this.doStop();
+    	this.stop();
     }
 }

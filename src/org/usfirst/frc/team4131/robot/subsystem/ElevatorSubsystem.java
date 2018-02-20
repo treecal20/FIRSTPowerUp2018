@@ -48,18 +48,18 @@ public class ElevatorSubsystem extends Subsystem {
     }
     
     public void goToBottom() {
-    	this.doStop();
+    	this.stop();
     	while (Robot.isElevatorBottom) {
-    		this.doLower();
+    		this.lower();
     	}
-    	this.doStop();
+    	this.stop();
     }
     
     public void goToTop() {
-    	this.doStop();
+    	this.stop();
     	while (Robot.isElevatorTop) {
-    		this.doClimb();
+    		this.raise();
     	}
-    	this.doStop();
+    	this.stop();
     }
 }
