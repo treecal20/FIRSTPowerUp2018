@@ -1,7 +1,6 @@
 package org.usfirst.frc.team4131.robot.command;
 
 import org.usfirst.frc.team4131.robot.Oi;
-import org.usfirst.frc.team4131.robot.RobotMap;
 import org.usfirst.frc.team4131.robot.subsystem.ClawSubsystem;
 
 /**
@@ -14,36 +13,43 @@ public class ClawCommand extends SingleSubsystemCmd<ClawSubsystem> {
         super(subsystem);
     }
 
-    private boolean buttonClaw() {
-    	return Oi.CLAW.get();
+    /**
+     * Checks the claw button in order to determine whether
+     * the claw should clamp.
+     *
+     * @return {@code true} to begin clamping
+     */
+    private static boolean buttonClaw() {
+        return Oi.CLAW.get();
     }
-    
-    private boolean buttonEject() {
-    	return Oi.EJECT.get();
+
+    /**
+     * Checks the eject button in order to determine whether
+     * the robot should unclamp.
+     *
+     * @return {@code true} to eject the held crate
+     */
+    private static boolean buttonEject() {
+        return Oi.EJECT.get();
     }
     
     @Override
     protected void execute() {
-    	if (buttonClaw() && buttonEject()) {
-    		this.subsystem.doRelease();
-    		this.subsystem.doEject();
-    	} else if (buttonClaw()){
-    		this.subsystem.doRelease();
-    		this.subsystem.doRetract();
-    	} else {
-    		this.subsystem.doClamp();
-    		this.subsystem.doRetract();
-    	}
+        if (buttonClaw() && buttonEject()) {
+            this.subsystem.release();
+            this.subsystem.eject();
+        } else if (buttonClaw()){
+            this.subsystem.release();
+            this.subsystem.retract();
+        } else {
+            this.subsystem.clamp();
+            this.subsystem.retract();
+        }
     }
     
     @Override
-    protected boolean isFinished() {
-        return false;
-    }
-
-    @Override
     protected void interrupted() {
-        this.subsystem.doClamp();
-        this.subsystem.doRetract();
+        this.subsystem.clamp();
+        this.subsystem.retract();
     }
 }
