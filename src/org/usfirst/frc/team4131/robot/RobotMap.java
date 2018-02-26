@@ -19,8 +19,7 @@ public final class RobotMap {
 
     // CAN devices
     public static final int PCM = 61;
-    public static final int PDP = 62;
-    
+
     // Left motors
     public static final int L1 = 1;
     public static final int L2 = 2;
@@ -36,12 +35,11 @@ public final class RobotMap {
     // Claw elevator motor
     public static final int E = 0;
 
+    // Pneumatics
     public static final int CLAWONE = 5;
     public static final int CLAWTWO = 4;
-    public static final int EJECTONE = 6;
-    public static final int EJECTTWO = 7;
-    public static final int LOWERONE = 0;
-    public static final int LOWERTWO = 0;
+    public static final int ARMONE = 6;
+    public static final int ARMTWO = 7;
     
     private RobotMap() { // Prevent instantiation
     }
