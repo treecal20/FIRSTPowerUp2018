@@ -9,16 +9,16 @@ import org.usfirst.frc.team4131.robot.RobotMap;
 import org.usfirst.frc.team4131.robot.command.ClimbCommand;
 
 /**
- * Links control of the climbing mechanism.
+ * Links control of the climbing mechanism, used to raise
+ * the robot.
  */
 public class ClimberSubsystem extends Subsystem {
-    /**
-     * Initializes and caches the climbing mechanism motors.
-     */
-
     private final TalonSRX one;
     private final TalonSRX two;
 
+    /**
+     * Initializes and caches the climbing mechanism motors.
+     */
     public ClimberSubsystem() {
         this.one = new TalonSRX(RobotMap.C1);
         this.two = new TalonSRX(RobotMap.C2);
@@ -33,35 +33,41 @@ public class ClimberSubsystem extends Subsystem {
      * Performs the climbing action and hoists the robot
      * up the pull-up bar.
      */
-    public void doClimb() {
-
+    public void climb() {
         this.one.set(ControlMode.PercentOutput, 0.75);
         this.two.set(ControlMode.PercentOutput, 0.75);
     }
 
-    public void doLower() {
+    /**
+     * Lowers the elevator.
+     */
+    public void descend() {
         this.one.set(ControlMode.PercentOutput, -0.5);
         this.two.set(ControlMode.PercentOutput, -0.5);
     }
 
-    public void doStop() {
+    /**
+     * Stops the elevator from movement produced by the
+     * controls.
+     */
+    public void stop() {
         this.one.set(ControlMode.PercentOutput, 0);
         this.two.set(ControlMode.PercentOutput, 0);
     }
     
     public void goToBottom() {
-    	this.doStop();
+    	this.stop();
     	while (Robot.isClimberBottom) {
-    		this.doLower();
+    		this.descend();
     	}
-    	this.doStop();
+    	this.stop();
     }
     
     public void goToTop() {
-    	this.doStop();
+    	this.stop();
     	while (Robot.isClimberTop) {
-    		this.doClimb();
+    		this.climb();
     	}
-    	this.doStop();
+    	this.stop();
     }
 }

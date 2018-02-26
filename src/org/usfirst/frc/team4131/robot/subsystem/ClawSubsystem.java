@@ -10,18 +10,21 @@ import org.usfirst.frc.team4131.robot.command.ClawCommand;
  * Links control for the claw-related motors.
  */
 public class ClawSubsystem extends Subsystem {
+    // Pneumatic devices
+    private final Solenoid clawOne;
+    private final Solenoid clawTwo;
+    private final Solenoid armOne;
+    private final Solenoid armTwo;
+
     /**
      * Initializes and caches the motor wrapper for the claw
      * subsystem
      */
-	
-	private final Solenoid clawOne, clawTwo, ejectOne, ejectTwo;
-	
     public ClawSubsystem() {
-    	clawOne = new Solenoid(RobotMap.PCM, RobotMap.CLAWONE);
-    	clawTwo = new Solenoid(RobotMap.PCM, RobotMap.CLAWTWO);
-    	ejectOne = new Solenoid(RobotMap.PCM, RobotMap.EJECTONE);
-    	ejectTwo = new Solenoid(RobotMap.PCM, RobotMap.EJECTTWO);
+        this.clawOne = new Solenoid(RobotMap.PCM, RobotMap.CLAWONE);
+        this.clawTwo = new Solenoid(RobotMap.PCM, RobotMap.CLAWTWO);
+        this.armOne = new Solenoid(RobotMap.PCM, RobotMap.ARMONE);
+        this.armTwo = new Solenoid(RobotMap.PCM, RobotMap.ARMTWO);
     }
 
     @Override
@@ -33,23 +36,32 @@ public class ClawSubsystem extends Subsystem {
      * Performs the clamping action in order to pick up a
      * power cube
      */
-    public void doClamp() {
-    	clawOne.set(false);
-    	clawTwo.set(true);
+    public void clamp() {
+        this.clawOne.set(false);
+        this.clawTwo.set(true);
     }
-    
-    public void doRelease() {
-    	clawOne.set(true);
-    	clawTwo.set(false);
+
+    /**
+     * Releases the crate held by the claw
+     */
+    public void release() {
+        this.clawOne.set(true);
+        this.clawTwo.set(false);
     }
-    
-    public void doEject() {
-    	ejectOne.set(true);
-    	ejectOne.set(false);
+
+    /**
+     * Ejects the crate
+     */
+    public void lower() {
+        this.armOne.set(true);
+        this.armTwo.set(false);
     }
-    
-    public void doRetract() {
-    	ejectOne.set(false);
-    	ejectTwo.set(true);
+
+    /**
+     * Causes the claw to retract
+     */
+    public void raise() {
+    	this.armOne.set(false);
+        this.armTwo.set(true);
     }
 }

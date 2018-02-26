@@ -8,15 +8,14 @@ import org.usfirst.frc.team4131.robot.RobotMap;
 import org.usfirst.frc.team4131.robot.command.ElevatorCommand;
 
 /**
- * Links control of the climbing mechanism.
+ * Links control of the elevator, used to raise the claw.
  */
 public class ElevatorSubsystem extends Subsystem {
-    /**
-     * Initializes and caches the climbing mechanism motors.
-     */
-
     private final Spark motor;
 
+    /**
+     * Initializes and caches the climbing mechanism motor.
+     */
     public ElevatorSubsystem() {
         this.motor = new Spark(RobotMap.E);
     }
@@ -27,34 +26,40 @@ public class ElevatorSubsystem extends Subsystem {
     }
 
     /**
-     * Performs the climbing action and hoists the robot
-     * up the pull-up bar.
+     * Raises the claw.
      */
-    public void doClimb() {
-    	this.motor.set(-0.5);
+    public void raise() {
+        this.motor.set(-0.5);
     }
 
-    public void doLower() {
-    	this.motor.set(0.5);
+    /**
+     * Lowers the claw.
+     */
+    public void lower() {
+        this.motor.set(0.5);
     }
 
-    public void doStop() {
+    /**
+     * Halts claw movement, but the claw may or may not move
+     * depending on its position.
+     */
+    public void stop() {
         this.motor.set(0);
     }
     
     public void goToBottom() {
-    	this.doStop();
+    	this.stop();
     	while (Robot.isElevatorBottom) {
-    		this.doLower();
+    		this.lower();
     	}
-    	this.doStop();
+    	this.stop();
     }
     
     public void goToTop() {
-    	this.doStop();
+    	this.stop();
     	while (Robot.isElevatorTop) {
-    		this.doClimb();
+    		this.raise();
     	}
-    	this.doStop();
+    	this.stop();
     }
 }
